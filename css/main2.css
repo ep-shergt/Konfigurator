@@ -1,0 +1,290 @@
+.drop-node {
+	background-color: #e0eeee;
+	padding: 30px;
+	margin: 10px;
+	font-size: 10px;
+	color: rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+	width: 170px;
+}
+
+.margin-bottom-30 {
+	margin-bottom: 30px;
+}
+
+.margin-around {
+	margin: 50px 30px 50px 30px;
+}
+
+.dropdown-menu>li>a {
+	color: #337ab7;
+	font-size: 11px;
+}
+
+ul.dropdown-menu {
+	min-width: 100px;
+	margin-top: -1px;
+}
+
+.align-with-tag {
+	margin-left: 10px;
+}
+
+.glyphicon-remove {
+	color: red;
+	margin-left: -8px;
+}
+
+.glyphicon-circle-arrow-right {
+	color: green;
+	margin-left: -8px;
+}
+
+.marked {
+	background: lime !important;
+}
+
+
+.drop-node-wrapper {
+	margin-top: 5px;
+}
+
+.button-list {
+	display: inline-block;
+	margin-left: -40px;
+	list-style-type: none;
+}
+
+ul.button-list>li {
+	cursor: pointer;
+}
+
+.dnd-grid {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dropZoneTableNode {
+	margin: 15px 10px;
+}
+
+
+.radio-values {
+	margin-right: 4px;
+	margin-left: 2px;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.editor-panel {
+	text-align: center;
+}
+
+.group-bar-level-one {
+	display: table-cell;
+	width: 900px;
+}
+
+.group-buttons-level-one {
+	display: table-cell;
+}
+
+.field-ul {
+	margin: 5px;
+	padding: 0;
+	list-style-type: none;
+	float: left;
+}
+
+.li-div {
+	display:table-cell;
+    vertical-align:middle;
+}
+
+.field-li {
+	display: inline-block;
+	position: relative;
+    vertical-align:middle;
+	margin: 0;
+	padding:0;
+	border-width: 0;
+}
+
+.field-node {
+	height: 45px;
+	background-color: #e0eeee;
+	padding: 2px;
+	font-size: 10px;
+	color: rgba(0, 0, 0, 0.5);
+	border-radius: 4px;
+	width: 100px;
+}
+
+.clear-left {
+	clear: left;
+}
+
+.clear-right {
+	clear: right;
+}
+
+.clear-both {
+	clear: both;
+}
+
+.fa-margin {
+	margin-right: 5px;
+}
+
+.title-overflow {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.field-inner-li {
+	display: inline-block;
+	position: relative;
+    vertical-align:middle;
+	margin-left: 5px;
+	padding:0;
+	border-width: 0;
+	width: 40px;
+	text-align: center;
+}
+
+.field-inner-ul {
+	margin: 0px;
+	padding: 0;
+	list-style-type: none;
+	float: left;
+}
+
+.field-icon {
+	display: block;
+	margin: auto;
+}
+
+.field-code {
+	color: darkmagenta;
+}
+
+.field-select {
+	color: cornflowerblue;
+}
+
+.field-radio {
+	color: crimson;
+}
+
+.field-check {
+	color: teal;
+}
+
+.field-textarea {
+	color: darkorange;
+}
+
+.field-text {
+	color: midnightblue;
+}
+.display-hidden {
+	display: none;
+}
+
+.error-style {
+	padding: 5px;
+	color: firebrick;
+	font-weight: bold;
+}
+
+.title-style {
+    text-align: center;
+    font-size: 23px;
+    font-weight: bolder;
+    color: #D0F8FF;
+    margin-top: 15px;
+    text-shadow: 0 0 5px #A5F1FF, 0 0 10px #A5F1FF, 0 0 20px #A5F1FF, 0 0 30px #A5F1FF, 0 0 40px #A5F1FF;
+}
+
+.subtitle-style {
+    text-align: center;
+    font-size: 12px;
+    color: #D0F8FF;
+    text-shadow: 0 0 5px #A5F1FF, 0 0 10px #A5F1FF, 0 0 20px #A5F1FF, 0 0 30px #A5F1FF, 0 0 40px #A5F1FF;
+}
+
+.ul-accordion {
+	list-style-type: none;
+	margin: 0 auto;
+}
+.glow {
+	color: #D0F8FF;
+    text-shadow: 0 0 5px #A5F1FF, 0 0 10px #A5F1FF, 0 0 20px #A5F1FF, 0 0 30px #A5F1FF, 0 0 40px #A5F1FF;
+}
+
+.title-wrapper-centering {
+	text-align: center;
+	background-color: black;
+	border-radius: 5px;
+}
+
+.li-accordion {
+	display: inline-block;
+}
+
+.li-title-positioning {
+	margin-left: 10px;
+}
+
+.li-title-btn {
+	margin-bottom: 48px;
+	background: inherit;
+	border: none !important;
+}
+
+.li-title-btn:hover, .li-title-btn:active, .li-title-btn:focus {
+	background: inherit !important;
+	border: none !important;
+	outline: none !important;
+}
+
+.react-tabs [role=tab][aria-selected=true] {
+	color: white;
+	background-color: black;
+}
+
+.react-tabs [role=tab][aria-selected=false] {
+	opacity: 0.5;
+}
+
+#dateMainTitle {
+	width: 100px !important;
+	display: inline-block;
+	margin: 10px;
+}
+
+#endDateMainTitle {
+	width: 100px !important;
+	display: inline-block;
+	margin: 10px;
+}
+
+.label-info {
+	padding: 8px !important;
+}
+.glow {
+	color: #D0F8FF;
+    text-shadow: 0 0 5px #A5F1FF, 0 0 10px #A5F1FF, 0 0 20px #A5F1FF, 0 0 30px #A5F1FF, 0 0 40px #A5F1FF;
+}
+
+.acc-width {
+	width: 90%;
+}
