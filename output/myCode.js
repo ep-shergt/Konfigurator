@@ -23316,6 +23316,7 @@
 	exports.changeGroupLevelOneTitle = changeGroupLevelOneTitle;
 	exports.changeGroupLevelTwoTitle = changeGroupLevelTwoTitle;
 	exports.changeFieldToEdit = changeFieldToEdit;
+	exports.changeField = changeField;
 	exports.setSubAccordionToOpen = setSubAccordionToOpen;
 	exports.markGroupLevelOneForCopy = markGroupLevelOneForCopy;
 	exports.markGroupLevelTwoForCopy = markGroupLevelTwoForCopy;
@@ -23382,6 +23383,13 @@
 		return {
 			type: 'CHANGE_FIELD_TO_EDIT',
 			fieldToEdit: fieldToEdit
+		};
+	}
+
+	function changeField(field) {
+		return {
+			type: 'CHANGE_FIELD',
+			field: field
 		};
 	}
 	//*******************************************************************************
@@ -25061,6 +25069,7 @@
 				var self = this;
 
 				$('#inputMainTitle').val(this.state.jsonData.title);
+
 				var date_input = $('input[name="date"]');
 				var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
 				date_input.datepicker({
@@ -25085,14 +25094,28 @@
 		}, {
 			key: 'handleFieldData',
 			value: function handleFieldData(event) {
+				var newField = this.state.fieldToEdit,
+				    groupKeys = newField.group.split('|'),
+				    titleForKey = void 0;
+
 				event.preventDefault();
 
 				var fieldData = {
-					inputFieldTitle: this.inputFieldTitle.value
+					inputFieldTitle: this.inputFieldTitle.value,
+					colSelect: this.colSelect.value,
+					fieldType: this.fieldType.value
 				};
 
-				console.log('inputFieldTitle', fieldData.inputFieldTitle);
-				console.log('field', this.state.fieldToEdit);
+				newField.title = fieldData.inputFieldTitle;
+				titleForKey = fieldData.inputFieldTitle.split(' ').join('_');
+				newField.key = "fld_" + titleForKey;
+				newField.cols = fieldData.colSelect;
+				newField.type = fieldData.fieldType;
+				newField.clearBefore = $("#checkClearBefore").is(":checked");
+				newField.clearAfter = $("#checkClearAfter").is(":checked");
+
+				this.props.changeField(newField);
+				this.props.setSubAccordionToOpen(groupKeys);
 				$('#fieldEditorPanel').addClass('display-hidden');
 			}
 		}, {
@@ -25273,6 +25296,238 @@
 											_this3.inputFieldTitle = input;
 										}, id: 'inputFieldTitle', type: 'text', className: 'form-control', name: 'inputFieldTitle', placeholder: 'Feldtitel' })
 								),
+								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'div',
+									{ className: 'container-fluid' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'row vertical-align' },
+										_react2.default.createElement(
+											'div',
+											{ className: 'input-group col-xs-4' },
+											_react2.default.createElement(
+												'span',
+												{ className: 'input-group-addon' },
+												'Spalten'
+											),
+											_react2.default.createElement(
+												'select',
+												{ ref: function ref(input) {
+														_this3.colSelect = input;
+													}, className: 'form-control', id: 'colSelect', name: 'colSelect' },
+												_react2.default.createElement(
+													'option',
+													null,
+													'1'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'2'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'3'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'4'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'5'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'6'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'7'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'8'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'9'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'10'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'11'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'12'
+												)
+											)
+										),
+										_react2.default.createElement('div', { className: 'col-xs-3' }),
+										_react2.default.createElement(
+											'div',
+											{ className: 'input-group col-xs-5' },
+											_react2.default.createElement(
+												'span',
+												{ className: 'input-group-addon' },
+												'Typ'
+											),
+											_react2.default.createElement(
+												'select',
+												{ ref: function ref(input) {
+														_this3.fieldType = input;
+													}, className: 'form-control', id: 'fieldType', name: 'fieldType' },
+												_react2.default.createElement(
+													'option',
+													null,
+													'code'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'radio'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'check'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'select'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'text'
+												),
+												_react2.default.createElement(
+													'option',
+													null,
+													'textarea'
+												)
+											)
+										)
+									)
+								),
+								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'div',
+									{ className: 'container-fluid' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'row vertical-align' },
+										_react2.default.createElement(
+											'div',
+											{ className: 'input-group col-xs-5' },
+											_react2.default.createElement(
+												'label',
+												{ className: 'label-check' },
+												_react2.default.createElement('input', { id: 'checkClearBefore', type: 'checkbox', value: 'clearBefore' }),
+												'  Zeilenumbruch davor'
+											)
+										),
+										_react2.default.createElement('div', { className: 'col-xs-2' }),
+										_react2.default.createElement(
+											'div',
+											{ className: 'input-group col-xs-5' },
+											_react2.default.createElement(
+												'label',
+												{ className: 'label-check' },
+												_react2.default.createElement('input', { id: 'checkClearAfter', type: 'checkbox', value: 'clearAfter' }),
+												'  Zeilenumbruch danach'
+											)
+										)
+									)
+								),
+								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'p',
+									{ className: 'heading-parameter' },
+									'Zus\xE4tzliche Parameter'
+								),
+								_react2.default.createElement('br', null),
+								_react2.default.createElement(
+									'div',
+									{ className: 'col-xs-12' },
+									_react2.default.createElement(
+										'table',
+										null,
+										_react2.default.createElement(
+											'thead',
+											null,
+											_react2.default.createElement(
+												'th',
+												{ className: 'align-center' },
+												'Typ'
+											),
+											_react2.default.createElement(
+												'th',
+												{ className: 'align-center' },
+												'Wert'
+											)
+										),
+										_react2.default.createElement(
+											'tr',
+											null,
+											_react2.default.createElement(
+												'th',
+												null,
+												'css'
+											),
+											_react2.default.createElement(
+												'th',
+												{ className: 'th-param' },
+												_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'cssParam' })
+											)
+										),
+										_react2.default.createElement(
+											'tr',
+											null,
+											_react2.default.createElement(
+												'th',
+												null,
+												'html'
+											),
+											_react2.default.createElement(
+												'th',
+												{ className: 'th-param' },
+												_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'htmlParam' })
+											)
+										),
+										_react2.default.createElement(
+											'tr',
+											null,
+											_react2.default.createElement(
+												'th',
+												null,
+												'js'
+											),
+											_react2.default.createElement(
+												'th',
+												{ className: 'th-param' },
+												_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'jsParam' })
+											)
+										)
+									)
+								),
+								_react2.default.createElement('br', null),
 								_react2.default.createElement(
 									'button',
 									{ type: 'submit', className: 'btn btn-primary btn-field-confirm' },
@@ -26592,6 +26847,12 @@
 	        $('#fieldEditorPanel').removeClass('display-hidden');
 	      }
 
+	      $('#inputFieldTitle').val(field.title);
+	      $('#colSelect').val(field.cols);
+	      $('#fieldType').val(field.type);
+	      $("#checkClearBefore").prop("checked", field.clearBefore);
+	      $("#checkClearAfter").prop("checked", field.clearAfter);
+
 	      this.props.changeFieldToEdit(field);
 	      this.props.setSubAccordionToOpen(groupKeys);
 	    }
@@ -26614,7 +26875,7 @@
 	              { className: 'field-inner-ul' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-more-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'title-overflow' },
@@ -26623,7 +26884,7 @@
 	              ),
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-less-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'field-icon' },
@@ -26637,13 +26898,15 @@
 	        case 'radio':
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'field-node field-li' },
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
 	            _react2.default.createElement(
 	              'ul',
 	              { className: 'field-inner-ul' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-more-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'title-overflow' },
@@ -26652,7 +26915,7 @@
 	              ),
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-less-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'field-icon' },
@@ -26666,13 +26929,15 @@
 	        case 'check':
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'field-node field-li' },
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
 	            _react2.default.createElement(
 	              'ul',
 	              { className: 'field-inner-ul' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-more-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'title-overflow' },
@@ -26681,7 +26946,7 @@
 	              ),
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-less-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'field-icon' },
@@ -26695,13 +26960,15 @@
 	        case 'select':
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'field-node field-li' },
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
 	            _react2.default.createElement(
 	              'ul',
 	              { className: 'field-inner-ul' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-more-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'title-overflow' },
@@ -26710,7 +26977,7 @@
 	              ),
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-less-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'field-icon' },
@@ -26724,13 +26991,15 @@
 	        case 'text':
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'field-node field-li' },
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
 	            _react2.default.createElement(
 	              'ul',
 	              { className: 'field-inner-ul' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-more-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'title-overflow' },
@@ -26739,7 +27008,7 @@
 	              ),
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-less-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'field-icon' },
@@ -26753,13 +27022,15 @@
 	        case 'textarea':
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'field-node field-li' },
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
 	            _react2.default.createElement(
 	              'ul',
 	              { className: 'field-inner-ul' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-more-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'title-overflow' },
@@ -26768,7 +27039,7 @@
 	              ),
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-less-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'field-icon' },
@@ -26782,13 +27053,15 @@
 	        default:
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'field-node field-li' },
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
 	            _react2.default.createElement(
 	              'ul',
 	              { className: 'field-inner-ul' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-more-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'title-overflow' },
@@ -26797,7 +27070,7 @@
 	              ),
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'field-inner-li' },
+	                { className: 'field-inner-li field-li-less-width' },
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'field-icon' },
@@ -35582,25 +35855,44 @@
 					break;
 				}
 
+			case "CHANGE_FIELD":
+				{
+					var field = action.field;
+
+					var _accordion2 = [].concat(_toConsumableArray(state.accordion)),
+					    _jsonData2 = _extends({}, state.jsonData),
+					    fieldIndex = void 0;
+
+					fieldIndex = _jsonData2.fields.map(function (elem, i) {
+						return elem.key;
+					}).indexOf(field.key);
+
+					_accordion2 = (0, _helpers.setAccordionItems)(_jsonData2);
+
+					state = _extends({}, state, { jsonData: _jsonData2, accordion: _accordion2 });
+					break;
+				}
+
 			case "SET_SUBACCORDION_TO_OPEN":
 				{
 					var groupKeys = action.groupKeys;
 
-					var _accordion2 = [].concat(_toConsumableArray(state.accordion)),
+					var _accordion3 = [].concat(_toConsumableArray(state.accordion)),
 					    indexSubAccordion = void 0,
 					    indexAccordionSection = void 0;
 
-					indexSubAccordion = _accordion2.map(function (subAccordion, i) {
+					indexSubAccordion = _accordion3.map(function (subAccordion, i) {
 						return subAccordion.key;
 					}).indexOf(groupKeys[0]);
 
-					indexAccordionSection = _accordion2[indexSubAccordion].content.map(function (section, i) {
+					indexAccordionSection = _accordion3[indexSubAccordion].content.map(function (section, i) {
 						return section.key;
 					}).indexOf(groupKeys[1]);
 
-					_accordion2[indexSubAccordion].content[indexAccordionSection].open = true;
+					_accordion3[indexSubAccordion].open = true;
+					_accordion3[indexSubAccordion].content[indexAccordionSection].open = true;
 
-					state = _extends({}, state, { accordion: _accordion2 });
+					state = _extends({}, state, { accordion: _accordion3 });
 					break;
 				}
 
@@ -35609,32 +35901,32 @@
 					var gOneTitle = action.gOneTitle,
 					    gOneKey = action.gOneKey;
 
-					var _accordion3 = [].concat(_toConsumableArray(state.accordion)),
-					    _jsonData2 = _extends({}, state.jsonData),
+					var _accordion4 = [].concat(_toConsumableArray(state.accordion)),
+					    _jsonData3 = _extends({}, state.jsonData),
 					    keyString = gOneTitle.split(' ').join('_'),
 					    i = 0;
 
-					while (i < _jsonData2.groups.length) {
-						if (_jsonData2.groups[i].key === gOneKey) {
-							_jsonData2.groups[i].title = gOneTitle;
-							_jsonData2.groups[i].key = 'grp_1_' + keyString;
+					while (i < _jsonData3.groups.length) {
+						if (_jsonData3.groups[i].key === gOneKey) {
+							_jsonData3.groups[i].title = gOneTitle;
+							_jsonData3.groups[i].key = 'grp_1_' + keyString;
 							break;
 						}
 						i++;
 					}
 
-					for (var j = 0; j < _jsonData2.fields.length; j++) {
-						var _groupKeys = _jsonData2.fields[j].group.split('|'),
+					for (var j = 0; j < _jsonData3.fields.length; j++) {
+						var _groupKeys = _jsonData3.fields[j].group.split('|'),
 						    groupOneKey = _groupKeys[0];
 
 						if (groupOneKey === gOneKey) {
-							_jsonData2.fields[j].group = "grp_1_" + keyString + '|' + _groupKeys[1];
+							_jsonData3.fields[j].group = "grp_1_" + keyString + '|' + _groupKeys[1];
 						}
 					}
 
-					_accordion3 = (0, _helpers.setAccordionItems)(_jsonData2);
+					_accordion4 = (0, _helpers.setAccordionItems)(_jsonData3);
 
-					state = _extends({}, state, { jsonData: _jsonData2, accordion: _accordion3 });
+					state = _extends({}, state, { jsonData: _jsonData3, accordion: _accordion4 });
 					break;
 				}
 
@@ -35644,36 +35936,36 @@
 					    gTwoKey = action.gTwoKey,
 					    _gOneKey = action.gOneKey;
 
-					var _accordion4 = [].concat(_toConsumableArray(state.accordion)),
-					    _jsonData3 = _extends({}, state.jsonData),
+					var _accordion5 = [].concat(_toConsumableArray(state.accordion)),
+					    _jsonData4 = _extends({}, state.jsonData),
 					    _keyString = gTwoTitle.split(' ').join('_'),
 					    _indexSubAccordion = void 0,
 					    _indexAccordionSection = void 0;
 
-					_indexSubAccordion = _accordion4.map(function (subAccordion, i) {
+					_indexSubAccordion = _accordion5.map(function (subAccordion, i) {
 						return subAccordion.key;
 					}).indexOf(_gOneKey);
 
-					_indexAccordionSection = _accordion4[_indexSubAccordion].content.map(function (section, i) {
+					_indexAccordionSection = _accordion5[_indexSubAccordion].content.map(function (section, i) {
 						return section.key;
 					}).indexOf(gTwoKey);
 
-					_jsonData3.groups[_indexSubAccordion].groups[_indexAccordionSection].title = gTwoTitle;
-					_jsonData3.groups[_indexSubAccordion].groups[_indexAccordionSection].key = 'grp_2_' + _keyString;
+					_jsonData4.groups[_indexSubAccordion].groups[_indexAccordionSection].title = gTwoTitle;
+					_jsonData4.groups[_indexSubAccordion].groups[_indexAccordionSection].key = 'grp_2_' + _keyString;
 
-					for (var _j = 0; _j < _jsonData3.fields.length; _j++) {
-						var _groupKeys2 = _jsonData3.fields[_j].group.split('|'),
+					for (var _j = 0; _j < _jsonData4.fields.length; _j++) {
+						var _groupKeys2 = _jsonData4.fields[_j].group.split('|'),
 						    groupTwoKey = _groupKeys2[1];
 
 						if (groupTwoKey === gTwoKey) {
-							_jsonData3.fields[_j].group = _groupKeys2[0] + '|' + "grp_2_" + _keyString;
+							_jsonData4.fields[_j].group = _groupKeys2[0] + '|' + "grp_2_" + _keyString;
 						}
 					}
 
-					_accordion4 = (0, _helpers.setAccordionItems)(_jsonData3);
-					_accordion4[_indexSubAccordion].open = true;
+					_accordion5 = (0, _helpers.setAccordionItems)(_jsonData4);
+					_accordion5[_indexSubAccordion].open = true;
 
-					state = _extends({}, state, { jsonData: _jsonData3, accordion: _accordion4 });
+					state = _extends({}, state, { jsonData: _jsonData4, accordion: _accordion5 });
 					break;
 				}
 
@@ -35681,11 +35973,11 @@
 				{
 					var mainTitle = action.mainTitle;
 
-					var _jsonData4 = _extends({}, state.jsonData);
+					var _jsonData5 = _extends({}, state.jsonData);
 
-					_jsonData4.title = mainTitle;
+					_jsonData5.title = mainTitle;
 
-					state = _extends({}, state, { jsonData: _jsonData4 });
+					state = _extends({}, state, { jsonData: _jsonData5 });
 					break;
 				}
 
@@ -35693,12 +35985,12 @@
 				{
 					var startDate = action.startDate;
 
-					var _accordion5 = [].concat(_toConsumableArray(state.accordion)),
-					    _jsonData5 = _extends({}, state.jsonData);
+					var _accordion6 = [].concat(_toConsumableArray(state.accordion)),
+					    _jsonData6 = _extends({}, state.jsonData);
 
-					_jsonData5.valid_from = startDate;
+					_jsonData6.valid_from = startDate;
 
-					state = _extends({}, state, { jsonData: _jsonData5, accordion: _accordion5 });
+					state = _extends({}, state, { jsonData: _jsonData6, accordion: _accordion6 });
 					break;
 				}
 
@@ -35706,22 +35998,22 @@
 				{
 					var endDate = action.endDate;
 
-					var _accordion6 = [].concat(_toConsumableArray(state.accordion)),
-					    _jsonData6 = _extends({}, state.jsonData);
+					var _accordion7 = [].concat(_toConsumableArray(state.accordion)),
+					    _jsonData7 = _extends({}, state.jsonData);
 
-					_jsonData6.valid_to = endDate;
+					_jsonData7.valid_to = endDate;
 
-					state = _extends({}, state, { jsonData: _jsonData6, accordion: _accordion6 });
+					state = _extends({}, state, { jsonData: _jsonData7, accordion: _accordion7 });
 					break;
 				}
 
 			case "INITIALIZE_JSON":
 				{
-					var _accordion7 = [].concat(_toConsumableArray(state.accordion));
+					var _accordion8 = [].concat(_toConsumableArray(state.accordion));
 
-					_accordion7 = (0, _helpers.setAccordionItems)(_EmptyJSON2.default);
+					_accordion8 = (0, _helpers.setAccordionItems)(_EmptyJSON2.default);
 
-					state = _extends({}, state, { jsonData: _EmptyJSON2.default, accordion: _accordion7 });
+					state = _extends({}, state, { jsonData: _EmptyJSON2.default, accordion: _accordion8 });
 					break;
 				}
 
@@ -35737,12 +36029,12 @@
 					    index = action.index,
 					    buttonId = 'btn_group_level_one_mark_' + element.key;
 					var _groupsLevelOneToCopy = action.groupsLevelOneToCopy,
-					    _accordion8 = [].concat(_toConsumableArray(state.accordion)),
+					    _accordion9 = [].concat(_toConsumableArray(state.accordion)),
 					    indexForElementToRemove = void 0;
 
 
-					if (_accordion8.length > 1) {
-						_accordion8 = (0, _helpers2.removeArrayElement)(_accordion8, index);
+					if (_accordion9.length > 1) {
+						_accordion9 = (0, _helpers2.removeArrayElement)(_accordion9, index);
 						if (element.marked) {
 							$('#' + buttonId).removeClass('marked');
 
@@ -35756,7 +36048,7 @@
 						// delete group and field to copy!
 					}
 
-					state = _extends({}, state, { accordion: _accordion8, groupsLevelOneToCopy: _groupsLevelOneToCopy });
+					state = _extends({}, state, { accordion: _accordion9, groupsLevelOneToCopy: _groupsLevelOneToCopy });
 					return state;
 					break;
 				}
@@ -35770,7 +36062,7 @@
 
 					var subAccordionItems = action.subAccordionItems,
 					    _groupsLevelTwoToCopy = action.groupsLevelTwoToCopy,
-					    _accordion9 = [].concat(_toConsumableArray(state.accordion)),
+					    _accordion10 = [].concat(_toConsumableArray(state.accordion)),
 					    _indexForElementToRemove = void 0,
 					    _indexSubAccordion2 = void 0;
 
@@ -35788,14 +36080,14 @@
 
 						//delete field to copy!
 
-						_indexSubAccordion2 = _accordion9.map(function (subAccordion, i) {
+						_indexSubAccordion2 = _accordion10.map(function (subAccordion, i) {
 							return subAccordion.key;
 						}).indexOf(groupLevelOneKey);
 
-						_accordion9[_indexSubAccordion2].content = (0, _helpers2.removeArrayElement)(_accordion9[_indexSubAccordion2].content, _index);
+						_accordion10[_indexSubAccordion2].content = (0, _helpers2.removeArrayElement)(_accordion10[_indexSubAccordion2].content, _index);
 					}
 
-					state = _extends({}, state, { accordion: _accordion9, groupsLevelTwoToCopy: _groupsLevelTwoToCopy });
+					state = _extends({}, state, { accordion: _accordion10, groupsLevelTwoToCopy: _groupsLevelTwoToCopy });
 					return state;
 					break;
 				}
@@ -35810,16 +36102,16 @@
 
 					var fields = action.fields,
 					    _fieldsToCopy = action.fieldsToCopy,
-					    _accordion10 = [].concat(_toConsumableArray(state.accordion)),
+					    _accordion11 = [].concat(_toConsumableArray(state.accordion)),
 					    _indexForElementToRemove2 = void 0,
 					    _indexSubAccordion3 = void 0,
 					    _indexAccordionSection2 = void 0;
 
-					_indexSubAccordion3 = _accordion10.map(function (subAccordion, i) {
+					_indexSubAccordion3 = _accordion11.map(function (subAccordion, i) {
 						return subAccordion.key;
 					}).indexOf(_groupLevelOneKey);
 
-					_indexAccordionSection2 = _accordion10[_indexSubAccordion3].content.map(function (section, i) {
+					_indexAccordionSection2 = _accordion11[_indexSubAccordion3].content.map(function (section, i) {
 						return section.key;
 					}).indexOf(groupLevelTwoKey);
 
@@ -35834,12 +36126,12 @@
 							_fieldsToCopy = (0, _helpers2.removeArrayElement)(_fieldsToCopy, _indexForElementToRemove2);
 						}
 
-						_accordion10[_indexSubAccordion3].content[_indexAccordionSection2].fields = (0, _helpers2.removeArrayElement)(_accordion10[_indexSubAccordion3].content[_indexAccordionSection2].fields, _index2);
+						_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].fields = (0, _helpers2.removeArrayElement)(_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].fields, _index2);
 					}
 
-					_accordion10[_indexSubAccordion3].content[_indexAccordionSection2].open = true;
+					_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].open = true;
 
-					state = _extends({}, state, { accordion: _accordion10, fieldsToCopy: _fieldsToCopy });
+					state = _extends({}, state, { accordion: _accordion11, fieldsToCopy: _fieldsToCopy });
 					return state;
 					break;
 				}
@@ -35851,7 +36143,7 @@
 					    _buttonId3 = 'btn_group_level_one_mark_' + _element3.key;
 
 					var _groupsLevelOneToCopy2 = action.groupsLevelOneToCopy,
-					    _accordion11 = [].concat(_toConsumableArray(state.accordion)),
+					    _accordion12 = [].concat(_toConsumableArray(state.accordion)),
 					    _indexForElementToRemove3 = void 0;
 
 
@@ -35861,10 +36153,10 @@
 						}).indexOf(_element3.key);
 
 						_groupsLevelOneToCopy2 = (0, _helpers2.removeArrayElement)(_groupsLevelOneToCopy2, _indexForElementToRemove3);
-						_accordion11[_index3].marked = false;
+						_accordion12[_index3].marked = false;
 					} else {
-						_accordion11[_index3].marked = true;
-						_groupsLevelOneToCopy2.push(_accordion11[_index3].key);
+						_accordion12[_index3].marked = true;
+						_groupsLevelOneToCopy2.push(_accordion12[_index3].key);
 					}
 
 					state = _extends({}, state, { groupsLevelOneToCopy: _groupsLevelOneToCopy2 });
@@ -35881,11 +36173,11 @@
 
 					var _subAccordionItems = action.subAccordionItems,
 					    _groupsLevelTwoToCopy2 = action.groupsLevelTwoToCopy,
-					    _accordion12 = [].concat(_toConsumableArray(state.accordion)),
+					    _accordion13 = [].concat(_toConsumableArray(state.accordion)),
 					    _indexForElementToRemove4 = void 0,
 					    _indexSubAccordion4 = void 0;
 
-					_indexSubAccordion4 = _accordion12.map(function (subAccordion, i) {
+					_indexSubAccordion4 = _accordion13.map(function (subAccordion, i) {
 						return subAccordion.key;
 					}).indexOf(_groupLevelOneKey2);
 
@@ -35894,16 +36186,16 @@
 							return key;
 						}).indexOf(_element4.key);
 
-						_accordion12[_indexSubAccordion4].content[_index4].marked = false;
+						_accordion13[_indexSubAccordion4].content[_index4].marked = false;
 						_groupsLevelTwoToCopy2 = (0, _helpers2.removeArrayElement)(_groupsLevelTwoToCopy2, _indexForElementToRemove4);
 					} else {
-						_accordion12[_indexSubAccordion4].content[_index4].marked = true;
+						_accordion13[_indexSubAccordion4].content[_index4].marked = true;
 						_groupsLevelTwoToCopy2.push(_subAccordionItems[_index4].key);
 					}
 
-					_accordion12[_indexSubAccordion4].content[_index4]['open'] = false;
+					_accordion13[_indexSubAccordion4].content[_index4]['open'] = false;
 
-					state = _extends({}, state, { accordion: _accordion12, groupsLevelTwoToCopy: _groupsLevelTwoToCopy2 });
+					state = _extends({}, state, { accordion: _accordion13, groupsLevelTwoToCopy: _groupsLevelTwoToCopy2 });
 					return state;
 					break;
 				}
@@ -35918,17 +36210,17 @@
 
 					var _fields = action.fields,
 					    _fieldsToCopy2 = action.fieldsToCopy,
-					    _accordion13 = [].concat(_toConsumableArray(state.accordion)),
-					    field = void 0,
+					    _accordion14 = [].concat(_toConsumableArray(state.accordion)),
+					    _field = void 0,
 					    _indexForElementToRemove5 = void 0,
 					    _indexSubAccordion5 = void 0,
 					    _indexAccordionSection3 = void 0;
 
-					_indexSubAccordion5 = _accordion13.map(function (subAccordion, i) {
+					_indexSubAccordion5 = _accordion14.map(function (subAccordion, i) {
 						return subAccordion.key;
 					}).indexOf(_groupLevelOneKey3);
 
-					_indexAccordionSection3 = _accordion13[_indexSubAccordion5].content.map(function (section, i) {
+					_indexAccordionSection3 = _accordion14[_indexSubAccordion5].content.map(function (section, i) {
 						return section.key;
 					}).indexOf(_groupLevelTwoKey);
 
@@ -35938,17 +36230,17 @@
 						}).indexOf(_element5.key);
 
 						_fieldsToCopy2 = (0, _helpers2.removeArrayElement)(_fieldsToCopy2, _indexForElementToRemove5);
-						_accordion13[_indexSubAccordion5].content[_indexAccordionSection3].fields[_index5].marked = false;
+						_accordion14[_indexSubAccordion5].content[_indexAccordionSection3].fields[_index5].marked = false;
 						$('#' + _buttonId5).removeClass('marked');
 					} else {
-						_accordion13[_indexSubAccordion5].content[_indexAccordionSection3].fields[_index5].marked = true;
+						_accordion14[_indexSubAccordion5].content[_indexAccordionSection3].fields[_index5].marked = true;
 						_fieldsToCopy2.push(_fields[_index5].key);
 						$('#' + _buttonId5).addClass('marked');
 					}
 
-					_accordion13[_indexSubAccordion5].content[_indexAccordionSection3]['open'] = true;
+					_accordion14[_indexSubAccordion5].content[_indexAccordionSection3]['open'] = true;
 
-					state = _extends({}, state, { accordion: _accordion13, fieldsToCopy: _fieldsToCopy2 });
+					state = _extends({}, state, { accordion: _accordion14, fieldsToCopy: _fieldsToCopy2 });
 					return state;
 					break;
 				}

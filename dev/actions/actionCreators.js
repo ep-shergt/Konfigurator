@@ -59,6 +59,13 @@ export function changeFieldToEdit(fieldToEdit) {
 		fieldToEdit
 	}
 }
+
+export function changeField(field) {
+	return {
+		type: 'CHANGE_FIELD',
+		field
+	}
+}
 //*******************************************************************************
 
 

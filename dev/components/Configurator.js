@@ -21,6 +21,7 @@ class Configurator extends Component {
     	const self = this;
 
     	$('#inputMainTitle').val(this.state.jsonData.title);
+
     	var date_input=$('input[name="date"]');
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         date_input.datepicker({
@@ -43,17 +44,33 @@ class Configurator extends Component {
 		    if (!("_".indexOf(chr) < 0))
 		        return false;
 		});
+
+
   	}
 
-  	handleFieldData(event) { 	
+  	handleFieldData(event) {
+  		let newField = this.state.fieldToEdit,
+  			groupKeys = newField.group.split('|'),
+  			titleForKey;
+
 		event.preventDefault();
   		
   		let fieldData = {
-			inputFieldTitle: this.inputFieldTitle.value
+			inputFieldTitle: this.inputFieldTitle.value,
+			colSelect: this.colSelect.value,
+			fieldType: this.fieldType.value
 		}
 
-		console.log('inputFieldTitle', fieldData.inputFieldTitle);
-		console.log('field', this.state.fieldToEdit);
+		newField.title = fieldData.inputFieldTitle;
+		titleForKey = fieldData.inputFieldTitle.split(' ').join('_');
+		newField.key = "fld_" + titleForKey;
+		newField.cols = fieldData.colSelect;
+		newField.type = fieldData.fieldType;
+		newField.clearBefore = $("#checkClearBefore").is(":checked");
+		newField.clearAfter = $("#checkClearAfter").is(":checked");
+
+		this.props.changeField(newField);
+		this.props.setSubAccordionToOpen(groupKeys);
 		$('#fieldEditorPanel').addClass('display-hidden');
   	}
 
@@ -155,7 +172,77 @@ class Configurator extends Component {
 							<div className="input-group">
 							    <span className="input-group-addon">Titel</span>
 							    <input required ref={(input) => { this.inputFieldTitle = input}} id="inputFieldTitle" type="text" className="form-control" name="inputFieldTitle" placeholder="Feldtitel" />			  		
-						  	</div>					
+						  	</div>
+						  	<br/>
+						  	<div className="container-fluid">
+    							<div className="row vertical-align">
+								  	<div className="input-group col-xs-4">
+								  		<span className="input-group-addon">Spalten</span>
+									  	<select ref={(input) => { this.colSelect = input}} className="form-control" id="colSelect" name="colSelect">
+									        <option>1</option>
+									        <option>2</option>
+									        <option>3</option>
+									        <option>4</option>
+									        <option>5</option>
+									        <option>6</option>
+									        <option>7</option>
+									        <option>8</option>
+									        <option>9</option>
+									        <option>10</option>
+									        <option>11</option>
+									        <option>12</option>
+									    </select>
+								    </div>
+								    <div className="col-xs-3"></div>
+								    <div className="input-group col-xs-5">
+								  		<span className="input-group-addon">Typ</span>
+									  	<select ref={(input) => { this.fieldType = input}} className="form-control" id="fieldType" name="fieldType">
+									        <option>code</option>
+									        <option>radio</option>
+									        <option>check</option>
+									        <option>select</option>
+									        <option>text</option>
+									        <option>textarea</option>
+									    </select>
+								    </div>
+								</div>
+							</div>
+							<br/>
+							<div className="container-fluid">
+    							<div className="row vertical-align">
+								  	<div className="input-group col-xs-5">
+										<label className="label-check"><input id="checkClearBefore" type="checkbox" value="clearBefore" />  Zeilenumbruch davor</label>
+									</div>
+									<div className="col-xs-2"></div>
+								    <div className="input-group col-xs-5">
+										<label className="label-check"><input id="checkClearAfter" type="checkbox" value="clearAfter" />  Zeilenumbruch danach</label>
+									</div>
+								</div>
+							</div>
+							<br/>
+							<p className="heading-parameter">Zusätzliche Parameter</p>
+							<br/>
+							<div className="col-xs-12">
+								<table>
+									<thead>
+										<th className="align-center">Typ</th>
+										<th className="align-center">Wert</th>
+									</thead>
+									<tr>
+										<th>css</th>
+										<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="cssParam"></textarea></th>
+									</tr>
+									<tr>
+										<th>html</th>
+										<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="htmlParam"></textarea></th>
+									</tr>
+									<tr>
+										<th>js</th>
+										<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="jsParam"></textarea></th>
+									</tr>
+								</table>
+							</div>
+							<br/>					
 						 	<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
 						 </form>
 					</div>

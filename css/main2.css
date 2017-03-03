@@ -125,7 +125,7 @@ ul.button-list>li {
 	font-size: 10px;
 	color: rgba(0, 0, 0, 0.5);
 	border-radius: 4px;
-	width: 100px;
+	width: 120px;
 }
 
 .field-node:hover {
@@ -151,6 +151,7 @@ ul.button-list>li {
 .title-overflow {
 	overflow: hidden;
 	text-overflow: ellipsis;
+	height: 4em;
 }
 
 .field-inner-li {
@@ -160,8 +161,16 @@ ul.button-list>li {
 	margin-left: 5px;
 	padding:0;
 	border-width: 0;
-	width: 40px;
+	width: 50px;
 	text-align: center;
+}
+
+.field-li-more-width {
+	width: 80px;
+}
+
+.field-li-less-width {
+	width: 20px;
 }
 
 .field-inner-ul {
@@ -296,4 +305,26 @@ ul.button-list>li {
 .btn-field-confirm {
 	margin-top: 15px;
 	float: left;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+
+.label-check {
+	float: left;
+}
+
+.heading-parameter {
+	font-size: 17px;
+}
+
+.textarea-param {
+	width: 265px;
+}
+
+.th-param {
+	padding-left: 5px;
+	padding-bottom: 5px;
 }

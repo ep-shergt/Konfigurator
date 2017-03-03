@@ -36,6 +36,12 @@ class Field extends Component {
       $('#fieldEditorPanel').removeClass('display-hidden');
     }
 
+    $('#inputFieldTitle').val(field.title);
+    $('#colSelect').val(field.cols);
+    $('#fieldType').val(field.type);
+    $("#checkClearBefore").prop("checked", field.clearBefore);
+    $("#checkClearAfter").prop("checked", field.clearAfter);
+
     this.props.changeFieldToEdit(field);
     this.props.setSubAccordionToOpen(groupKeys);
   }
@@ -48,8 +54,8 @@ class Field extends Component {
         return (
           <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
-              <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
-              <li className="field-inner-li">
+              <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
+              <li className="field-inner-li field-li-less-width">
                 <div className="field-icon">
                   <i className="fa fa-file-code-o fa-2x field-code" aria-hidden="true"></i>
                 </div>
@@ -61,10 +67,10 @@ class Field extends Component {
 
       case 'radio':
         return (
-          <div className="field-node field-li">
+          <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
-              <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
-              <li className="field-inner-li">
+              <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
+              <li className="field-inner-li field-li-less-width">
                 <div className="field-icon">
                   <i className="fa fa-dot-circle-o fa-2x field-radio" aria-hidden="true"></i>
                 </div>
@@ -76,10 +82,10 @@ class Field extends Component {
 
       case 'check':
         return (
-          <div className="field-node field-li">
+          <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
-              <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
-              <li className="field-inner-li">
+              <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
+              <li className="field-inner-li field-li-less-width">
                 <div className="field-icon">
                   <i className="fa fa-check-square-o fa-2x field-check" aria-hidden="true"></i>
                 </div>
@@ -91,10 +97,10 @@ class Field extends Component {
 
       case 'select':
         return (
-          <div className="field-node field-li">
+          <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
-              <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
-              <li className="field-inner-li">
+              <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
+              <li className="field-inner-li field-li-less-width">
                 <div className="field-icon">
                   <i className="fa fa-list-ol fa-2x field-select" aria-hidden="true"></i>
                 </div>
@@ -106,10 +112,10 @@ class Field extends Component {
 
       case 'text':
         return (
-          <div className="field-node field-li">
+          <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
-              <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
-              <li className="field-inner-li">
+              <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
+              <li className="field-inner-li field-li-less-width">
                 <div className="field-icon">
                   <i className="fa fa-commenting fa-2x field-text" aria-hidden="true"></i>
                 </div>
@@ -121,10 +127,10 @@ class Field extends Component {
 
       case 'textarea':
         return (
-          <div className="field-node field-li">
+          <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
-              <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
-              <li className="field-inner-li">
+              <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
+              <li className="field-inner-li field-li-less-width">
                 <div className="field-icon">
                   <i className="fa fa-file-text fa-2x field-textarea" aria-hidden="true"></i>
                 </div>
@@ -136,10 +142,10 @@ class Field extends Component {
 
       default:
         return (
-          <div className="field-node field-li">
+          <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
-              <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
-              <li className="field-inner-li">
+              <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
+              <li className="field-inner-li field-li-less-width">
                 <div className="field-icon">
                   <i className="fa fa-question-circle fa-2x" aria-hidden="true"></i>    
                 </div>

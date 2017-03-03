@@ -1,0 +1,18 @@
+{
+  "name": "configurator",
+  "description": "",
+  "main": "",
+  "license": "ISC",
+  "homepage": "https://github.com/ep-shergt/Konfigurator",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

@@ -28,6 +28,22 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 			break;
 		}
 
+		case "CHANGE_FIELD": {
+			const {field} = action;
+			let accordion = [...state.accordion],
+				jsonData = {...state.jsonData},
+				fieldIndex;
+
+			fieldIndex = jsonData.fields.map((elem, i) => {
+    			return elem.key;
+  			}).indexOf(field.key);
+
+			accordion = setAccordionItems(jsonData);			
+	
+			state = {...state, jsonData, accordion};
+			break;
+		}
+
 		case "SET_SUBACCORDION_TO_OPEN": {
 			const {groupKeys} = action;
 			let accordion = [...state.accordion],
@@ -41,7 +57,8 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
   			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
     			return section.key;
   			}).indexOf(groupKeys[1]);
-
+			
+			accordion[indexSubAccordion].open = true;
 			accordion[indexSubAccordion].content[indexAccordionSection].open = true;
 				
 			state = {...state, accordion};
