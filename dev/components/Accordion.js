@@ -116,13 +116,12 @@ class Accordion extends Component {
   handleEdit(event, key) {
     if ($('#inputGroupLevelOne').hasClass('display-hidden')) {
       $('#inputGroupLevelOne').removeClass('display-hidden');
-      $('#inputGroupLevelOneTitle').attr('groupOneKey', key);
+      $('#inputGroupLevelOneTitle').attr('grouponekey', key);
 
     } else {
       $('#inputGroupLevelOne').addClass('display-hidden');
-      $('#inputGroupLevelOneTitle').removeAttr('groupOneKey');
+      $('#inputGroupLevelOneTitle').removeAttr('grouponekey');
     }
-
   }
 
   render() {

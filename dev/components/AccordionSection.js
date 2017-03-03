@@ -169,7 +169,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId} className="clear-both">
                       <ul className="field-ul">
-                        <li className="field-li"><Field field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">
@@ -197,7 +197,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId} className="clear-left">
                       <ul className="field-ul">
-                        <li className="field-li"><Field field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">
@@ -225,7 +225,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId} className="clear-right">
                       <ul className="field-ul">
-                        <li className="field-li"><Field field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">
@@ -253,7 +253,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId}>
                       <ul className="field-ul">
-                        <li className="field-li"><Field field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">

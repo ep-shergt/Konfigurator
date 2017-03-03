@@ -56,7 +56,7 @@ ul.dropdown-menu {
 }
 
 ul.button-list>li {
-	cursor: pointer;
+	
 }
 
 .dnd-grid {
@@ -126,6 +126,10 @@ ul.button-list>li {
 	color: rgba(0, 0, 0, 0.5);
 	border-radius: 4px;
 	width: 100px;
+}
+
+.field-node:hover {
+	cursor: pointer;
 }
 
 .clear-left {
@@ -287,4 +291,9 @@ ul.button-list>li {
 
 .acc-width {
 	width: 90%;
+}
+
+.btn-field-confirm {
+	margin-top: 15px;
+	float: left;
 }

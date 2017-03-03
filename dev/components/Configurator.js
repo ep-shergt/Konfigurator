@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Accordion from './Accordion';
+import { removeArrayElement } from './../helpers';
 
 class Configurator extends Component {
 
 	constructor(props) {
 	    super(props);
 
+	    this.handleFieldData = this.handleFieldData.bind(this);
+
 	    //getinitialState
 	    this.state = {
-	  		jsonData: this.props.store.database.jsonData
+	  		jsonData: this.props.store.database.jsonData,
+	  		fieldToEdit: this.props.store.database.fieldToEdit
 	    };
     }
 
@@ -33,6 +37,24 @@ class Configurator extends Component {
         	(target[0].id === 'dateMainTitle') ? self.props.changeStartDate(targetDate)
         								       : self.props.changeEndDate(targetDate);
         });
+
+        $("input").keypress( function(e) {
+		    let chr = String.fromCharCode(e.which);
+		    if (!("_".indexOf(chr) < 0))
+		        return false;
+		});
+  	}
+
+  	handleFieldData(event) { 	
+		event.preventDefault();
+  		
+  		let fieldData = {
+			inputFieldTitle: this.inputFieldTitle.value
+		}
+
+		console.log('inputFieldTitle', fieldData.inputFieldTitle);
+		console.log('field', this.state.fieldToEdit);
+		$('#fieldEditorPanel').addClass('display-hidden');
   	}
 
   	handleMainTitleChange(event){
@@ -53,18 +75,35 @@ class Configurator extends Component {
   	handleGroupLevelOneTitleChange(event){
   		const newTitle = event.target.value,
   			  groupOneKey = document.getElementById("inputGroupLevelOneTitle").getAttribute("grouponekey");
+  		let keyString = newTitle.split(' ').join('_');
 
 	    this.props.changeGroupLevelOneTitle(newTitle, groupOneKey);
+	    $('#inputGroupLevelOneTitle').attr('grouponekey', 'grp_1_' + keyString);
+  	}
+
+  	handleGroupLevelTwoTitleChange(event){
+  		const newTitle = event.target.value,
+  			  groupOneKey = document.getElementById("inputGroupLevelTwoTitle").getAttribute("grouponekey"),
+  			  groupTwoKey = document.getElementById("inputGroupLevelTwoTitle").getAttribute("grouptwokey");
+  		let keyString = newTitle.split(' ').join('_');
+
+	    this.props.changeGroupLevelTwoTitle(newTitle, groupTwoKey, groupOneKey);
+
+	    $('#inputGroupLevelTwoTitle').attr('grouptwokey', 'grp_2_' + keyString);
   	}
 
   	componentWillReceiveProps(nextProps) {
 	    let newJsonData = nextProps.store.database.jsonData,
-	        jsonData = {...this.state.jsonData};
+	    	newFieldToEdit = nextProps.store.database.fieldToEdit,
+	        jsonData = {...this.state.jsonData},
+	        fieldToEdit = {...this.state.fieldToEdit}
 
 	    jsonData = newJsonData;
+	    fieldToEdit = newFieldToEdit;
 
 	    this.setState({
-	        jsonData
+	        jsonData,
+	        fieldToEdit
 	    });
 
 	    setTimeout(() => {
@@ -103,7 +142,23 @@ class Configurator extends Component {
 							    <input id="inputGroupLevelOneTitle" onChange={this.handleGroupLevelOneTitleChange.bind(this)} type="text" className="form-control" name="inputMainTitle" placeholder="Titel - Gruppe Level 1" />			  		
 						  	</div>
 						</div>
+						<div id="inputGroupLevelTwo" className="display-hidden">
+							<div className="input-group">
+							    <span className="input-group-addon">Gruppe L2</span>
+							    <input id="inputGroupLevelTwoTitle" onChange={this.handleGroupLevelTwoTitleChange.bind(this)} type="text" className="form-control" name="inputMainTitle" placeholder="Titel - Gruppe Level 2" />			  		
+						  	</div>
+						</div>
 					</form>
+					<div id="fieldEditorPanel" className="display-hidden">
+						<h3>Feld-Editor</h3>
+						<form onSubmit={(e) => this.handleFieldData(e)}>		
+							<div className="input-group">
+							    <span className="input-group-addon">Titel</span>
+							    <input required ref={(input) => { this.inputFieldTitle = input}} id="inputFieldTitle" type="text" className="form-control" name="inputFieldTitle" placeholder="Feldtitel" />			  		
+						  	</div>					
+						 	<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
+						 </form>
+					</div>
 				</div>
 			</div>
 		);

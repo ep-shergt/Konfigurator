@@ -1,14 +1,15 @@
 import { setAccordionItems } from './../helpers.js';
 import jsonData from './../data/EmptyJSON';
 import { removeArrayElement } from './../helpers';
-import { jsonPath } from './../jsonPath';
+import jsonpath from './../jp';
 
 let accordion = setAccordionItems(jsonData),
 	groupsLevelOneToCopy = [],
 	groupsLevelTwoToCopy = [],
+	fieldToEdit = {},
 	fieldsToCopy = [];
 
-const changeJSONAndAccordion = (state = {jsonData, accordion, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy}, action) => {	
+const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy}, action) => {	
 	switch(action.type){
 		case "CHANGE_JSON": {
 			const {jsonData} = action;
@@ -16,7 +17,34 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, groupsLevelOneToCo
 
 			accordion = setAccordionItems(jsonData);
 
-			state = {...state, jsonData, accordion}
+			state = {...state, jsonData, accordion};
+			break;
+		}
+
+		case "CHANGE_FIELD_TO_EDIT": {
+			const {fieldToEdit} = action;
+	
+			state = {...state, fieldToEdit};
+			break;
+		}
+
+		case "SET_SUBACCORDION_TO_OPEN": {
+			const {groupKeys} = action;
+			let accordion = [...state.accordion],
+				indexSubAccordion,
+				indexAccordionSection;
+
+			indexSubAccordion = accordion.map((subAccordion, i) => {
+    			return subAccordion.key;
+  			}).indexOf(groupKeys[0]);
+
+  			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
+    			return section.key;
+  			}).indexOf(groupKeys[1]);
+
+			accordion[indexSubAccordion].content[indexAccordionSection].open = true;
+				
+			state = {...state, accordion};
 			break;
 		}
 
@@ -24,21 +52,65 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, groupsLevelOneToCo
 			const {gOneTitle, gOneKey} = action;
 			let accordion = [...state.accordion],
 				jsonData = {...state.jsonData},
+				keyString = gOneTitle.split(' ').join('_'),
 				i = 0;
 
 			while(i < jsonData.groups.length) {
 				if(jsonData.groups[i].key === gOneKey) {
 					jsonData.groups[i].title = gOneTitle;
+					jsonData.groups[i].key = 'grp_1_' + keyString;
 					break;
 				}
 				i++;
-			}	
+			}
+
+			for(let j = 0; j < jsonData.fields.length; j++) {
+				let groupKeys = jsonData.fields[j].group.split('|'),
+					groupOneKey = groupKeys[0];
+
+				if(groupOneKey === gOneKey) {
+					jsonData.fields[j].group = "grp_1_" + keyString + '|' + groupKeys[1];
+				}
+			}
 
 			accordion = setAccordionItems(jsonData);
 
-			//let bla = jsonPath(jsonData, "$..groups");
+			state = {...state, jsonData, accordion};
+			break;
+		}
 
-			state = {...state, jsonData, accordion}
+		case "CHANGE_GROUP_LEVEL_TWO_TITLE": {
+			const {gTwoTitle, gTwoKey, gOneKey} = action;
+			let accordion = [...state.accordion],
+				jsonData = {...state.jsonData},
+				keyString = gTwoTitle.split(' ').join('_'),
+				indexSubAccordion,
+				indexAccordionSection;
+
+			indexSubAccordion = accordion.map((subAccordion, i) => {
+    			return subAccordion.key;
+  			}).indexOf(gOneKey);
+
+  			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
+    			return section.key;
+  			}).indexOf(gTwoKey);
+
+			jsonData.groups[indexSubAccordion].groups[indexAccordionSection].title = gTwoTitle;
+			jsonData.groups[indexSubAccordion].groups[indexAccordionSection].key = 'grp_2_' + keyString;
+
+			for(let j = 0; j < jsonData.fields.length; j++) {
+				let groupKeys = jsonData.fields[j].group.split('|'),
+					groupTwoKey = groupKeys[1];
+					
+				if(groupTwoKey === gTwoKey) {
+					jsonData.fields[j].group = groupKeys[0] + '|' + "grp_2_" + keyString;
+				}
+			}
+
+			accordion = setAccordionItems(jsonData);
+			accordion[indexSubAccordion].open = true;
+
+			state = {...state, jsonData, accordion};
 			break;
 		}
 
@@ -161,6 +233,14 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, groupsLevelOneToCo
 				indexSubAccordion,
 				indexAccordionSection;
 
+			indexSubAccordion = accordion.map((subAccordion, i) => {
+    			return subAccordion.key;
+  			}).indexOf(groupLevelOneKey);
+
+  			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
+    			return section.key;
+  			}).indexOf(groupLevelTwoKey);		
+
 			if (fields.length > 1) {
 				if (element.marked) {
 			        $('#' + buttonId).removeClass('marked');
@@ -172,17 +252,10 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, groupsLevelOneToCo
 			        fieldsToCopy = removeArrayElement(fieldsToCopy, indexForElementToRemove);
 			    }
 
-				indexSubAccordion = accordion.map((subAccordion, i) => {
-	    			return subAccordion.key;
-	  			}).indexOf(groupLevelOneKey);
-
-	  			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
-	    			return section.key;
-	  			}).indexOf(groupLevelTwoKey);
-
 	  			accordion[indexSubAccordion].content[indexAccordionSection].fields = removeArrayElement(accordion[indexSubAccordion].content[indexAccordionSection].fields, index);			
 			}		
 
+	  		accordion[indexSubAccordion].content[indexAccordionSection].open = true;
 					
 			state = {...state, accordion, fieldsToCopy};
 		    return state;

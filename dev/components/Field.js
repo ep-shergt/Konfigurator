@@ -7,6 +7,7 @@ class Field extends Component {
     super(props);
 
     this.updateField = this.updateField.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       field: this.props.field
@@ -28,11 +29,24 @@ class Field extends Component {
     
   }
 
+  handleClick(event, field) {
+    const groupKeys = field.group.split('|');
+
+    if ($('#fieldEditorPanel').hasClass('display-hidden')) {
+      $('#fieldEditorPanel').removeClass('display-hidden');
+    }
+
+    this.props.changeFieldToEdit(field);
+    this.props.setSubAccordionToOpen(groupKeys);
+  }
+
   render() {
+    let field = this.state.field;
+
     switch (this.state.field.type) {
       case 'code':
         return (
-          <div className="field-node field-li">
+          <div className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li">

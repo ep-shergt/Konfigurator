@@ -44,8 +44,33 @@ export function changeGroupLevelOneTitle(gOneTitle, gOneKey) {
 	}
 }
 
+export function changeGroupLevelTwoTitle(gTwoTitle, gTwoKey, gOneKey) {
+	return {
+		type: 'CHANGE_GROUP_LEVEL_TWO_TITLE',
+		gTwoTitle,
+		gTwoKey,
+		gOneKey
+	}
+}
+
+export function changeFieldToEdit(fieldToEdit) {
+	return {
+		type: 'CHANGE_FIELD_TO_EDIT',
+		fieldToEdit
+	}
+}
 //*******************************************************************************
 
+
+// Setters
+//***************************************************************************************
+
+export function setSubAccordionToOpen(groupKeys) {
+	return {
+		type: 'SET_SUBACCORDION_TO_OPEN',
+		groupKeys
+	}
+}
 // Markers
 //*************************************************************************************************************************************
 export function markGroupLevelOneForCopy(groupsLevelOneToCopy, element, index) {
