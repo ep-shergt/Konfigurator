@@ -113,10 +113,12 @@ class Accordion extends Component {
     }
   }
 
-  handleEdit(event, key) {
+  handleEdit(event, key, title) {
     if ($('#inputGroupLevelOne').hasClass('display-hidden')) {
       $('#inputGroupLevelOne').removeClass('display-hidden');
       $('#inputGroupLevelOneTitle').attr('grouponekey', key);
+      $('#inputGroupLevelOneTitle').val(title);
+
 
     } else {
       $('#inputGroupLevelOne').addClass('display-hidden');
@@ -159,7 +161,7 @@ class Accordion extends Component {
                         <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
+                        <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key, elem.title)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>

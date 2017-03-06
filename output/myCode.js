@@ -23617,6 +23617,10 @@
 
 	var _reactDom = __webpack_require__(32);
 
+	var _EmptyJSON = __webpack_require__(333);
+
+	var _EmptyJSON2 = _interopRequireDefault(_EmptyJSON);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23647,6 +23651,16 @@
 	  _createClass(Textbox, [{
 	    key: 'saveTextAsFile',
 	    value: function saveTextAsFile(event) {
+	      var jsonCopy = _extends({}, this.state.jsonData);
+
+	      jsonCopy.groups.forEach(function (elem) {
+	        elem.groups.forEach(function (i) {
+	          delete i['fields'];
+	        });
+	      });
+
+	      $('#mainArea').val(JSON.stringify(jsonCopy, null, 2));
+
 	      var textToSave = document.getElementById("mainArea").value,
 	          textToSaveAsBlob = new Blob([textToSave], { type: "text/plain" }),
 	          textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob),
@@ -23661,6 +23675,7 @@
 	      document.body.appendChild(downloadLink);
 
 	      downloadLink.click();
+	      this.props.initializeJSON(_EmptyJSON2.default);
 	    }
 	  }, {
 	    key: 'destroyClickedElement',
@@ -23708,7 +23723,15 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      $('#mainArea').val(JSON.stringify(this.state.jsonData, null, 2));
+	      var jsonCopy = _extends({}, this.state.jsonData);
+
+	      /*  jsonCopy.groups.forEach((elem) => {
+	          elem.groups.forEach((i) => {
+	            delete i['fields'];
+	          })
+	        });*/
+
+	      $('#mainArea').val(JSON.stringify(jsonCopy, null, 2));
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -25037,6 +25060,10 @@
 
 	var _helpers = __webpack_require__(229);
 
+	var _CheckboxOptions = __webpack_require__(335);
+
+	var _CheckboxOptions2 = _interopRequireDefault(_CheckboxOptions);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25054,6 +25081,7 @@
 			var _this = _possibleConstructorReturn(this, (Configurator.__proto__ || Object.getPrototypeOf(Configurator)).call(this, props));
 
 			_this.handleFieldData = _this.handleFieldData.bind(_this);
+			_this.handleCheckboxNumberChange = _this.handleCheckboxNumberChange.bind(_this);
 
 			//getinitialState
 			_this.state = {
@@ -25092,6 +25120,25 @@
 				});
 			}
 		}, {
+			key: 'handleTypeChange',
+			value: function handleTypeChange(event) {
+				var type = event.target.value,
+				    selector = type + 'ParamsWrapper';
+				var fieldToEdit = this.state.fieldToEdit,
+				    groupKeys = fieldToEdit.group.split('|');
+
+				$('.param-wrapper').addClass('display-hidden');
+				$('#' + selector).removeClass('display-hidden');
+
+				fieldToEdit['parameters'] = {};
+
+				this.props.changeField(fieldToEdit);
+				this.props.setSubAccordionToOpen(groupKeys);
+			}
+		}, {
+			key: 'handleCheckboxNumberChange',
+			value: function handleCheckboxNumberChange(event) {}
+		}, {
 			key: 'handleFieldData',
 			value: function handleFieldData(event) {
 				var newField = this.state.fieldToEdit,
@@ -25114,9 +25161,31 @@
 				newField.clearBefore = $("#checkClearBefore").is(":checked");
 				newField.clearAfter = $("#checkClearAfter").is(":checked");
 
+				switch (fieldData.fieldType) {
+					case 'code':
+						newField.parameters.css = $('#cssParam').val();
+						newField.parameters.html = $('#htmlParam').val();
+						newField.parameters.js = $('#jsParam').val();
+						break;
+
+					case 'text':
+						newField.parameters.class = $('#inputTextParams').val();
+
+					case 'textarea':
+						newField.parameters.class = $('#inputTextAreaParams').val();
+
+					case 'check':
+						newField.parameters.inline = $("#checkInlineCheck").is(":checked") ? true : false;
+						newField.parameters.inlineBreak = $("#checkInlineBreakCheck").is(":checked") ? true : false;
+						newField.parameters.options = [{}];
+						newField.parameters.options[0].title = $('#inputParamsTitleCheck').val();
+						newField.parameters.options[0].value = $('#inputParamsValueCheck').val();
+				}
+
 				this.props.changeField(newField);
 				this.props.setSubAccordionToOpen(groupKeys);
 				$('#fieldEditorPanel').addClass('display-hidden');
+				$('.param-wrapper').addClass('display-hidden');
 			}
 		}, {
 			key: 'handleMainTitleChange',
@@ -25256,6 +25325,7 @@
 									_react2.default.createElement('input', { id: 'inputGroupLevelOneTitle', onChange: this.handleGroupLevelOneTitleChange.bind(this), type: 'text', className: 'form-control', name: 'inputMainTitle', placeholder: 'Titel - Gruppe Level 1' })
 								)
 							),
+							_react2.default.createElement('br', null),
 							_react2.default.createElement(
 								'div',
 								{ id: 'inputGroupLevelTwo', className: 'display-hidden' },
@@ -25305,7 +25375,7 @@
 										{ className: 'row vertical-align' },
 										_react2.default.createElement(
 											'div',
-											{ className: 'input-group col-xs-4' },
+											{ className: 'input-group col-xs-5' },
 											_react2.default.createElement(
 												'span',
 												{ className: 'input-group-addon' },
@@ -25378,7 +25448,7 @@
 												)
 											)
 										),
-										_react2.default.createElement('div', { className: 'col-xs-3' }),
+										_react2.default.createElement('div', { className: 'col-xs-2' }),
 										_react2.default.createElement(
 											'div',
 											{ className: 'input-group col-xs-5' },
@@ -25389,7 +25459,7 @@
 											),
 											_react2.default.createElement(
 												'select',
-												{ ref: function ref(input) {
+												{ onChange: this.handleTypeChange.bind(this), ref: function ref(input) {
 														_this3.fieldType = input;
 													}, className: 'form-control', id: 'fieldType', name: 'fieldType' },
 												_react2.default.createElement(
@@ -25460,12 +25530,12 @@
 								_react2.default.createElement(
 									'p',
 									{ className: 'heading-parameter' },
-									'Zus\xE4tzliche Parameter'
+									'Zus\xE4tzliche Typ-Parameter'
 								),
 								_react2.default.createElement('br', null),
 								_react2.default.createElement(
 									'div',
-									{ className: 'col-xs-12' },
+									{ id: 'codeParamsWrapper', className: 'col-xs-12 display-hidden param-wrapper' },
 									_react2.default.createElement(
 										'table',
 										null,
@@ -25473,58 +25543,197 @@
 											'thead',
 											null,
 											_react2.default.createElement(
-												'th',
-												{ className: 'align-center' },
-												'Typ'
-											),
-											_react2.default.createElement(
-												'th',
-												{ className: 'align-center' },
-												'Wert'
+												'tr',
+												null,
+												_react2.default.createElement(
+													'th',
+													{ className: 'align-center' },
+													'Typ'
+												),
+												_react2.default.createElement(
+													'th',
+													{ className: 'align-center' },
+													'Wert'
+												)
 											)
 										),
 										_react2.default.createElement(
-											'tr',
+											'tbody',
 											null,
 											_react2.default.createElement(
-												'th',
+												'tr',
 												null,
-												'css'
+												_react2.default.createElement(
+													'th',
+													null,
+													'css'
+												),
+												_react2.default.createElement(
+													'th',
+													{ className: 'th-param' },
+													_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'cssParam' })
+												)
 											),
 											_react2.default.createElement(
-												'th',
-												{ className: 'th-param' },
-												_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'cssParam' })
-											)
-										),
-										_react2.default.createElement(
-											'tr',
-											null,
-											_react2.default.createElement(
-												'th',
+												'tr',
 												null,
-												'html'
+												_react2.default.createElement(
+													'th',
+													null,
+													'html'
+												),
+												_react2.default.createElement(
+													'th',
+													{ className: 'th-param' },
+													_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'htmlParam' })
+												)
 											),
 											_react2.default.createElement(
-												'th',
-												{ className: 'th-param' },
-												_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'htmlParam' })
-											)
-										),
-										_react2.default.createElement(
-											'tr',
-											null,
-											_react2.default.createElement(
-												'th',
+												'tr',
 												null,
-												'js'
-											),
-											_react2.default.createElement(
-												'th',
-												{ className: 'th-param' },
-												_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'jsParam' })
+												_react2.default.createElement(
+													'th',
+													null,
+													'js'
+												),
+												_react2.default.createElement(
+													'th',
+													{ className: 'th-param' },
+													_react2.default.createElement('textarea', { className: 'form-control textarea-param', rows: '5', id: 'jsParam' })
+												)
 											)
 										)
+									)
+								),
+								_react2.default.createElement('div', { id: 'radioParamsWrapper', className: 'col-xs-12 display-hidden param-wrapper' }),
+								_react2.default.createElement(
+									'div',
+									{ id: 'checkParamsWrapper', className: 'col-xs-12 display-hidden param-wrapper' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'container-fluid' },
+										_react2.default.createElement(
+											'div',
+											{ className: 'row vertical-align' },
+											_react2.default.createElement(
+												'div',
+												{ className: 'input-group col-xs-5' },
+												_react2.default.createElement(
+													'label',
+													{ className: 'label-check' },
+													_react2.default.createElement('input', { id: 'checkInlineCheck', type: 'checkbox', value: 'inline' }),
+													'  nebeneinander setzen'
+												)
+											),
+											_react2.default.createElement('div', { className: 'col-xs-2' }),
+											_react2.default.createElement(
+												'div',
+												{ className: 'input-group col-xs-5' },
+												_react2.default.createElement(
+													'label',
+													{ className: 'label-check' },
+													_react2.default.createElement('input', { id: 'checkInlineBreakCheck', type: 'checkbox', value: 'inlineBreak' }),
+													'  Zeilenumbruch danach'
+												)
+											)
+										)
+									),
+									_react2.default.createElement('br', null),
+									_react2.default.createElement(
+										'div',
+										{ className: 'input-group col-xs-12' },
+										_react2.default.createElement(
+											'span',
+											{ className: 'input-group-addon' },
+											'Anzahl der Checkboxen f\xFCr das Feld'
+										),
+										_react2.default.createElement(
+											'select',
+											{ onChange: this.handleCheckboxNumberChange.bind(this), ref: function ref(input) {
+													_this3.checkboxNumber = input;
+												}, className: 'form-control', id: 'checkboxNumber', name: 'checkboxNumber' },
+											_react2.default.createElement(
+												'option',
+												null,
+												'1'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'2'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'3'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'4'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'5'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'6'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'7'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'8'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'9'
+											),
+											_react2.default.createElement(
+												'option',
+												null,
+												'10'
+											)
+										)
+									),
+									_react2.default.createElement('br', null),
+									_react2.default.createElement(_CheckboxOptions2.default, null)
+								),
+								_react2.default.createElement('div', { id: 'selectParamsWrapper', className: 'col-xs-12 display-hidden param-wrapper' }),
+								_react2.default.createElement(
+									'div',
+									{ id: 'textParamsWrapper', className: 'col-xs-12 display-hidden param-wrapper' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'input-group' },
+										_react2.default.createElement(
+											'span',
+											{ className: 'input-group-addon' },
+											'Klasse'
+										),
+										_react2.default.createElement('input', { id: 'inputTextParams', type: 'text', className: 'form-control', name: 'inputTextParams', placeholder: 'Klasse f\xFCr Text' })
+									)
+								),
+								_react2.default.createElement(
+									'div',
+									{ id: 'textareaParamsWrapper', className: 'col-xs-12 display-hidden param-wrapper' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'input-group' },
+										_react2.default.createElement(
+											'span',
+											{ className: 'input-group-addon' },
+											'Klasse'
+										),
+										_react2.default.createElement('input', { id: 'inputTextAreaParams', type: 'text', className: 'form-control', name: 'inputTextAreaParams', placeholder: 'Klasse f\xFCr Textbox' })
 									)
 								),
 								_react2.default.createElement('br', null),
@@ -25711,10 +25920,11 @@
 	    }
 	  }, {
 	    key: 'handleEdit',
-	    value: function handleEdit(event, key) {
+	    value: function handleEdit(event, key, title) {
 	      if ($('#inputGroupLevelOne').hasClass('display-hidden')) {
 	        $('#inputGroupLevelOne').removeClass('display-hidden');
 	        $('#inputGroupLevelOneTitle').attr('grouponekey', key);
+	        $('#inputGroupLevelOneTitle').val(title);
 	      } else {
 	        $('#inputGroupLevelOne').addClass('display-hidden');
 	        $('#inputGroupLevelOneTitle').removeAttr('grouponekey');
@@ -25810,7 +26020,7 @@
 	                        _react2.default.createElement(
 	                          'a',
 	                          { href: '#', onClick: function onClick(e) {
-	                              return _this4.handleEdit(e, elem.key);
+	                              return _this4.handleEdit(e, elem.key, elem.title);
 	                            } },
 	                          _react2.default.createElement('i', { className: 'fa-margin fa fa-wrench', 'aria-hidden': 'true' }),
 	                          ' Bearbeiten'
@@ -26025,11 +26235,12 @@
 	    }
 	  }, {
 	    key: 'handleEdit',
-	    value: function handleEdit(event, groupTwoKey, groupOneKey) {
+	    value: function handleEdit(event, groupTwoKey, groupOneKey, title) {
 	      if ($('#inputGroupLevelTwo').hasClass('display-hidden')) {
 	        $('#inputGroupLevelTwo').removeClass('display-hidden');
 	        $('#inputGroupLevelTwoTitle').attr('groupOneKey', groupOneKey);
 	        $('#inputGroupLevelTwoTitle').attr('groupTwoKey', groupTwoKey);
+	        $('#inputGroupLevelTwoTitle').val(title);
 	      } else {
 	        $('#inputGroupLevelTwo').addClass('display-hidden');
 	        $('#inputGroupLevelTwoTitle').removeAttr('groupOneKey');
@@ -26124,7 +26335,7 @@
 	                              _react2.default.createElement(
 	                                'a',
 	                                { href: '#', onClick: function onClick(e) {
-	                                    return _this4.handleEdit(e, elem.key, groupLevelOneKey);
+	                                    return _this4.handleEdit(e, elem.key, groupLevelOneKey, elem.title);
 	                                  } },
 	                                _react2.default.createElement('i', { className: 'fa-margin fa fa-wrench', 'aria-hidden': 'true' }),
 	                                ' Bearbeiten'
@@ -26845,6 +27056,43 @@
 
 	      if ($('#fieldEditorPanel').hasClass('display-hidden')) {
 	        $('#fieldEditorPanel').removeClass('display-hidden');
+	      } else {
+	        $('#fieldEditorPanel').addClass('display-hidden');
+	      }
+
+	      $('.param-wrapper').addClass('display-hidden');
+
+	      switch (field.type) {
+	        case 'code':
+	          $('#codeParamsWrapper').removeClass('display-hidden');
+	          $('#cssParam').val(field.parameters.css);
+	          $('#htmlParam').val(field.parameters.html);
+	          $('#jsParam').val(field.parameters.js);
+	          break;
+
+	        case 'text':
+	          $('#textParamsWrapper').removeClass('display-hidden');
+	          $('#inputTextParams').val(field.parameters.class);
+	          break;
+
+	        case 'radio':
+	          $('#radioParamsWrapper').removeClass('display-hidden');
+	          break;
+
+	        case 'check':
+	          $('#checkParamsWrapper').removeClass('display-hidden');
+	          $('#checkInlineCheck').prop("checked", field.parameters.inline);
+	          $('#checkInlineBreakCheck').prop("checked", field.parameters.inlineBreak);
+	          break;
+
+	        case 'select':
+	          $('#selectParamsWrapper').removeClass('display-hidden');
+	          break;
+
+	        case 'textarea':
+	          $('#textareaParamsWrapper').removeClass('display-hidden');
+	          $('#inputTextAreaParams').val(field.parameters.class);
+	          break;
 	      }
 
 	      $('#inputFieldTitle').val(field.title);
@@ -27098,6 +27346,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	exports.extractContent = extractContent;
 	exports.removeArrayElement = removeArrayElement;
 	exports.setAccordionItems = setAccordionItems;
@@ -27114,9 +27365,10 @@
 	  return newArray;
 	}
 
-	function setAccordionItems(jsonData) {
+	function setAccordionItems(jsonDataCopy) {
 	  var accordion = [],
-	      groups = jsonData.groups;
+	      jsonData = _extends({}, jsonDataCopy),
+	      groups = [].concat(_toConsumableArray(jsonData.groups));
 
 	  groups.forEach(function (group) {
 	    if (group.groups[0] !== undefined) {
@@ -35813,8 +36065,6 @@
 
 	var _EmptyJSON2 = _interopRequireDefault(_EmptyJSON);
 
-	var _helpers2 = __webpack_require__(229);
-
 	var _jp = __webpack_require__(334);
 
 	var _jp2 = _interopRequireDefault(_jp);
@@ -35823,7 +36073,8 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var accordion = (0, _helpers.setAccordionItems)(_EmptyJSON2.default),
+	var jsonDataCopy = _extends({}, _EmptyJSON2.default);
+	var accordion = (0, _helpers.setAccordionItems)(jsonDataCopy),
 	    groupsLevelOneToCopy = [],
 	    groupsLevelTwoToCopy = [],
 	    fieldToEdit = {},
@@ -35867,6 +36118,7 @@
 						return elem.key;
 					}).indexOf(field.key);
 
+					_jsonData2.fields[fieldIndex] = field;
 					_accordion2 = (0, _helpers.setAccordionItems)(_jsonData2);
 
 					state = _extends({}, state, { jsonData: _jsonData2, accordion: _accordion2 });
@@ -36034,7 +36286,7 @@
 
 
 					if (_accordion9.length > 1) {
-						_accordion9 = (0, _helpers2.removeArrayElement)(_accordion9, index);
+						_accordion9 = (0, _helpers.removeArrayElement)(_accordion9, index);
 						if (element.marked) {
 							$('#' + buttonId).removeClass('marked');
 
@@ -36042,7 +36294,7 @@
 								return key;
 							}).indexOf(element.key);
 
-							_groupsLevelOneToCopy = (0, _helpers2.removeArrayElement)(_groupsLevelOneToCopy, indexForElementToRemove);
+							_groupsLevelOneToCopy = (0, _helpers.removeArrayElement)(_groupsLevelOneToCopy, indexForElementToRemove);
 						}
 
 						// delete group and field to copy!
@@ -36067,7 +36319,7 @@
 					    _indexSubAccordion2 = void 0;
 
 					if (subAccordionItems.length > 1) {
-						subAccordionItems = (0, _helpers2.removeArrayElement)(subAccordionItems, _index);
+						subAccordionItems = (0, _helpers.removeArrayElement)(subAccordionItems, _index);
 						if (_element.marked) {
 							$('#' + _buttonId).removeClass('marked');
 
@@ -36075,7 +36327,7 @@
 								return key;
 							}).indexOf(_element.key);
 
-							_groupsLevelTwoToCopy = (0, _helpers2.removeArrayElement)(_groupsLevelTwoToCopy, _indexForElementToRemove);
+							_groupsLevelTwoToCopy = (0, _helpers.removeArrayElement)(_groupsLevelTwoToCopy, _indexForElementToRemove);
 						}
 
 						//delete field to copy!
@@ -36084,7 +36336,7 @@
 							return subAccordion.key;
 						}).indexOf(groupLevelOneKey);
 
-						_accordion10[_indexSubAccordion2].content = (0, _helpers2.removeArrayElement)(_accordion10[_indexSubAccordion2].content, _index);
+						_accordion10[_indexSubAccordion2].content = (0, _helpers.removeArrayElement)(_accordion10[_indexSubAccordion2].content, _index);
 					}
 
 					state = _extends({}, state, { accordion: _accordion10, groupsLevelTwoToCopy: _groupsLevelTwoToCopy });
@@ -36123,10 +36375,10 @@
 								return key;
 							}).indexOf(_element2.key);
 
-							_fieldsToCopy = (0, _helpers2.removeArrayElement)(_fieldsToCopy, _indexForElementToRemove2);
+							_fieldsToCopy = (0, _helpers.removeArrayElement)(_fieldsToCopy, _indexForElementToRemove2);
 						}
 
-						_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].fields = (0, _helpers2.removeArrayElement)(_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].fields, _index2);
+						_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].fields = (0, _helpers.removeArrayElement)(_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].fields, _index2);
 					}
 
 					_accordion11[_indexSubAccordion3].content[_indexAccordionSection2].open = true;
@@ -36152,7 +36404,7 @@
 							return key;
 						}).indexOf(_element3.key);
 
-						_groupsLevelOneToCopy2 = (0, _helpers2.removeArrayElement)(_groupsLevelOneToCopy2, _indexForElementToRemove3);
+						_groupsLevelOneToCopy2 = (0, _helpers.removeArrayElement)(_groupsLevelOneToCopy2, _indexForElementToRemove3);
 						_accordion12[_index3].marked = false;
 					} else {
 						_accordion12[_index3].marked = true;
@@ -36187,7 +36439,7 @@
 						}).indexOf(_element4.key);
 
 						_accordion13[_indexSubAccordion4].content[_index4].marked = false;
-						_groupsLevelTwoToCopy2 = (0, _helpers2.removeArrayElement)(_groupsLevelTwoToCopy2, _indexForElementToRemove4);
+						_groupsLevelTwoToCopy2 = (0, _helpers.removeArrayElement)(_groupsLevelTwoToCopy2, _indexForElementToRemove4);
 					} else {
 						_accordion13[_indexSubAccordion4].content[_index4].marked = true;
 						_groupsLevelTwoToCopy2.push(_subAccordionItems[_index4].key);
@@ -36229,7 +36481,7 @@
 							return key;
 						}).indexOf(_element5.key);
 
-						_fieldsToCopy2 = (0, _helpers2.removeArrayElement)(_fieldsToCopy2, _indexForElementToRemove5);
+						_fieldsToCopy2 = (0, _helpers.removeArrayElement)(_fieldsToCopy2, _indexForElementToRemove5);
 						_accordion14[_indexSubAccordion5].content[_indexAccordionSection3].fields[_index5].marked = false;
 						$('#' + _buttonId5).removeClass('marked');
 					} else {
@@ -37665,6 +37917,84 @@
 	    }, { "./lib/index": 5 }] }, {}, ["jsonpath"])("jsonpath");
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 335 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CheckboxOptions = function (_Component) {
+	  _inherits(CheckboxOptions, _Component);
+
+	  function CheckboxOptions(props) {
+	    _classCallCheck(this, CheckboxOptions);
+
+	    var _this = _possibleConstructorReturn(this, (CheckboxOptions.__proto__ || Object.getPrototypeOf(CheckboxOptions)).call(this, props));
+
+	    _this.state = {};
+	    return _this;
+	  }
+
+	  _createClass(CheckboxOptions, [{
+	    key: 'render',
+	    value: function render() {
+	      var _React$createElement, _React$createElement2;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'input-group' },
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'input-group-addon' },
+	            'Titel'
+	          ),
+	          _react2.default.createElement('input', (_React$createElement = { id: 'inputParamsTitleCheck', name: 'inputParamsTitleCheck', required: true, type: 'text', className: 'form-control' }, _defineProperty(_React$createElement, 'name', 'inputParamsTitleCheck'), _defineProperty(_React$createElement, 'placeholder', 'z.B.: positiv'), _React$createElement))
+	        ),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'input-group' },
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'input-group-addon' },
+	            'Wert'
+	          ),
+	          _react2.default.createElement('input', (_React$createElement2 = { id: 'inputParamsValueCheck', name: 'inputParamsValueCheck', required: true, type: 'text', className: 'form-control' }, _defineProperty(_React$createElement2, 'name', 'inputParamsValueCheck'), _defineProperty(_React$createElement2, 'placeholder', 'z.B.: +'), _React$createElement2))
+	        )
+	      );
+	    }
+	  }]);
+
+	  return CheckboxOptions;
+	}(_react.Component);
+
+	exports.default = CheckboxOptions;
 
 /***/ }
 /******/ ]);

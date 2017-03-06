@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import emptyJSON from './../data/EmptyJSON';
 
 export default class Textbox extends Component {
 
@@ -17,20 +18,31 @@ export default class Textbox extends Component {
   }
 
   saveTextAsFile(event) {
-      var textToSave = document.getElementById("mainArea").value,
-          textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"}),
-          textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob),
-          fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value,
-          downloadLink = document.createElement("a");
+    var jsonCopy = {...this.state.jsonData};
 
-      downloadLink.download = fileNameToSaveAs;
-      downloadLink.innerHTML = "Download File";
-      downloadLink.href = textToSaveAsURL;
-      downloadLink.onclick = this.destroyClickedElement;
-      downloadLink.style.display = "none";
-      document.body.appendChild(downloadLink);
-   
-      downloadLink.click();
+    jsonCopy.groups.forEach((elem) => {
+      elem.groups.forEach((i) => {
+        delete i['fields'];
+      });
+    });
+
+    $('#mainArea').val(JSON.stringify(jsonCopy, null, 2));
+    
+    var textToSave = document.getElementById("mainArea").value,
+        textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"}),
+        textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob),
+        fileNameToSaveAs = document.getElementById("inputFileNameToSaveAs").value,
+        downloadLink = document.createElement("a");
+
+    downloadLink.download = fileNameToSaveAs;
+    downloadLink.innerHTML = "Download File";
+    downloadLink.href = textToSaveAsURL;
+    downloadLink.onclick = this.destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+ 
+    downloadLink.click();
+    this.props.initializeJSON(emptyJSON);
   }
  
   destroyClickedElement(event) {
@@ -74,7 +86,15 @@ export default class Textbox extends Component {
   }
 
   componentDidMount() {
-    $('#mainArea').val(JSON.stringify(this.state.jsonData, null, 2));
+    let jsonCopy = {...this.state.jsonData};
+
+  /*  jsonCopy.groups.forEach((elem) => {
+      elem.groups.forEach((i) => {
+        delete i['fields'];
+      })
+    });*/
+
+    $('#mainArea').val(JSON.stringify(jsonCopy, null, 2));
   }
 
   componentWillReceiveProps(nextProps) {

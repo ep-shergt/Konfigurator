@@ -102,11 +102,12 @@ class SubAccordion extends Component {
     });
   }
 
-  handleEdit(event, groupTwoKey, groupOneKey) {
+  handleEdit(event, groupTwoKey, groupOneKey, title) {
      if ($('#inputGroupLevelTwo').hasClass('display-hidden')) {
       $('#inputGroupLevelTwo').removeClass('display-hidden');
       $('#inputGroupLevelTwoTitle').attr('groupOneKey', groupOneKey);
       $('#inputGroupLevelTwoTitle').attr('groupTwoKey', groupTwoKey);
+      $('#inputGroupLevelTwoTitle').val(title);
 
     } else {
       $('#inputGroupLevelTwo').addClass('display-hidden');
@@ -160,7 +161,7 @@ class SubAccordion extends Component {
                               <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </button>
                             <ul className="dropdown-menu">
-                              <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key, groupLevelOneKey)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
+                              <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key, groupLevelOneKey, elem.title)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>

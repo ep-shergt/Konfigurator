@@ -1,9 +1,10 @@
-import { setAccordionItems } from './../helpers.js';
+import { setAccordionItems } from './../helpers';
 import jsonData from './../data/EmptyJSON';
 import { removeArrayElement } from './../helpers';
 import jsonpath from './../jp';
 
-let accordion = setAccordionItems(jsonData),
+const jsonDataCopy = {...jsonData};
+let	accordion = setAccordionItems(jsonDataCopy),
 	groupsLevelOneToCopy = [],
 	groupsLevelTwoToCopy = [],
 	fieldToEdit = {},
@@ -37,7 +38,8 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 			fieldIndex = jsonData.fields.map((elem, i) => {
     			return elem.key;
   			}).indexOf(field.key);
-
+			
+			jsonData.fields[fieldIndex] = field;
 			accordion = setAccordionItems(jsonData);			
 	
 			state = {...state, jsonData, accordion};

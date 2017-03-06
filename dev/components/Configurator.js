@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Accordion from './Accordion';
 import { removeArrayElement } from './../helpers';
+import CheckboxOptions from './CheckboxOptions';
 
 class Configurator extends Component {
 
@@ -9,6 +10,7 @@ class Configurator extends Component {
 	    super(props);
 
 	    this.handleFieldData = this.handleFieldData.bind(this);
+	    this.handleCheckboxNumberChange = this.handleCheckboxNumberChange.bind(this);
 
 	    //getinitialState
 	    this.state = {
@@ -44,7 +46,24 @@ class Configurator extends Component {
 		    if (!("_".indexOf(chr) < 0))
 		        return false;
 		});
+  	}
 
+  	handleTypeChange(event) {
+  		const type = event.target.value,
+  		      selector = type + 'ParamsWrapper';
+  		let fieldToEdit = this.state.fieldToEdit,
+  			groupKeys = fieldToEdit.group.split('|');
+
+  		$('.param-wrapper').addClass('display-hidden');
+  		$('#' + selector).removeClass('display-hidden');
+
+  		fieldToEdit['parameters'] = {};
+
+  		this.props.changeField(fieldToEdit);
+  		this.props.setSubAccordionToOpen(groupKeys); 		
+  	}
+
+  	handleCheckboxNumberChange(event) {
 
   	}
 
@@ -69,9 +88,31 @@ class Configurator extends Component {
 		newField.clearBefore = $("#checkClearBefore").is(":checked");
 		newField.clearAfter = $("#checkClearAfter").is(":checked");
 
+		switch(fieldData.fieldType) {
+      		case 'code':
+      			newField.parameters.css = $('#cssParam').val();
+      			newField.parameters.html = $('#htmlParam').val();
+      			newField.parameters.js = $('#jsParam').val();
+      			break;
+
+      		case 'text':
+      			newField.parameters.class = $('#inputTextParams').val();
+
+      		case 'textarea':
+      			newField.parameters.class = $('#inputTextAreaParams').val();
+
+      		case 'check': 
+      			newField.parameters.inline = $("#checkInlineCheck").is(":checked") ? true : false;
+      			newField.parameters.inlineBreak = $("#checkInlineBreakCheck").is(":checked") ? true : false;
+      			newField.parameters.options = [{}];
+      			newField.parameters.options[0].title = $('#inputParamsTitleCheck').val();
+      			newField.parameters.options[0].value = $('#inputParamsValueCheck').val();
+      	}
+
 		this.props.changeField(newField);
 		this.props.setSubAccordionToOpen(groupKeys);
 		$('#fieldEditorPanel').addClass('display-hidden');
+		$('.param-wrapper').addClass('display-hidden');
   	}
 
   	handleMainTitleChange(event){
@@ -159,6 +200,7 @@ class Configurator extends Component {
 							    <input id="inputGroupLevelOneTitle" onChange={this.handleGroupLevelOneTitleChange.bind(this)} type="text" className="form-control" name="inputMainTitle" placeholder="Titel - Gruppe Level 1" />			  		
 						  	</div>
 						</div>
+						<br/>
 						<div id="inputGroupLevelTwo" className="display-hidden">
 							<div className="input-group">
 							    <span className="input-group-addon">Gruppe L2</span>
@@ -176,7 +218,7 @@ class Configurator extends Component {
 						  	<br/>
 						  	<div className="container-fluid">
     							<div className="row vertical-align">
-								  	<div className="input-group col-xs-4">
+								  	<div className="input-group col-xs-5">
 								  		<span className="input-group-addon">Spalten</span>
 									  	<select ref={(input) => { this.colSelect = input}} className="form-control" id="colSelect" name="colSelect">
 									        <option>1</option>
@@ -193,10 +235,10 @@ class Configurator extends Component {
 									        <option>12</option>
 									    </select>
 								    </div>
-								    <div className="col-xs-3"></div>
+								    <div className="col-xs-2"></div>
 								    <div className="input-group col-xs-5">
 								  		<span className="input-group-addon">Typ</span>
-									  	<select ref={(input) => { this.fieldType = input}} className="form-control" id="fieldType" name="fieldType">
+									  	<select onChange={this.handleTypeChange.bind(this)} ref={(input) => { this.fieldType = input}} className="form-control" id="fieldType" name="fieldType">
 									        <option>code</option>
 									        <option>radio</option>
 									        <option>check</option>
@@ -220,27 +262,80 @@ class Configurator extends Component {
 								</div>
 							</div>
 							<br/>
-							<p className="heading-parameter">Zusätzliche Parameter</p>
+							<p className="heading-parameter">Zusätzliche Typ-Parameter</p>
 							<br/>
-							<div className="col-xs-12">
+							<div id="codeParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
 								<table>
 									<thead>
-										<th className="align-center">Typ</th>
-										<th className="align-center">Wert</th>
+										<tr>
+											<th className="align-center">Typ</th>
+											<th className="align-center">Wert</th>
+										</tr>
 									</thead>
-									<tr>
-										<th>css</th>
-										<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="cssParam"></textarea></th>
-									</tr>
-									<tr>
-										<th>html</th>
-										<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="htmlParam"></textarea></th>
-									</tr>
-									<tr>
-										<th>js</th>
-										<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="jsParam"></textarea></th>
-									</tr>
+									<tbody>
+										<tr>
+											<th>css</th>
+											<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="cssParam"></textarea></th>
+										</tr>
+										<tr>
+											<th>html</th>
+											<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="htmlParam"></textarea></th>
+										</tr>
+										<tr>
+											<th>js</th>
+											<th className="th-param"><textarea className="form-control textarea-param" rows="5" id="jsParam"></textarea></th>
+										</tr>
+									</tbody>
 								</table>
+							</div>
+							<div id="radioParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
+
+							</div>
+							<div id="checkParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
+								<div className="container-fluid">
+	    							<div className="row vertical-align">
+									  	<div className="input-group col-xs-5">
+											<label className="label-check"><input id="checkInlineCheck" type="checkbox" value="inline" />  nebeneinander setzen</label>
+										</div>
+										<div className="col-xs-2"></div>
+									    <div className="input-group col-xs-5">
+											<label className="label-check"><input id="checkInlineBreakCheck" type="checkbox" value="inlineBreak" />  Zeilenumbruch danach</label>
+										</div>
+									</div>
+								</div>
+								<br/>
+								<div className="input-group col-xs-12">
+							  		<span className="input-group-addon">Anzahl der Checkboxen für das Feld</span>
+								  	<select onChange={this.handleCheckboxNumberChange.bind(this)} ref={(input) => { this.checkboxNumber = input}} className="form-control" id="checkboxNumber" name="checkboxNumber">
+								        <option>1</option>
+								        <option>2</option>
+								        <option>3</option>
+								        <option>4</option>
+								        <option>5</option>
+								        <option>6</option>
+								        <option>7</option>
+								        <option>8</option>
+								        <option>9</option>
+								        <option>10</option>
+								    </select>
+							    </div>
+							    <br/>
+								<CheckboxOptions />
+							</div>
+							<div id="selectParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
+								
+							</div>
+							<div id="textParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
+								<div className="input-group">
+								    <span className="input-group-addon">Klasse</span>
+								    <input id="inputTextParams" type="text" className="form-control" name="inputTextParams" placeholder="Klasse für Text" />			  		
+							  	</div>
+							</div>
+							<div id="textareaParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
+								<div className="input-group">
+								    <span className="input-group-addon">Klasse</span>
+								    <input id="inputTextAreaParams" type="text" className="form-control" name="inputTextAreaParams" placeholder="Klasse für Textbox" />			  		
+							  	</div>
 							</div>
 							<br/>					
 						 	<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>

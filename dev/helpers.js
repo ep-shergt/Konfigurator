@@ -8,10 +8,11 @@ export function removeArrayElement(oldArray, index) {
 	return newArray;
 }
 
-export function setAccordionItems(jsonData) {
+export function setAccordionItems(jsonDataCopy) {
     let accordion = [],
-        groups = jsonData.groups;
-
+        jsonData = {...jsonDataCopy},
+        groups = [...jsonData.groups];
+    
     groups.forEach((group) => {
       if (group.groups[0] !== undefined) {
         let groupLevelOneKey = group.key;

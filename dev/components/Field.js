@@ -34,6 +34,43 @@ class Field extends Component {
 
     if ($('#fieldEditorPanel').hasClass('display-hidden')) {
       $('#fieldEditorPanel').removeClass('display-hidden');
+    } else {
+      $('#fieldEditorPanel').addClass('display-hidden');
+    }
+
+    $('.param-wrapper').addClass('display-hidden');
+
+    switch (field.type) {
+      case 'code':
+        $('#codeParamsWrapper').removeClass('display-hidden');
+        $('#cssParam').val(field.parameters.css);
+        $('#htmlParam').val(field.parameters.html);
+        $('#jsParam').val(field.parameters.js);
+        break;
+
+      case 'text':
+        $('#textParamsWrapper').removeClass('display-hidden');
+        $('#inputTextParams').val(field.parameters.class);
+        break;
+
+      case 'radio':
+        $('#radioParamsWrapper').removeClass('display-hidden');
+        break;
+
+      case 'check':
+        $('#checkParamsWrapper').removeClass('display-hidden');
+        $('#checkInlineCheck').prop("checked", field.parameters.inline)
+        $('#checkInlineBreakCheck').prop("checked", field.parameters.inlineBreak);
+        break;
+
+      case 'select':
+        $('#selectParamsWrapper').removeClass('display-hidden');
+        break;
+
+      case 'textarea':
+        $('#textareaParamsWrapper').removeClass('display-hidden');
+        $('#inputTextAreaParams').val(field.parameters.class);
+        break;
     }
 
     $('#inputFieldTitle').val(field.title);
