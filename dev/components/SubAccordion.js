@@ -17,7 +17,8 @@ class SubAccordion extends Component {
     this.state = {
       jsonData: this.props.store.database.jsonData,
       subAccordionItems: [],
-      groupsLevelTwoToCopy: []
+      groupsLevelTwoToCopy: [],
+      groupTwoToEdit: this.props.store.database.groupTwoToEdit
     };
   }
 
@@ -103,7 +104,19 @@ class SubAccordion extends Component {
   }
 
   handleEdit(event, groupTwoKey, groupOneKey, title) {
-     if ($('#inputGroupLevelTwo').hasClass('display-hidden')) {
+    const jsonData = {...this.state.jsonData};
+    let indexGroupOne,
+        indexGroupTwo;
+
+    indexGroupOne = jsonData.groups.map((groupOne, i) => {
+      return groupOne.key;
+    }).indexOf(groupOneKey);
+
+    indexGroupTwo = jsonData.groups[indexGroupOne].groups.map((groupTwo, i) => {
+      return groupTwo.key;
+    }).indexOf(groupTwoKey);
+
+    if ($('#inputGroupLevelTwo').hasClass('display-hidden')) {
       $('#inputGroupLevelTwo').removeClass('display-hidden');
       $('#inputGroupLevelTwoTitle').attr('groupOneKey', groupOneKey);
       $('#inputGroupLevelTwoTitle').attr('groupTwoKey', groupTwoKey);
@@ -114,6 +127,8 @@ class SubAccordion extends Component {
       $('#inputGroupLevelTwoTitle').removeAttr('groupOneKey');
       $('#inputGroupLevelTwoTitle').removeAttr('groupTwoKey');
     }
+
+    this.props.changeGroupTwoToEdit(jsonData.groups[indexGroupOne].groups[indexGroupTwo]);
   }
 
   render() {

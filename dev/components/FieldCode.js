@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-class CheckboxOptions extends Component {
+class FieldCode extends Component {
 
   constructor(props) {
     super(props);
@@ -28,4 +28,4 @@ class CheckboxOptions extends Component {
   }
 }
 
-export default CheckboxOptions;
+export default FieldCode;

@@ -19,7 +19,8 @@ class Accordion extends Component {
     this.state = {
       jsonData: this.props.store.database.jsonData,
       accordion: [],
-      groupsLevelOneToCopy: []
+      groupsLevelOneToCopy: [],
+      groupOneToEdit: this.props.store.database.groupOneToEdit
     };
   }
 
@@ -113,17 +114,25 @@ class Accordion extends Component {
     }
   }
 
-  handleEdit(event, key, title) {
+  handleEdit(event, key, title, groupIndex) {
+    const groupOneToEdit = this.state.jsonData.groups[groupIndex];
+
     if ($('#inputGroupLevelOne').hasClass('display-hidden')) {
       $('#inputGroupLevelOne').removeClass('display-hidden');
       $('#inputGroupLevelOneTitle').attr('grouponekey', key);
       $('#inputGroupLevelOneTitle').val(title);
 
-
     } else {
       $('#inputGroupLevelOne').addClass('display-hidden');
       $('#inputGroupLevelOneTitle').removeAttr('grouponekey');
     }
+
+    this.props.changeGroupOneToEdit(groupOneToEdit);
+    $('#colSelectGOne').val(groupOneToEdit.cols);
+    $('#g1ClearBefore').prop("checked", groupOneToEdit.clearBefore);
+    $('#g1ClearAfter').prop("checked", groupOneToEdit.clearAfter);
+    $('#g1Collapse').prop("checked", groupOneToEdit.collapse);
+    $('#g1AutoCollapse').prop("checked", groupOneToEdit.autocollapse);
   }
 
   render() {
@@ -161,7 +170,7 @@ class Accordion extends Component {
                         <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key, elem.title)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
+                        <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key, elem.title, i)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>

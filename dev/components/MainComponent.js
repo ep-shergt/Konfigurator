@@ -37,7 +37,6 @@ class MainComponent extends Component {
 								<Textbox {...this.props}/>
 							</TabPanel>
 						</Tabs>
-
 					</div>		
 		    	</div>   			
     		</div>

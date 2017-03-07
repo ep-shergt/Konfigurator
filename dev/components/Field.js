@@ -59,7 +59,7 @@ class Field extends Component {
 
       case 'check':
         $('#checkParamsWrapper').removeClass('display-hidden');
-        $('#checkInlineCheck').prop("checked", field.parameters.inline)
+        $('#checkInlineCheck').prop("checked", field.parameters.inline);
         $('#checkInlineBreakCheck').prop("checked", field.parameters.inlineBreak);
         break;
 

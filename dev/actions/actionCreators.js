@@ -8,6 +8,13 @@ export function changeJSON(jsonData) {
 	}
 }
 
+export function changeJSONOnLoading(jsonData) {
+	return {
+		type: 'CHANGE_JSON_ON_LOADING',
+		jsonData
+	}
+}
+
 export function initializeJSON(jsonData) {
 	return {
 		type: 'INITIALIZE_JSON',
@@ -60,10 +67,39 @@ export function changeFieldToEdit(fieldToEdit) {
 	}
 }
 
+export function changeGroupOneToEdit(groupOneToEdit) {
+	return {
+		type: 'CHANGE_GROUP_ONE_TO_EDIT',
+		groupOneToEdit
+	}
+}
+
+export function changeGroupTwoToEdit(groupTwoToEdit) {
+	return {
+		type: 'CHANGE_GROUP_TWO_TO_EDIT',
+		groupTwoToEdit
+	}
+}
+
 export function changeField(field) {
 	return {
 		type: 'CHANGE_FIELD',
 		field
+	}
+}
+
+export function changeGroupOne(groupOne) {
+	return {
+		type: 'CHANGE_GROUP_ONE',
+		groupOne
+	}
+}
+
+export function changeGroupTwo(groupTwo, groupOneKey) {
+	return {
+		type: 'CHANGE_GROUP_TWO',
+		groupTwo,
+		groupOneKey
 	}
 }
 //*******************************************************************************
