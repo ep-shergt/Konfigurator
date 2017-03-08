@@ -107,32 +107,40 @@ class Accordion extends Component {
   }
 
   openMainTitlePanel(event) {
-    if($('#inputMainTitleWrapper').hasClass('display-hidden')) {
-      $('#inputMainTitleWrapper').removeClass('display-hidden');
-    } else {
-      $('#inputMainTitleWrapper').addClass('display-hidden');
-    }
+    $('.config-wrapper').addClass('display-hidden');
+    $('#standardInputWrapper').removeClass('display-hidden');
+    $('#datepickerWrapper').removeClass('display-hidden');
+    $('#submitButtonWrapper').removeClass('display-hidden');
+
+    $('#inputTitle').val(this.state.jsonData.title);
+    $('#dateMainTitle').val(this.state.jsonData.valid_from);
+    $('#dateMainTitle').attr('required', true);
+    $('#endDateMainTitle').val(this.state.jsonData.valid_to);
+    $('#endDateMainTitle').attr('required', true);
+    $('#panelWrapper').attr('configtype', 'main');
+
   }
 
-  handleEdit(event, key, title, groupIndex) {
+  handleEdit(event, groupIndex) {
     const groupOneToEdit = this.state.jsonData.groups[groupIndex];
 
-    if ($('#inputGroupLevelOne').hasClass('display-hidden')) {
-      $('#inputGroupLevelOne').removeClass('display-hidden');
-      $('#inputGroupLevelOneTitle').attr('grouponekey', key);
-      $('#inputGroupLevelOneTitle').val(title);
-
-    } else {
-      $('#inputGroupLevelOne').addClass('display-hidden');
-      $('#inputGroupLevelOneTitle').removeAttr('grouponekey');
-    }
+    $('.config-wrapper').addClass('display-hidden');
+    $('#standardInputWrapper').removeClass('display-hidden');
+    $('#optionalInputWrapper').removeClass('display-hidden');
+    $('#colSelectWrapper').removeClass('display-hidden');
+    $('#clearWrapper').removeClass('display-hidden');
+    $('#collapseWrapper').removeClass('display-hidden');
+    $('#submitButtonWrapper').removeClass('display-hidden');
+    $('#panelWrapper').attr('configtype', 'groupOne');
 
     this.props.changeGroupOneToEdit(groupOneToEdit);
-    $('#colSelectGOne').val(groupOneToEdit.cols);
-    $('#g1ClearBefore').prop("checked", groupOneToEdit.clearBefore);
-    $('#g1ClearAfter').prop("checked", groupOneToEdit.clearAfter);
-    $('#g1Collapse').prop("checked", groupOneToEdit.collapse);
-    $('#g1AutoCollapse').prop("checked", groupOneToEdit.autocollapse);
+
+    $('#inputTitle').val(groupOneToEdit.title);
+    $('#colSelect').val(groupOneToEdit.cols);
+    $('#idClearBefore').prop("checked", groupOneToEdit.clearBefore);
+    $('#idClearAfter').prop("checked", groupOneToEdit.clearAfter);
+    $('#idCollapse').prop("checked", groupOneToEdit.collapse);
+    $('#idAutoCollapse').prop("checked", groupOneToEdit.autocollapse);
   }
 
   render() {
@@ -170,7 +178,7 @@ class Accordion extends Component {
                         <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                       </button>
                       <ul className="dropdown-menu">
-                        <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key, elem.title, i)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
+                        <li><a href="#" onClick={(e) => this.handleEdit(e, i)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>

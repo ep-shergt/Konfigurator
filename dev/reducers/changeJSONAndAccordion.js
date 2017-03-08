@@ -111,6 +111,7 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 				jsonData = {...state.jsonData},
 				groupOneIndex;
 
+			console.log('group', groupOne);
 			groupOneIndex = jsonData.groups.map((elem, i) => {
     			return elem.key;
   			}).indexOf(groupOne.key);
@@ -228,43 +229,6 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 			accordion[indexSubAccordion].open = true;
 
 			state = {...state, jsonData, accordion};
-			break;
-		}
-
-		case "CHANGE_MAIN_TITLE": {
-			const {mainTitle} = action;
-			let	jsonData = {...state.jsonData};
-
-			console.log('mainTitle', mainTitle);
-			jsonData.title = mainTitle;
-
-			console.log('jsonData', jsonData);
-
-			state = {...state, jsonData}
-			break;
-		}
-
-		case "CHANGE_START_DATE": {
-			const {startDate} = action;
-			let	accordion = [...state.accordion],
-				jsonData = {...state.jsonData};
-
-
-
-			jsonData.valid_from = startDate;
-
-			state = {...state, jsonData, accordion}
-			break;
-		}
-
-		case "CHANGE_END_DATE": {
-			const {endDate} = action;
-			let	accordion = [...state.accordion],
-				jsonData = {...state.jsonData};
-
-			jsonData.valid_to = endDate;
-
-			state = {...state, jsonData, accordion}
 			break;
 		}
 

@@ -8,6 +8,14 @@ export function removeArrayElement(oldArray, index) {
 	return newArray;
 }
 
+export function isInRange(number, range) {
+  if(typeof number === "number" && Number.isInteger(number)) {
+    return number > 0 && number < range;
+  } else {
+    return false;
+  }
+}
+
 export function setAccordionItems(jsonDataCopy) {
     let accordion = [],
         jsonData = {...jsonDataCopy},
