@@ -38,46 +38,45 @@ class Field extends Component {
       $('#fieldEditorPanel').addClass('display-hidden');
     }
 
-    $('.param-wrapper').addClass('display-hidden');
-
     switch (field.type) {
       case 'code':
-        $('#codeParamsWrapper').removeClass('display-hidden');
+        $('#codeParamsId').removeClass('display-hidden');
         $('#cssParam').val(field.parameters.css);
         $('#htmlParam').val(field.parameters.html);
         $('#jsParam').val(field.parameters.js);
         break;
 
       case 'text':
-        $('#textParamsWrapper').removeClass('display-hidden');
+        $('#textParamsId').removeClass('display-hidden');
         $('#inputTextParams').val(field.parameters.class);
         break;
 
       case 'radio':
-        $('#radioParamsWrapper').removeClass('display-hidden');
+        $('#radioParamsId').removeClass('display-hidden');
         break;
 
       case 'check':
-        $('#checkParamsWrapper').removeClass('display-hidden');
+       /* $('#checkParamsId').removeClass('display-hidden');
         $('#checkInlineCheck').prop("checked", field.parameters.inline);
-        $('#checkInlineBreakCheck').prop("checked", field.parameters.inlineBreak);
+        $('#checkInlineBreakCheck').prop("checked", field.parameters.inlineBreak);*/
         break;
 
       case 'select':
-        $('#selectParamsWrapper').removeClass('display-hidden');
+        $('#selectParamsId').removeClass('display-hidden');
         break;
 
       case 'textarea':
-        $('#textareaParamsWrapper').removeClass('display-hidden');
-        $('#inputTextAreaParams').val(field.parameters.class);
+        $('#textareaParamsId').removeClass('display-hidden');
+        $('#inputTextareaParams').val(field.parameters.class);
         break;
     }
 
     $('#inputFieldTitle').val(field.title);
-    $('#colSelect').val(field.cols);
+    $('#colSelectField').val(field.cols);
     $('#fieldType').val(field.type);
-    $("#checkClearBefore").prop("checked", field.clearBefore);
-    $("#checkClearAfter").prop("checked", field.clearAfter);
+    $("#fieldClearBefore").prop("checked", field.clearBefore);
+    $("#fieldClearAfter").prop("checked", field.clearAfter);
+    $("#inputFieldTooltip").val(field.tooltip);
 
     this.props.changeFieldToEdit(field);
     this.props.setSubAccordionToOpen(groupKeys);

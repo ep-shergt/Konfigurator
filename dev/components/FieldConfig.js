@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import FieldCode from './FieldCode';
+import FieldText from './FieldText';
+import FieldTextarea from './FieldTextarea';
 
-class FieldCode extends Component {
+class FieldConfig extends Component {
 
   constructor(props) {
     super(props);
@@ -16,7 +19,7 @@ class FieldCode extends Component {
 
   handleTypeChange(event) {
     const type = event.target.value,
-          selector = type + 'ParamsWrapper';
+          selector = type + 'ParamsId';
 
     let fieldToEdit = this.state.fieldToEdit,
       groupKeys = fieldToEdit.group.split('|');
@@ -32,22 +35,24 @@ class FieldCode extends Component {
 
   handleFieldData(event) {
     let newField = this.state.fieldToEdit,
-      groupKeys = newField.group.split('|'),
-      titleForKey;
+        groupKeys = newField.group.split('|'),
+        titleForKey;
 
     event.preventDefault();
       
     let fieldData = {
       inputFieldTitle: this.inputFieldTitle.value,
-      fieldType: this.fieldType.value
+      fieldType: this.fieldType.value,
+      tooltip: this.inputFieldTooltip.value,
+      cols: this.colSelectField.value
     }
 
     newField.title = fieldData.inputFieldTitle;
-    titleForKey = fieldData.inputFieldTitle.split(' ').join('_');
-    newField.key = "fld_" + titleForKey;
     newField.type = fieldData.fieldType;
-    newField.clearBefore = $("#checkClearBefore").is(":checked");
-    newField.clearAfter = $("#checkClearAfter").is(":checked");
+    newField.tooltip = fieldData.tooltip;
+    newField.cols = fieldData.cols;
+    newField.clearBefore = $("#fieldClearBefore").is(":checked");
+    newField.clearAfter = $("#fieldClearAfter").is(":checked");
 
     switch(fieldData.fieldType) {
       case 'code':
@@ -58,18 +63,20 @@ class FieldCode extends Component {
 
       case 'text':
         newField.parameters.class = $('#inputTextParams').val();
+        break;
 
       case 'textarea':
-        newField.parameters.class = $('#inputTextAreaParams').val();
+        newField.parameters.class = $('#inputTextareaParams').val();
+        break;
 
       case 'check': 
-        newField.parameters.inline = $("#checkInlineCheck").is(":checked") ? true : false;
-        newField.parameters.inlineBreak = $("#checkInlineBreakCheck").is(":checked") ? true : false;
+        /*newField.parameters.inline = $("#checkInlineCheck").is(":checked") ? true : false;
+        newField.parameters.inlineBreak = $("#checkInlineBreakCheck").is(":checked") ? true : false;*/
     }
 
     this.props.changeField(newField);
     this.props.setSubAccordionToOpen(groupKeys);
-    
+
     $('#fieldEditorPanel').addClass('display-hidden');
     $('.param-wrapper').addClass('display-hidden');
   }
@@ -110,6 +117,57 @@ class FieldCode extends Component {
               <option>textarea</option>
             </select>
           </div>
+          <br/>
+          <p className="heading-parameter">Zusätzliche Optionen</p>
+          <br/>
+          <div className="input-group col-xs-5">
+            <span className="input-group-addon">Spalten</span>
+            <select ref={(input) => { this.colSelectField = input}} className="form-control" id="colSelectField" name="colSelectField">
+              <option></option>
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+            </select>
+          </div>
+          <br/>
+          <div className="input-group">
+              <span className="input-group-addon">Tooltip</span>
+              <input ref={(input) => { this.inputFieldTooltip = input}} id="inputFieldTooltip" type="text" className="form-control" name="inputFieldTooltip" placeholder="Tooltip - Text" />            
+          </div>
+          <br/>
+          <div className="container-fluid">
+            <div className="row vertical-align">
+              <div className="input-group col-xs-5">
+              <label className="label-check"><input id="fieldClearBefore" type="checkbox" value="clearBefore" />  Zeilenumbruch davor</label>
+            </div>
+            <div className="col-xs-2"></div>
+              <div className="input-group col-xs-5">
+              <label className="label-check"><input id="fieldClearAfter" type="checkbox" value="clearAfter" />  Zeilenumbruch danach</label>
+            </div>
+            </div>
+          </div>
+          <br />
+          <p className="heading-parameter-param">Typ-Parameter</p>
+          <br/>
+          <div id="codeParamsId" className="display-hidden param-wrapper">
+            <FieldCode />
+          </div>
+          <div id="textParamsId" className="display-hidden param-wrapper">
+            <FieldText />
+          </div>
+          <div id="textareaParamsId" className="display-hidden param-wrapper">
+            <FieldTextarea />
+          </div>
           <button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
          </form>
       </div>
@@ -117,4 +175,4 @@ class FieldCode extends Component {
   }
 }
 
-export default FieldCode;
+export default FieldConfig;

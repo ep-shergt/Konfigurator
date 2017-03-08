@@ -33,6 +33,15 @@ class MainTitleConfig extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let newJsonData = nextProps.store.database.jsonData,
+        jsonData = {...this.state.jsonData};
+
+    jsonData = newJsonData;
+
+    this.setState({
+        jsonData
+    });
+
     setTimeout(() => {
         $('#inputMainTitle').val(this.state.jsonData.title);
     }, 200);

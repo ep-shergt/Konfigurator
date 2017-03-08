@@ -10,24 +10,16 @@ export default class Textbox extends Component {
     this.saveTextAsFile = this.saveTextAsFile.bind(this);
     this.destroyClickedElement = this.destroyClickedElement.bind(this);
     this.loadFileAsText = this.loadFileAsText.bind(this);
+    this.clearJSONForExport = this.clearJSONForExport.bind(this);
 
     //getinitialState
     this.state = {
-      jsonData: this.props.store.database.jsonData
+      jsonData: this.props.store.database.jsonData,
+      jsonForExport: {}
     };
   }
 
   saveTextAsFile(event) {
-    var jsonCopy = {...this.state.jsonData};
-
-    jsonCopy.groups.forEach((elem) => {
-      elem.groups.forEach((i) => {
-        delete i['fields'];
-      });
-    });
-
-    $('#mainArea').val(JSON.stringify(jsonCopy, null, 2));
-    
     var textToSave = document.getElementById("mainArea").value,
         textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"}),
         textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob),
@@ -44,38 +36,65 @@ export default class Textbox extends Component {
     downloadLink.click();
     this.props.initializeJSON(emptyJSON);
   }
+
+  clearJSONForExport(event) {
+    let jsonCopy = {...this.state.jsonData},
+        jsonForExport = {...this.state.jsonForExport};
+
+    jsonCopy.groups.forEach((elem) => {
+        delete elem['marked'];
+        delete elem['open'];
+      elem.groups.forEach((i) => {
+        delete i['fields'];
+        delete i['marked'];
+        delete i['open'];
+      });
+    });
+
+    jsonCopy.fields.forEach((field) => {
+      delete field['marked'];
+    });
+
+    jsonForExport = jsonCopy;
+
+    this.setState({
+      jsonForExport
+    });
+
+    $('#mainArea').val(JSON.stringify(jsonForExport, null, 2));
+  }
  
   destroyClickedElement(event) {
-      document.body.removeChild(event.target);
+    document.body.removeChild(event.target);
   }
  
   loadFileAsText(event) {
-      if (!($('#fileError').hasClass('display-hidden'))) {
-        $('#fileError').addClass('display-hidden');
-      }
+    if (!($('#fileError').hasClass('display-hidden'))) {
+      $('#fileError').addClass('display-hidden');
+    }
 
-      try {
-        var fileToLoad = document.getElementById("fileToLoad").files[0],
-            fileReader = new FileReader(),
-            jsonData,
-            self = this;
+    try {
+      var fileToLoad = document.getElementById("fileToLoad").files[0],
+          fileReader = new FileReader(),
+          jsonData,
+          self = this;
 
-        fileReader.onload = function(fileLoadedEvent)  {
-            var textFromFileLoaded = fileLoadedEvent.target.result;
+      fileReader.onload = function(fileLoadedEvent)  {
+          var textFromFileLoaded = fileLoadedEvent.target.result;
 
-            document.getElementById("mainArea").value = textFromFileLoaded;
-            jsonData = JSON.parse(JSON.stringify(eval("(" + textFromFileLoaded + ")")));
+          document.getElementById("mainArea").value = textFromFileLoaded;
+          jsonData = JSON.parse(JSON.stringify(eval("(" + textFromFileLoaded + ")")));
 
-            self.setState({
-              jsonData
-            });
-            self.props.changeJSONOnLoading(self.state.jsonData);
-        };
-        fileReader.readAsText(fileToLoad, "UTF-8");
-      } catch (err) {
-        console.log('%c Fehler: Keine Datei ausgewählt!', 'color: red; font-weight: bold');
-        $('#fileError').removeClass('display-hidden');
-      }
+          self.setState({
+            jsonData
+          });
+          self.props.changeJSONOnLoading(self.state.jsonData);
+      };
+      fileReader.readAsText(fileToLoad, "UTF-8");
+    } catch (err) {
+      console.log('%c Fehler: Keine Datei ausgewählt!', 'color: red; font-weight: bold');
+      $('#fileError').removeClass('display-hidden');
+    }
   }
 
   handleChange(event){
@@ -87,12 +106,6 @@ export default class Textbox extends Component {
 
   componentDidMount() {
     let jsonCopy = {...this.state.jsonData};
-
-  /*  jsonCopy.groups.forEach((elem) => {
-      elem.groups.forEach((i) => {
-        delete i['fields'];
-      })
-    });*/
 
     $('#mainArea').val(JSON.stringify(jsonCopy, null, 2));
   }
@@ -121,6 +134,7 @@ export default class Textbox extends Component {
             <div>Dateinamen zum Speichern festlegen:</div>
             <input type="text" id="inputFileNameToSaveAs" />
             <input type="button" onClick={(e) => this.saveTextAsFile(e)} value="Text speichern als"/>
+            <input type="button" onClick={(e) => this.clearJSONForExport(e)} value="JSON für den Export bereinigen"/>
             <div>Datei auswählen:</div>
             <input type="file" id="fileToLoad" />
             <input type="button" onClick={(e) => this.loadFileAsText(e)} value="Ausgewählte Datei laden"/>

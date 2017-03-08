@@ -22,8 +22,8 @@ const EmptyJSON = {
          "title" :   "Feld Titel",
          "type" :   "code",
          "group" :   "grp_1_Gruppe_Level_1|grp_2_Gruppe_Level_2",
-         "cols" :   4,
-         "clearBefore" :   true,
+         "cols" :   "",
+         "clearBefore" :  false,
          "clearAfter" :   false,
          "parameters" :   {
             "css" :   "",

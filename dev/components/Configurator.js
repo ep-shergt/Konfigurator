@@ -18,6 +18,10 @@ class Configurator extends Component {
 	    };
     }
 
+    componentWillMount() {
+    	this.props.changeJSON(this.state.jsonData);
+    }
+
     componentDidMount() {
         $("input").keypress( function(e) {
 		    let chr = String.fromCharCode(e.which);

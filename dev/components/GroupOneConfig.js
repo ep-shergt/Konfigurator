@@ -81,12 +81,13 @@ class GroupOneConfig extends Component {
               <input id="inputGroupLevelOneTitle" required ref={(input) => { this.inputGroupLevelOneTitle = input}} type="text" className="form-control" name="inputGroupLevelOneTitle" placeholder="Titel - Gruppe Level 1" />            
           </div>
           <br/>
-          <p className="heading-parameter">Zusätzliche Parameter</p>
+          <p className="heading-parameter">Zusätzliche Optionen</p>
           <br/>
           <div className="input-group col-xs-5">
             <span className="input-group-addon">Spalten</span>
             <select ref={(input) => { this.colSelectGOne = input}} className="form-control" id="colSelectGOne" name="colSelectGOne">
               <option></option>
+              <option>0</option>
               <option>1</option>
               <option>2</option>
               <option>3</option>

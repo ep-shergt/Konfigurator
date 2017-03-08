@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-class FieldText extends Component {
+class FieldTextarea extends Component {
 
   constructor(props) {
     super(props);
@@ -15,10 +15,10 @@ class FieldText extends Component {
     return (
       <div className="input-group">
         <span className="input-group-addon">Klasse</span>
-        <input id="inputTextParams" type="text" className="form-control" name="inputTextParams" placeholder="Klasseneingabe" />            
+        <input id="inputTextareaParams" type="text" className="form-control" name="inputTextareaParams" placeholder="Klasse für Textbox" />           
       </div>
     )
   }
 }
 
-export default FieldText;
+export default FieldTextarea;

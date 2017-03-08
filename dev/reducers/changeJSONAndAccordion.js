@@ -235,7 +235,10 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 			const {mainTitle} = action;
 			let	jsonData = {...state.jsonData};
 
+			console.log('mainTitle', mainTitle);
 			jsonData.title = mainTitle;
+
+			console.log('jsonData', jsonData);
 
 			state = {...state, jsonData}
 			break;

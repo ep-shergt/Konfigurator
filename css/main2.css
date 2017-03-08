@@ -320,6 +320,10 @@ ul.button-list>li {
 	font-size: 17px;
 }
 
+.heading-parameter-param {
+	font-size: 15px;
+}
+
 .textarea-param {
 	width: 300px;
 }

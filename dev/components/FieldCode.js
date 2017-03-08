@@ -13,16 +13,29 @@ class FieldCode extends Component {
 
   render() {
     return (
-      <div>
-        <div className="input-group">
-          <span className="input-group-addon">Titel</span>
-          <input id="inputParamsTitleCheck" name="inputParamsTitleCheck" required type="text" className="form-control" name="inputParamsTitleCheck" placeholder="z.B.: positiv" />           
-        </div>
-        <br/>
-        <div className="input-group">
-          <span className="input-group-addon">Wert</span>
-          <input id="inputParamsValueCheck" name="inputParamsValueCheck" required type="text" className="form-control" name="inputParamsValueCheck" placeholder="z.B.: +" />           
-        </div>
+      <div className="col-xs-12">
+        <table>
+          <thead>
+            <tr>
+              <th className="align-center">Code-Typ</th>
+              <th className="align-center">Wert</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>css</th>
+              <th className="th-param"><textarea className="form-control textarea-param" rows="5" id="cssParam"></textarea></th>
+            </tr>
+            <tr>
+              <th>html</th>
+              <th className="th-param"><textarea className="form-control textarea-param" rows="5" id="htmlParam"></textarea></th>
+            </tr>
+            <tr>
+              <th>js</th>
+              <th className="th-param"><textarea className="form-control textarea-param" rows="5" id="jsParam"></textarea></th>
+            </tr>
+          </tbody>
+        </table>
       </div>
     )
   }
