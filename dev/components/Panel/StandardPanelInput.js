@@ -13,14 +13,25 @@ class StandardPanelInput extends Component {
   }
 
   handleTypeChange(event) {
-    const type = event.target.value,
-          selector = type + 'ParamsId';
-
+    const type = event.target.value;
     let fieldToEdit = this.state.fieldToEdit,
-      groupKeys = fieldToEdit.group.split('|');
+        groupKeys = fieldToEdit.group.split('|');
 
     $('.param-wrapper').addClass('display-hidden');
-    $('#' + selector).removeClass('display-hidden');
+
+    switch(type) {
+      case 'code':
+        $('#codeParamsWrapper').removeClass('display-hidden');
+        break;
+
+      case 'text':
+        $('#textParamsWrapper').removeClass('display-hidden');
+        break;
+
+      case 'textarea':
+        $('#textParamsWrapper').removeClass('display-hidden');
+        break;
+    }
 
     fieldToEdit['parameters'] = {};
 
@@ -44,12 +55,16 @@ class StandardPanelInput extends Component {
 
   componentWillReceiveProps(nextProps) {
     let newJsonData = nextProps.store.database.jsonData,
-        jsonData = {...this.state.jsonData};
+        newFieldToEdit = nextProps.store.database.fieldToEdit,
+        jsonData = {...this.state.jsonData},
+        fieldToEdit = {...this.state.fieldToEdit};
 
     jsonData = newJsonData;
+    fieldToEdit = newFieldToEdit;
 
     this.setState({
-        jsonData
+        jsonData,
+        fieldToEdit
     });
   }
 
@@ -61,7 +76,6 @@ class StandardPanelInput extends Component {
           <span className="input-group-addon">Titel</span>
           <input required id="inputTitle" type="text" className="form-control" name="inputTitle" placeholder="" />           
         </div>
-        <br/>
         <div id="datepickerWrapper" className="config-wrapper display-hidden">
           <div className="bootstrap-iso">
             <div className="container-fluid">
@@ -73,11 +87,10 @@ class StandardPanelInput extends Component {
               </div>
            </div>
           </div>
-          <br/>
         </div>
         <div id="fieldTypeWrapper" className="input-group col-xs-5 config-wrapper display-hidden">
           <span className="input-group-addon">Feldtyp</span>
-          <select onChange={this.handleTypeChange.bind(this)} className="form-control" id="fieldType" name="fieldType">
+          <select onChange={this.handleTypeChange.bind(this)} className="form-control input-sm" id="fieldType" name="fieldType">
             <option>code</option>
             <option>radio</option>
             <option>check</option>
@@ -85,11 +98,10 @@ class StandardPanelInput extends Component {
             <option>text</option>
             <option>textarea</option>
           </select>
-          <br/>
         </div>
         <div id="exportKeyWrapper" className="input-group config-wrapper display-hidden">
           <span className="input-group-addon">ExportKey</span>
-          <input id="inputExportKey" type="text" className="form-control" name="inputExportKey" placeholder="" />           
+          <input id="inputExportKey" type="text" className="form-control input-sm" name="inputExportKey" placeholder="" />           
           <br/>
         </div>
       </div>

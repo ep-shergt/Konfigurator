@@ -40,9 +40,6 @@ class FieldText extends Component {
           <input id="inputTextWidthParams" type="text" className="form-control"
                  name="inputTextWidthParams" placeholder="Breite in Pixel" onChange={this.handleWidthChange.bind(this)}/>            
         </div>
-        <br />
-        <p className="heading-parameter-param">Validierungen</p>
-        <br/>
       </div>
     )
   }

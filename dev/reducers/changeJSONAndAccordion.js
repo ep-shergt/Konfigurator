@@ -166,69 +166,19 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 			break;
 		}
 
-		case "CHANGE_GROUP_LEVEL_ONE_TITLE": {
-			const {gOneTitle, gOneKey} = action;
+		case "SET_ACCORDION_TO_OPEN": {
+			const {groupOneKey} = action;
 			let accordion = [...state.accordion],
-				jsonData = {...state.jsonData},
-				keyString = gOneTitle.split(' ').join('_'),
-				i = 0;
-
-			while(i < jsonData.groups.length) {
-				if(jsonData.groups[i].key === gOneKey) {
-					jsonData.groups[i].title = gOneTitle;
-					//jsonData.groups[i].key = 'grp_1_' + keyString;
-					break;
-				}
-				i++;
-			}
-
-		/*	for(let j = 0; j < jsonData.fields.length; j++) {
-				let groupKeys = jsonData.fields[j].group.split('|'),
-					groupOneKey = groupKeys[0];
-
-				if(groupOneKey === gOneKey) {
-					jsonData.fields[j].group = "grp_1_" + keyString + '|' + groupKeys[1];
-				}
-			}*/
-
-			accordion = setAccordionItems(jsonData);
-
-			state = {...state, jsonData, accordion};
-			break;
-		}
-
-		case "CHANGE_GROUP_LEVEL_TWO_TITLE": {
-			const {gTwoTitle, gTwoKey, gOneKey} = action;
-			let accordion = [...state.accordion],
-				jsonData = {...state.jsonData},
-				keyString = gTwoTitle.split(' ').join('_'),
 				indexSubAccordion,
 				indexAccordionSection;
 
 			indexSubAccordion = accordion.map((subAccordion, i) => {
     			return subAccordion.key;
-  			}).indexOf(gOneKey);
-
-  			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
-    			return section.key;
-  			}).indexOf(gTwoKey);
-
-			jsonData.groups[indexSubAccordion].groups[indexAccordionSection].title = gTwoTitle;
-			//jsonData.groups[indexSubAccordion].groups[indexAccordionSection].key = 'grp_2_' + keyString;
-
-			/*for(let j = 0; j < jsonData.fields.length; j++) {
-				let groupKeys = jsonData.fields[j].group.split('|'),
-					groupTwoKey = groupKeys[1];
-					
-				if(groupTwoKey === gTwoKey) {
-					jsonData.fields[j].group = groupKeys[0] + '|' + "grp_2_" + keyString;
-				}
-			}*/
-
-			accordion = setAccordionItems(jsonData);
+  			}).indexOf(groupOneKey);
+	
 			accordion[indexSubAccordion].open = true;
-
-			state = {...state, jsonData, accordion};
+				
+			state = {...state, accordion};
 			break;
 		}
 

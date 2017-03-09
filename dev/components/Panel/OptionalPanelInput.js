@@ -53,11 +53,9 @@ class OptionalPanelInput extends Component {
         </div>
         <div id="tooltipWrapper" className="input-group config-wrapper display-hidden">
             <span className="input-group-addon">Tooltip</span>
-            <input id="inputTooltip" type="text" className="form-control" name="inputTooltip" placeholder="Tooltip - Text" />            
-            <br/>
+            <input id="inputTooltip" type="text" className="form-control input-sm" name="inputTooltip" placeholder="Tooltip - Text" />            
         </div>
         <div id="clearWrapper" className="container-fluid config-wrapper display-hidden">
-          <br/>
           <div className="row vertical-align">
             <div className="input-group col-xs-5">
               <label className="label-check"><input id="idClearBefore" type="checkbox" value="clearBefore" />  clearBefore</label>
@@ -67,7 +65,6 @@ class OptionalPanelInput extends Component {
               <label className="label-check"><input id="idClearAfter" type="checkbox" value="clearAfter" />  clearAfter</label>
             </div>
           </div>
-          <br />    
         </div>
         <div id="collapseWrapper" className="container-fluid config-wrapper display-hidden">
           <div className="row vertical-align">

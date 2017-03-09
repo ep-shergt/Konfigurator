@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Accordion from './Accordion';
 import { removeArrayElement } from './../helpers';
-import MainTitleConfig from './MainTitleConfig';
-import GroupOneConfig from './GroupOneConfig';
-import GroupTwoConfig from './GroupTwoConfig';
-import FieldConfig from './FieldConfig';
 import StandardPanelInput from './Panel/StandardPanelInput';
 import OptionalPanelInput from './Panel/OptionalPanelInput';
+import Parameters from './Panel/Parameters';
 
 class Configurator extends Component {
 
@@ -27,11 +24,13 @@ class Configurator extends Component {
     handleFieldData(event) {
     	event.preventDefault();
 
-    	const configType = document.getElementById("panelWrapper").getAttribute("configtype");
+    	const configType = document.getElementById("panelWrapper").getAttribute("configtype"),
+    		  groupOneKey = document.getElementById("panelWrapper").getAttribute("grouponekey"),
+    	      cols = $('#colSelect').val();
 		let newJsonData = {...this.state.jsonData},
 			newGroupOneToEdit = {...this.state.groupOneToEdit},
 			newGroupTwoToEdit = {...this.state.groupTwoToEdit},
-			fieldToEdit = {...this.state.fieldToEdit};
+			newFieldToEdit = {...this.state.fieldToEdit};
 
 		switch(configType) {
 			case 'main':
@@ -43,8 +42,6 @@ class Configurator extends Component {
     			break;
 
     		case 'groupOne':
-    			const cols = $('#colSelect').val();
-
     			newGroupOneToEdit.title = $('#inputTitle').val();
     			newGroupOneToEdit.clearBefore = $("#idClearBefore").is(":checked") ? true : false;
 			    newGroupOneToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
@@ -57,12 +54,68 @@ class Configurator extends Component {
 
     			this.props.changeGroupOne(newGroupOneToEdit);
     			break;
+
+    		case 'groupTwo':
+    			newGroupTwoToEdit.title = $('#inputTitle').val();
+    			newGroupTwoToEdit.clearBefore = $("#idClearBefore").is(":checked") ? true : false;
+			    newGroupTwoToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
+			    newGroupTwoToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
+			    newGroupTwoToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
+
+    			if (cols !== "") {
+    				newGroupTwoToEdit.cols = Number($('#colSelect').val());
+    			}
+
+    			this.props.changeGroupTwo(newGroupTwoToEdit, groupOneKey);
+    			this.props.setAccordionToOpen(groupOneKey);
+    			break;
+
+    		case 'field':
+    			let groupKeys = newFieldToEdit.group.split('|'),
+    				fieldType = $('#fieldType').val();
+
+    			newFieldToEdit['parameters'] = {};
+
+    			if (cols !== "") {
+    				newFieldToEdit.cols = Number($('#colSelect').val());
+    			}
+
+    			newFieldToEdit.title = $('#inputTitle').val();
+    			newFieldToEdit.type = fieldType;
+    			newFieldToEdit.exportKey = $('#inputExportKey').val();
+    			newFieldToEdit.tooltip = $('#inputTooltip').val();
+    			newFieldToEdit.clearBefore = $("#idClearBefore").is(":checked");
+    			newFieldToEdit.clearAfter = $("#idClearAfter").is(":checked");
+
+    			switch(fieldType) {
+    				case 'code':
+    					newFieldToEdit.parameters.css = $('#cssParam').val();
+        				newFieldToEdit.parameters.html = $('#htmlParam').val();
+        				newFieldToEdit.parameters.js = $('#jsParam').val();
+    					break;
+
+    				case 'text':
+    					newFieldToEdit.parameters.class = $('#idTextClass').val();
+        				newFieldToEdit.parameters.placeholder = $('#idTextPlaceholder').val();
+        				newFieldToEdit.parameters.width = $('#idTextWidth').val();
+    					break;
+
+    				case 'textarea':
+    					newFieldToEdit.parameters.class = $('#idTextClass').val();
+        				newFieldToEdit.parameters.placeholder = $('#idTextPlaceholder').val();
+        				newFieldToEdit.parameters.width = $('#idTextWidth').val();
+    			}
+
+    			this.props.changeField(newFieldToEdit);
+    			this.props.setSubAccordionToOpen(groupKeys);
+    			break;
 		}
 
     	$('.config-wrapper').addClass('display-hidden');
     	$('#panelWrapper').removeAttr('configtype');
     	$('#dateMainTitle').removeAttr('required');
     	$('#endDateMainTitle').removeAttr('required');
+    	$('#inputExportKey').removeAttr('required');
     }
 
     componentWillMount() {
@@ -70,11 +123,21 @@ class Configurator extends Component {
     }
 
     componentDidMount() {
+    	const exportKey = this.state.fieldToEdit.exportKey;
+
         $("input").keypress( function(e) {
 		    let chr = String.fromCharCode(e.which);
 		    if (!("_".indexOf(chr) < 0))
 		        return false;
 		});
+
+		$('#dateMainTitle').val(this.state.jsonData.valid_from);
+		$('#endDateMainTitle').val(this.state.jsonData.valid_to);
+		if (exportKey !== undefined && exportKey !== "") {
+			$('#inputExportKey').val(this.state.fieldToEdit.exportKey);
+		} else {
+			$('#inputExportKey').val('exportKey');
+		}
   	}
 
   	componentWillReceiveProps(nextProps) {
@@ -100,6 +163,18 @@ class Configurator extends Component {
 	    });
 	}
 
+	componentDidUpdate() {
+		const exportKey = this.state.fieldToEdit.exportKey;
+
+		$('#dateMainTitle').val(this.state.jsonData.valid_from);
+		$('#endDateMainTitle').val(this.state.jsonData.valid_to);
+		if (exportKey !== undefined && exportKey !== "") {
+			$('#inputExportKey').val(this.state.fieldToEdit.exportKey);
+		} else {
+			$('#inputExportKey').val('exportKey');
+		}
+	}
+
     render() {
     	return (
     		<div id="configuratorWrapper">
@@ -113,6 +188,8 @@ class Configurator extends Component {
 							<StandardPanelInput {...this.props} />
 							<br/>
 							<OptionalPanelInput {...this.props} />
+							<br/>
+							<Parameters {...this.props} />
 							<div id="submitButtonWrapper" className="config-wrapper display-hidden">
 								<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
 							</div> 

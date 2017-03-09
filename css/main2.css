@@ -332,3 +332,11 @@ ul.button-list>li {
 	padding-left: 5px;
 	padding-bottom: 5px;
 }
+
+.config-wrapper {
+	margin-top: 10px;
+}
+
+.param-input-margin {
+	margin-top: 10px;
+}

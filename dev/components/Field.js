@@ -32,53 +32,52 @@ class Field extends Component {
   handleClick(event, field) {
     const groupKeys = field.group.split('|');
 
-    if ($('#fieldEditorPanel').hasClass('display-hidden')) {
-      $('#fieldEditorPanel').removeClass('display-hidden');
-    } else {
-      $('#fieldEditorPanel').addClass('display-hidden');
-    }
+    $('.config-wrapper').addClass('display-hidden');
+    $('#standardInputWrapper').removeClass('display-hidden');
+    $('#fieldTypeWrapper').removeClass('display-hidden');
+    $('#exportKeyWrapper').removeClass('display-hidden');
+    $('#inputExportKey').attr('required', true);
+    $('#submitButtonWrapper').removeClass('display-hidden');
+    $('#optionalInputWrapper').removeClass('display-hidden')
+    $('#colSelectWrapper').removeClass('display-hidden');
+    $('#clearWrapper').removeClass('display-hidden');
+    $('#tooltipWrapper').removeClass('display-hidden');
+    $('#idParamsWrapperForAll').removeClass('display-hidden');
+    $('#panelWrapper').attr('configtype', 'field');
+    
+    this.props.changeFieldToEdit(field);
 
-    switch (field.type) {
+    $('#inputTitle').val(field.title);
+    $('#colSelectField').val(field.cols);
+    $('#fieldType').val(field.type);
+    $('#inputExportKey').val(field.exportKey);
+    $('#idClearBefore').prop("checked", field.clearBefore);
+    $('#idClearAfter').prop("checked", field.clearAfter);
+    $('#inputTooltip').val(field.tooltip);
+
+    switch(field.type) {
       case 'code':
-        $('#codeParamsId').removeClass('display-hidden');
+        $('#codeParamsWrapper').removeClass('display-hidden');
         $('#cssParam').val(field.parameters.css);
         $('#htmlParam').val(field.parameters.html);
         $('#jsParam').val(field.parameters.js);
         break;
 
       case 'text':
-        $('#textParamsId').removeClass('display-hidden');
-        $('#inputTextParams').val(field.parameters.class);
-        break;
-
-      case 'radio':
-        $('#radioParamsId').removeClass('display-hidden');
-        break;
-
-      case 'check':
-       /* $('#checkParamsId').removeClass('display-hidden');
-        $('#checkInlineCheck').prop("checked", field.parameters.inline);
-        $('#checkInlineBreakCheck').prop("checked", field.parameters.inlineBreak);*/
-        break;
-
-      case 'select':
-        $('#selectParamsId').removeClass('display-hidden');
+        $('#textParamsWrapper').removeClass('display-hidden');
+        $('#idTextClass').val(field.parameters.class);
+        $('#idTextPlaceholder').val(field.parameters.placeholder);
+        $('#idTextWidth').val(field.parameters.width);
         break;
 
       case 'textarea':
-        $('#textareaParamsId').removeClass('display-hidden');
-        $('#inputTextareaParams').val(field.parameters.class);
+        $('#textParamsWrapper').removeClass('display-hidden');
+        $('#idTextClass').val(field.parameters.class);
+        $('#idTextPlaceholder').val(field.parameters.placeholder);
+        $('#idTextWidth').val(field.parameters.width);
         break;
     }
 
-    $('#inputFieldTitle').val(field.title);
-    $('#colSelectField').val(field.cols);
-    $('#fieldType').val(field.type);
-    $("#fieldClearBefore").prop("checked", field.clearBefore);
-    $("#fieldClearAfter").prop("checked", field.clearAfter);
-    $("#inputFieldTooltip").val(field.tooltip);
-
-    this.props.changeFieldToEdit(field);
     this.props.setSubAccordionToOpen(groupKeys);
   }
 

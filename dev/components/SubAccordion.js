@@ -24,10 +24,22 @@ class SubAccordion extends Component {
 
   componentWillReceiveProps(nextProps) {
     let newItems = nextProps.elem.content,
-        newGroupsLevelTwoToCopy = nextProps.store.database.groupsLevelTwoToCopy;
+        newGroupsLevelTwoToCopy = nextProps.store.database.groupsLevelTwoToCopy,
+        newJsonData = nextProps.store.database.jsonData,
+        newGroupTwoToEdit = nextProps.store.database.groupTwoToEdit,
+        jsonData = {...this.state.jsonData},
+        groupTwoToEdit = {...this.state.groupTwoToEdit};
 
     this.updateGroupsLevelTwoToCopy(newGroupsLevelTwoToCopy);    
     this.updateSubAccordionItems(newItems);
+
+    jsonData = newJsonData;
+    groupTwoToEdit = newGroupTwoToEdit;
+
+     this.setState({
+          jsonData,
+          groupTwoToEdit
+      });
 
     setTimeout(() => {
       this.updateMarking(newItems)
@@ -103,32 +115,39 @@ class SubAccordion extends Component {
     });
   }
 
-  handleEdit(event, groupTwoKey, groupOneKey, title) {
+  handleEdit(event, groupOneKey, groupTwoKey) {
     const jsonData = {...this.state.jsonData};
-    let indexGroupOne,
-        indexGroupTwo;
+    let groupOneIndex, groupTwoIndex,
+        newGroupTwoToEdit = {...this.state.groupTwoToEdit}; 
 
-    indexGroupOne = jsonData.groups.map((groupOne, i) => {
-      return groupOne.key;
+    groupOneIndex = jsonData.groups.map((elem, i) => {
+      return elem.key;
     }).indexOf(groupOneKey);
 
-    indexGroupTwo = jsonData.groups[indexGroupOne].groups.map((groupTwo, i) => {
-      return groupTwo.key;
+    groupTwoIndex = jsonData.groups[groupOneIndex].groups.map((group, i) => {
+      return group.key;
     }).indexOf(groupTwoKey);
 
-    if ($('#inputGroupLevelTwo').hasClass('display-hidden')) {
-      $('#inputGroupLevelTwo').removeClass('display-hidden');
-      $('#inputGroupLevelTwoTitle').attr('groupOneKey', groupOneKey);
-      $('#inputGroupLevelTwoTitle').attr('groupTwoKey', groupTwoKey);
-      $('#inputGroupLevelTwoTitle').val(title);
+    newGroupTwoToEdit = jsonData.groups[groupOneIndex].groups[groupTwoIndex];
+         
+    $('.config-wrapper').addClass('display-hidden');
+    $('#standardInputWrapper').removeClass('display-hidden');
+    $('#optionalInputWrapper').removeClass('display-hidden');
+    $('#colSelectWrapper').removeClass('display-hidden');
+    $('#clearWrapper').removeClass('display-hidden');
+    $('#collapseWrapper').removeClass('display-hidden');
+    $('#submitButtonWrapper').removeClass('display-hidden');
+    $('#panelWrapper').attr('configtype', 'groupTwo');
 
-    } else {
-      $('#inputGroupLevelTwo').addClass('display-hidden');
-      $('#inputGroupLevelTwoTitle').removeAttr('groupOneKey');
-      $('#inputGroupLevelTwoTitle').removeAttr('groupTwoKey');
-    }
-
-    this.props.changeGroupTwoToEdit(jsonData.groups[indexGroupOne].groups[indexGroupTwo]);
+    this.props.changeGroupTwoToEdit(newGroupTwoToEdit);
+    
+    $('#inputTitle').val(newGroupTwoToEdit.title);
+    $('#colSelect').val(newGroupTwoToEdit.cols);
+    $('#idClearBefore').prop("checked", newGroupTwoToEdit.clearBefore);
+    $('#idClearAfter').prop("checked", newGroupTwoToEdit.clearAfter);
+    $('#idCollapse').prop("checked", newGroupTwoToEdit.collapse);
+    $('#idAutoCollapse').prop("checked", newGroupTwoToEdit.autocollapse);
+    $('#panelWrapper').attr('grouponekey', groupOneKey);
   }
 
   render() {
@@ -176,7 +195,7 @@ class SubAccordion extends Component {
                               <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </button>
                             <ul className="dropdown-menu">
-                              <li><a href="#" onClick={(e) => this.handleEdit(e, elem.key, groupLevelOneKey, elem.title)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
+                              <li><a href="#" onClick={(e) => this.handleEdit(e, groupLevelOneKey, elem.key)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
