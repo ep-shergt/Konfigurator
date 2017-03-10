@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import Field from "./Field";
 import { removeArrayElement } from './../helpers';
+import { getRandomInt } from './../helpers';
 
 // stateless functional component
 
@@ -14,6 +15,7 @@ class AccordionSection extends Component {
     this.markForCopy = this.markForCopy.bind(this);
     this.updateMarking = this.updateMarking.bind(this);
     this.updateFieldsToCopy = this.updateFieldsToCopy.bind(this);
+    this.updateJsonData = this.updateJsonData.bind(this);
     this.insertfieldsToCopy = this.insertfieldsToCopy.bind(this);
     this.createNewField = this.createNewField.bind(this);
     this.cutAndShift = this.cutAndShift.bind(this);
@@ -27,10 +29,12 @@ class AccordionSection extends Component {
 
   componentWillReceiveProps(nextProps) {
     let newFields = nextProps.elem.content,
-        newFieldsToCopy = nextProps.store.database.fieldsToCopy;
+        newFieldsToCopy = nextProps.store.database.fieldsToCopy,
+        newJsonData = nextProps.store.database.jsonData;
 
     this.updateFieldsToCopy(newFieldsToCopy);    
     this.updateFields(newFields);
+    this.updateJsonData(newJsonData);
 
     setTimeout(() => {
       this.updateMarking(newFields);
@@ -41,8 +45,14 @@ class AccordionSection extends Component {
 
   }
 
-  createNewField(elem, index) {
+  createNewField(groupKeys, fieldIndex) {
+    const rand = getRandomInt(1, 1000);
+    let keysArr = groupKeys.split('|');
 
+    console.log('fieldIndex', fieldIndex);
+   
+    this.props.createField(fieldIndex, groupKeys, rand);
+    this.props.setSubAccordionToOpen(keysArr);
   }
 
   cutAndShift(elem, index) {
@@ -89,6 +99,16 @@ class AccordionSection extends Component {
 
     this.setState({ 
       fieldsToCopy
+    });
+  }
+
+  updateJsonData(newJsonData) {
+    let jsonData = {...this.state.jsonData};
+
+    jsonData = newJsonData;
+
+    this.setState({ 
+      jsonData
     });
   }
 
@@ -162,7 +182,14 @@ class AccordionSection extends Component {
           > 
             {this.state.fields.map((elem, i) => {
               let fieldId = 'field_' + elem.key,
-                  buttonId = "btn_field_" + elem.key;
+                  buttonId = "btn_field_" + elem.key,
+                  groupKeys = elem.group,
+                  jsonData = this.state.jsonData,
+                  fieldIndexInJsonData;
+
+              fieldIndexInJsonData = jsonData.fields.map((field, i) => {
+                return field.key;
+              }).indexOf(elem.key);
 
               switch (true) {
                 case elem.clearBefore && elem.clearAfter:
@@ -180,7 +207,7 @@ class AccordionSection extends Component {
                                 <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                               </button>
                               <ul className="dropdown-menu">
-                                <li><a href="#" onClick={() => this.createNewField(elem, i)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
+                                <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
                                 <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
@@ -208,7 +235,7 @@ class AccordionSection extends Component {
                                 <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                               </button>
                               <ul className="dropdown-menu">
-                                <li><a href="#" onClick={() => this.createNewField(elem, i)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
+                                <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
                                 <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
@@ -236,7 +263,7 @@ class AccordionSection extends Component {
                                 <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                               </button>
                               <ul className="dropdown-menu">
-                                <li><a href="#" onClick={() => this.createNewField(elem, i)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
+                                <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
                                 <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
@@ -264,7 +291,7 @@ class AccordionSection extends Component {
                                 <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
                               </button>
                               <ul className="dropdown-menu">
-                                <li><a href="#" onClick={() => this.createNewField(elem, i)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
+                                <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
                                 <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>

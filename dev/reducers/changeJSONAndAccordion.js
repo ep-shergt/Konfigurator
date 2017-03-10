@@ -1,6 +1,7 @@
 import { setAccordionItems } from './../helpers';
 import jsonData from './../data/EmptyJSON';
 import { removeArrayElement } from './../helpers';
+import { insertArrayElement } from './../helpers';
 import jsonpath from './../jp';
 
 const timestamp = + new Date(),
@@ -21,15 +22,53 @@ let	accordion = setAccordionItems(jsonDataCopy),
 	fieldToEdit = {},
 	groupOneToEdit = {},
 	groupTwoToEdit = {},
-	fieldsToCopy = [];
+	fieldsToCopy = [],
+	fieldToCreate = {
+		key: "",
+		title: 'Neues Feld',
+		type: 'code',
+		group: "",
+		cols: "",
+		clearBefore: false,
+		clearAfter: false,
+		parameters: {
+			css: "",
+			html: "",
+			js: ""
+		}
+	};
 
-const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, groupOneToEdit, groupTwoToEdit, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy}, action) => {	
+const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, groupOneToEdit, groupTwoToEdit, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy, fieldToCreate}, action) => {	
 	switch(action.type){
+		case "CREATE_FIELD": {
+			const {fieldIndex, groupKeys, randomInt} = action;
+
+			let jsonData = {...state.jsonData},
+				accordion = [...state.accordion],
+				fieldToCreate = {...state.fieldToCreate},
+				newtimestamp = + new Date();
+			
+			fieldToCreate.key = 'fld_' + (newtimestamp + randomInt).toString();
+			fieldToCreate.group = groupKeys;
+
+			console.log('fieldIndexreducer', fieldIndex);
+			console.log('elem in json before', jsonData.fields[fieldIndex+1]);
+			jsonData.fields = insertArrayElement(jsonData.fields, fieldToCreate, fieldIndex);
+			console.log('jsonData', jsonData);
+			console.log('elem in json after', jsonData.fields[fieldIndex+1]);		
+			accordion = setAccordionItems(jsonData);
+
+			console.log('accordion', accordion);
+
+			state = {...state, jsonData, accordion, fieldToCreate};
+
+			break;
+		}
+
 		case "CHANGE_JSON_ON_LOADING": {
 			const timestamp = + new Date();
 			let {jsonData} = action,
-				accordion = [...state.accordion],
-				help;
+				accordion = [...state.accordion];
 
 			jsonData.groups.map((groupOne, i) => {
 				const oldKeyOne = groupOne.key;

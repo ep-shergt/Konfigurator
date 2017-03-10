@@ -153,7 +153,17 @@ export function deleteField(fields, fieldsToCopy, groupLevelOneKey, groupLevelTw
 
 //**************************************************************************************************************************
 
+//Creators
+//**************************************************************************************************************************
 
+export function createField(fieldIndex, groupKeys, randomInt) {
+	return {
+		type: 'CREATE_FIELD',
+		fieldIndex,
+		groupKeys,
+		randomInt
+	}
+}
 //import * as user from "../actionCreators";
 //import { importJSON } from "../actionCreators"
 

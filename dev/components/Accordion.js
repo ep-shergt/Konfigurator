@@ -13,6 +13,7 @@ class Accordion extends Component {
     this.updateAccordion = this.updateAccordion.bind(this);
     this.updateGroupsLevelOneToCopy = this.updateGroupsLevelOneToCopy.bind(this);
     this.updateJsonData = this.updateJsonData.bind(this);
+    this.updateGroupOneToEdit = this.updateGroupOneToEdit.bind(this);
     this.openMainTitlePanel = this.openMainTitlePanel.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
 
@@ -48,11 +49,15 @@ class Accordion extends Component {
   componentWillReceiveProps(nextProps) {
     let newJsonData = nextProps.store.database.jsonData,
         newAccordion = nextProps.store.database.accordion,
-        newGroupsLevelOneToCopy = nextProps.store.database.groupsLevelOneToCopy;
+        newGroupsLevelOneToCopy = nextProps.store.database.groupsLevelOneToCopy,
+        newGroupOneToEdit = this.props.store.database.groupOneToEdit;
+        
 
     this.updateAccordion(newAccordion);
     this.updateGroupsLevelOneToCopy(newGroupsLevelOneToCopy);
     this.updateJsonData(newJsonData);
+    this.updateGroupOneToEdit(newGroupOneToEdit);
+
 
     setTimeout(() => {
       this.updateMarking(newAccordion)
@@ -86,6 +91,16 @@ class Accordion extends Component {
 
     this.setState({ 
       jsonData
+    });
+  }
+
+  updateGroupOneToEdit(newGroupOneToEdit) {
+    let groupOneToEdit = {...this.state.groupOneToEdit};
+
+    groupOneToEdit = newGroupOneToEdit;
+
+    this.setState({ 
+      groupOneToEdit
     });
   }
 

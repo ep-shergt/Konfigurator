@@ -8,12 +8,22 @@ export function removeArrayElement(oldArray, index) {
 	return newArray;
 }
 
+export function insertArrayElement(oldArray, element, index) {
+  let newArray = [...oldArray.slice(0, index + 1), element, ...oldArray.slice(index + 1)];
+
+  return newArray;
+}
+
 export function isInRange(number, range) {
   if(typeof number === "number" && Number.isInteger(number)) {
     return number > 0 && number < range;
   } else {
     return false;
   }
+}
+
+export function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export function setAccordionItems(jsonDataCopy) {
