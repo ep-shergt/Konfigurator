@@ -1,5 +1,8 @@
 import { setAccordionItems } from './../helpers';
 import jsonData from './../data/EmptyJSON';
+import fieldToCreate from './../data/FieldToCreate';
+import groupOneToCreate from './../data/GroupOneToCreate';
+import groupTwoToCreate from './../data/groupTwoToCreate';
 import { removeArrayElement } from './../helpers';
 import { insertArrayElement } from './../helpers';
 import jsonpath from './../jp';
@@ -23,22 +26,21 @@ let	accordion = setAccordionItems(jsonDataCopy),
 	groupOneToEdit = {},
 	groupTwoToEdit = {},
 	fieldsToCopy = [],
-	fieldToCreate = {
-		key: "",
-		title: 'Neues Feld',
-		type: 'code',
-		group: "",
-		cols: "",
-		clearBefore: false,
-		clearAfter: false,
-		parameters: {
-			css: "",
-			html: "",
-			js: ""
-		}
-	};
+	intialState = {
+		jsonData,
+		accordion,
+		fieldToEdit,
+		groupOneToEdit,
+		groupTwoToEdit, 
+		groupsLevelOneToCopy, 
+		groupsLevelTwoToCopy, 
+		fieldsToCopy, 
+		fieldToCreate, 
+		groupOneToCreate,
+		groupTwoToCreate
+	}
 
-const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, groupOneToEdit, groupTwoToEdit, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy, fieldToCreate}, action) => {	
+const changeJSONAndAccordion = (state = intialState, action) => {	
 	switch(action.type){
 		case "CREATE_FIELD": {
 			const {fieldIndex, groupKeys, randomInt} = action;
@@ -46,21 +48,71 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 			let jsonData = {...state.jsonData},
 				accordion = [...state.accordion],
 				fieldToCreate = {...state.fieldToCreate},
-				newtimestamp = + new Date();
+				newTimestamp = + new Date();
 			
-			fieldToCreate.key = 'fld_' + (newtimestamp + randomInt).toString();
+			fieldToCreate.key = 'fld_' + (newTimestamp + randomInt).toString();
 			fieldToCreate.group = groupKeys;
 
-			console.log('fieldIndexreducer', fieldIndex);
-			console.log('elem in json before', jsonData.fields[fieldIndex+1]);
 			jsonData.fields = insertArrayElement(jsonData.fields, fieldToCreate, fieldIndex);
-			console.log('jsonData', jsonData);
-			console.log('elem in json after', jsonData.fields[fieldIndex+1]);		
 			accordion = setAccordionItems(jsonData);
 
-			console.log('accordion', accordion);
-
 			state = {...state, jsonData, accordion, fieldToCreate};
+
+			break;
+		}
+
+		case "CREATE_GROUP_ONE": {
+			const {groupOneIndexInJson, randomInt} = action;
+			
+			let jsonData = {...state.jsonData},
+				accordion = [...state.accordion],
+				groupOneToCreate = {...state.groupOneToCreate},
+				fieldToCreate = {...state.fieldToCreate},
+				newTimestamp = + new Date(),
+				groupOneKey = 'grp_1_' + (newTimestamp + randomInt).toString(),
+				groupTwoKey = 'grp_2_' + (newTimestamp + randomInt).toString();
+
+			groupOneToCreate.key = groupOneKey;
+			console.log('ub', groupOneToCreate);
+			groupOneToCreate.groups[0].key = groupTwoKey;
+
+			fieldToCreate.key = 'fld_' + (newTimestamp + randomInt).toString();
+			fieldToCreate.group = groupOneKey + '|' + groupTwoKey;
+
+			jsonData.groups = insertArrayElement(jsonData.groups, groupOneToCreate, groupOneIndexInJson);
+			jsonData.fields.push(fieldToCreate);
+
+			accordion = setAccordionItems(jsonData);
+			state = {...state, jsonData, accordion, groupOneToCreate};
+
+			break;
+		}
+
+		case "CREATE_GROUP_TWO": {
+			const {groupOneKey, indexInGroupOne, randomInt} = action;
+			
+			let jsonData = {...state.jsonData},
+				accordion = [...state.accordion],
+				groupTwoToCreate = {...state.groupTwoToCreate},
+				fieldToCreate = {...state.fieldToCreate},
+				newTimestamp = + new Date(),
+				groupTwoKey = 'grp_2_' + (newTimestamp + randomInt).toString(),
+				groupOneIndex;
+
+			groupTwoToCreate.key = groupTwoKey;
+
+			fieldToCreate.key = 'fld_' + (newTimestamp + randomInt).toString();
+			fieldToCreate.group = groupOneKey + '|' + groupTwoKey;
+
+			groupOneIndex = jsonData.groups.map((elem, i) => {
+    			return elem.key;
+  			}).indexOf(groupOneKey);
+
+			jsonData.groups[groupOneIndex].groups = insertArrayElement(jsonData.groups[groupOneIndex].groups, groupTwoToCreate, indexInGroupOne);
+			jsonData.fields.push(fieldToCreate);
+
+			accordion = setAccordionItems(jsonData);
+			state = {...state, jsonData, accordion, groupOneToCreate};
 
 			break;
 		}
@@ -216,6 +268,9 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
   			}).indexOf(groupOneKey);
 	
 			accordion[indexSubAccordion].open = true;
+			accordion[indexSubAccordion].content.forEach((i) => {
+				i.open = false;
+			});
 				
 			state = {...state, accordion};
 			break;
@@ -236,14 +291,15 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 		}
 
 		case "DELETE_GROUP_L1": {
-			const {element, index} = action,
-		          buttonId = 'btn_group_level_one_mark_' + element.key;
-		    let {groupsLevelOneToCopy} = action,
-		    	accordion = [...state.accordion],
+			const {groupOneIndex, element} = action,
+		    	  buttonId = 'btn_group_level_one_mark_' + element.key;
+		    let accordion = [...state.accordion],
+		    	jsonData = {...state.jsonData},
+		    	groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
 		    	indexForElementToRemove;
 
+
 		    if (accordion.length > 1) {
-		        accordion = removeArrayElement(accordion, index);
 		        if (element.marked) {
 			    	$('#' + buttonId).removeClass('marked');
 
@@ -253,26 +309,35 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 
 	      			groupsLevelOneToCopy = removeArrayElement(groupsLevelOneToCopy, indexForElementToRemove);
 			    }
+		        jsonData.groups = removeArrayElement(jsonData.groups, groupOneIndex);
 
 			    // delete group and field to copy!
-
 		    }
 
-			state = {...state, accordion, groupsLevelOneToCopy};
+		    accordion = setAccordionItems(jsonData);
+
+			state = {...state, jsonData, accordion, groupsLevelOneToCopy};
 			return state;
 			break;
 		}
 
 		case "DELETE_GROUP_L2": {
-			const {groupLevelOneKey, element, index} = action,
+			const {groupOneKey, element, indexInGroupOne, subAccLength} = action,
 		          buttonId = 'btn_group_level_two_mark_' + element.key;
-		    let {subAccordionItems, groupsLevelTwoToCopy} = action,
-		    	accordion = [...state.accordion],
-		    	indexForElementToRemove,
-		    	indexSubAccordion;
+		    let accordion = [...state.accordion],
+		    	jsonData = {...state.jsonData},
+		    	groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
+		    	groupOneIndex,
+		    	indexForElementToRemove;
 
-		    if (subAccordionItems.length > 1) {
-		        subAccordionItems = removeArrayElement(subAccordionItems, index);
+		    if (subAccLength > 1) {
+
+		        groupOneIndex = jsonData.groups.map((elem, i) => {
+	    			return elem.key;
+	  			}).indexOf(groupOneKey);
+
+	  			jsonData.groups[groupOneIndex].groups = removeArrayElement(jsonData.groups[groupOneIndex].groups, indexInGroupOne);
+
 		        if (element.marked) {
 			    	$('#' + buttonId).removeClass('marked');
 
@@ -284,37 +349,26 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 			    }
 
 			    //delete field to copy!
-
-			    indexSubAccordion = accordion.map((subAccordion, i) => {
-	    			return subAccordion.key;
-	  			}).indexOf(groupLevelOneKey);
-
-				accordion[indexSubAccordion].content = removeArrayElement(accordion[indexSubAccordion].content, index);
 		    }
-		
-			state = {...state, accordion, groupsLevelTwoToCopy};
+	
+			accordion = setAccordionItems(jsonData);
+
+			state = {...state, jsonData, accordion, groupsLevelTwoToCopy};
 			return state;
 			break;
 		}
 
 		case "DELETE_FIELD": {
-			const {groupLevelOneKey, groupLevelTwoKey, element, index} = action,
+			const {element, indexInJson} = action,
 				  buttonId = "btn_field_" + element.key;
-			let {fields, fieldsToCopy} = action,
+			let jsonData = {...state.jsonData},
 				accordion = [...state.accordion],
-				indexForElementToRemove,
-				indexSubAccordion,
-				indexAccordionSection;
+				fieldsToCopy = [...state.fieldsToCopy],
+				indexForElementToRemove;
+	
+			if (jsonData.fields.length > 1) {
+				jsonData.fields = removeArrayElement(jsonData.fields, indexInJson);
 
-			indexSubAccordion = accordion.map((subAccordion, i) => {
-    			return subAccordion.key;
-  			}).indexOf(groupLevelOneKey);
-
-  			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
-    			return section.key;
-  			}).indexOf(groupLevelTwoKey);		
-
-			if (fields.length > 1) {
 				if (element.marked) {
 			        $('#' + buttonId).removeClass('marked');
 
@@ -324,110 +378,88 @@ const changeJSONAndAccordion = (state = {jsonData, accordion, fieldToEdit, group
 
 			        fieldsToCopy = removeArrayElement(fieldsToCopy, indexForElementToRemove);
 			    }
+			}
 
-	  			accordion[indexSubAccordion].content[indexAccordionSection].fields = removeArrayElement(accordion[indexSubAccordion].content[indexAccordionSection].fields, index);			
-			}		
-
-	  		accordion[indexSubAccordion].content[indexAccordionSection].open = true;
-					
-			state = {...state, accordion, fieldsToCopy};
+			accordion = setAccordionItems(jsonData);
+			state = {...state, jsonData, accordion, fieldsToCopy};
 		    return state;
 		    break;
 		}
 
 		case "MARK_GROUP_L1": {
-			const {element, index} = action,
+			const {element, groupIndexInJson} = action,
 		          buttonId = 'btn_group_level_one_mark_' + element.key;
-		    let {groupsLevelOneToCopy} = action,
+		    let groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
+		    	jsonData = {...state.jsonData},
 		    	accordion = [...state.accordion],
 		    	indexForElementToRemove;
 
-		    if (element.marked) {
+		    if (jsonData.groups[groupIndexInJson].marked) {
 		        indexForElementToRemove = groupsLevelOneToCopy.map((key, i) => {
 		            return key;
 		        }).indexOf(element.key);
 
 		        groupsLevelOneToCopy = removeArrayElement(groupsLevelOneToCopy, indexForElementToRemove);
-		        accordion[index].marked = false;
-		    } else {
-		        accordion[index].marked = true;    
-		        groupsLevelOneToCopy.push(accordion[index].key);
+		        jsonData.groups[groupIndexInJson].marked = false;
+		    } else { 
+		    	jsonData.groups[groupIndexInJson].marked = true;
+		        groupsLevelOneToCopy.push(jsonData.groups[groupIndexInJson].key);
 		    }
 
-		    state = {...state, groupsLevelOneToCopy};
+		    accordion = setAccordionItems(jsonData);
+			state = {...state, jsonData, accordion, groupsLevelOneToCopy};
 		    return state;
 		    break;
 		}
 
 		case "MARK_GROUP_L2": {
-			const {groupLevelOneKey, element, index} = action,
-				  buttonId = 'btn_group_level_two_mark_' + element.key;
-		    let {subAccordionItems, groupsLevelTwoToCopy} = action,
+			const {element, groupOneIndex, indexInGroupOne} = action;
+		    let jsonData = {...state.jsonData},
 		    	accordion = [...state.accordion],
-		        indexForElementToRemove,
-		        indexSubAccordion;
-
-		    indexSubAccordion = accordion.map((subAccordion, i) => {
-    			return subAccordion.key;
-  			}).indexOf(groupLevelOneKey);
+		    	groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
+		        indexForElementToRemove;
 
 		    if (element.marked) {
 		      indexForElementToRemove = groupsLevelTwoToCopy.map((key, i) => {
 		        return key;
 		      }).indexOf(element.key);
 
-		      accordion[indexSubAccordion].content[index].marked = false;
 		      groupsLevelTwoToCopy = removeArrayElement(groupsLevelTwoToCopy, indexForElementToRemove);
-		   
+		   	  jsonData.groups[groupOneIndex].groups[indexInGroupOne].marked = false;
+
 		    } else {
-		      accordion[indexSubAccordion].content[index].marked = true;    
-		      groupsLevelTwoToCopy.push(subAccordionItems[index].key);	
+		      jsonData.groups[groupOneIndex].groups[indexInGroupOne].marked = true;  
+		      groupsLevelTwoToCopy.push(jsonData.groups[groupOneIndex].groups[indexInGroupOne].key);	
 		    }
 
-		    accordion[indexSubAccordion].content[index]['open'] = false;
-
-
-			state = {...state, accordion, groupsLevelTwoToCopy};
+		    accordion = setAccordionItems(jsonData);
+			state = {...state, jsonData, accordion, groupsLevelTwoToCopy};
 		    return state;
 		    break;
 		}
 
 		case "MARK_FIELD": {
-			const {groupLevelOneKey, groupLevelTwoKey, element, index} = action,
-				  buttonId = "btn_field_" + element.key;
-			let {fields, fieldsToCopy} = action,
+			const {field, indexInJson} = action;
+			let jsonData = {...state.jsonData},
 				accordion = [...state.accordion],
-				field,
-				indexForElementToRemove,
-				indexSubAccordion,
-				indexAccordionSection;
-
-			indexSubAccordion = accordion.map((subAccordion, i) => {
-    			return subAccordion.key;
-  			}).indexOf(groupLevelOneKey);
-
-  			indexAccordionSection = accordion[indexSubAccordion].content.map((section, i) => {
-    			return section.key;
-  			}).indexOf(groupLevelTwoKey);
-
-		    if (element.marked) {
+				fieldsToCopy = [...state.fieldsToCopy],	
+				indexForElementToRemove;
+			
+		    if (field.marked) {
 		        indexForElementToRemove = fieldsToCopy.map((key, i) => {
 		            return key;
-		        }).indexOf(element.key);
+		        }).indexOf(field.key);
 
 		        fieldsToCopy = removeArrayElement(fieldsToCopy, indexForElementToRemove);
-		        accordion[indexSubAccordion].content[indexAccordionSection].fields[index].marked = false;
-		        $('#' + buttonId).removeClass('marked');
+		        jsonData.fields[indexInJson].marked = false;
 
 		    } else {
-		        accordion[indexSubAccordion].content[indexAccordionSection].fields[index].marked = true;
-		        fieldsToCopy.push(fields[index].key);
-		        $('#' + buttonId).addClass('marked');      
+		    	jsonData.fields[indexInJson].marked = true;
+		        fieldsToCopy.push(jsonData.fields[indexInJson].key);
 		    }
 
-		    accordion[indexSubAccordion].content[indexAccordionSection]['open'] = true;
-
-			state = {...state, accordion, fieldsToCopy};
+		    accordion = setAccordionItems(jsonData);
+			state = {...state, jsonData, accordion, fieldsToCopy};
 		    return state;
 		    break;
 		}

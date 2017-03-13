@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import SubAccordion from './SubAccordion';
 import { removeArrayElement } from './../helpers';
+import { getRandomInt } from './../helpers';
 
 class Accordion extends Component {
 
@@ -16,6 +17,7 @@ class Accordion extends Component {
     this.updateGroupOneToEdit = this.updateGroupOneToEdit.bind(this);
     this.openMainTitlePanel = this.openMainTitlePanel.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.createNewGroupOne = this.createNewGroupOne.bind(this);
 
     this.state = {
       jsonData: this.props.store.database.jsonData,
@@ -37,6 +39,12 @@ class Accordion extends Component {
     }, 100);
   }
 
+  createNewGroupOne(groupOneIndexInJson) {
+    const rand = getRandomInt(1, 1000);
+
+    this.props.createGroupOne(groupOneIndexInJson, rand);
+  }
+
   click(event, i) {
     const newAccordion = this.state.accordion.slice();
 
@@ -51,13 +59,11 @@ class Accordion extends Component {
         newAccordion = nextProps.store.database.accordion,
         newGroupsLevelOneToCopy = nextProps.store.database.groupsLevelOneToCopy,
         newGroupOneToEdit = this.props.store.database.groupOneToEdit;
-        
 
     this.updateAccordion(newAccordion);
     this.updateGroupsLevelOneToCopy(newGroupsLevelOneToCopy);
     this.updateJsonData(newJsonData);
     this.updateGroupOneToEdit(newGroupOneToEdit);
-
 
     setTimeout(() => {
       this.updateMarking(newAccordion)
@@ -111,7 +117,7 @@ class Accordion extends Component {
 
     accordion.forEach((i) => {
       const buttonId = 'btn_group_level_one_mark_' + i.key;
-
+      
       $('#' + buttonId).removeClass('marked');
       if (i.marked) {
         $('#' + buttonId).addClass('marked');
@@ -178,14 +184,20 @@ class Accordion extends Component {
         </div>
         <div>
           {this.state.accordion.map((elem, i) => {
-            let buttonId = "btn_group_level_one_mark_" + elem.key;
-               
+            let buttonId = "btn_group_level_one_mark_" + elem.key,
+                jsonData = this.state.jsonData,
+                groupIndexInJson;
+
+            groupIndexInJson = jsonData.groups.map((group, i) => {
+              return group.key;
+            }).indexOf(elem.key);    
+              
             return (
               <div key={i}>
                 <div className="group-bar-level-one"><SubAccordion {...this.props} click={this.click} groupOne={i} elem={elem}/></div>
                 <div className="group-buttons-level-one">
                   <div className="btn-group-vertical" role="group" aria-label="edit">
-                    <button id={buttonId} type="button" className="btn btn-default btn-xs" onClick={this.props.markGroupLevelOneForCopy.bind(null, groupsLevelOneToCopy, elem, i)}>
+                    <button id={buttonId} type="button" className="btn btn-default btn-xs" onClick={this.props.markGroupLevelOneForCopy.bind(null, elem, groupIndexInJson)}>
                       <i className="fa fa-check" aria-hidden="true"></i>
                     </button>
                     <div className="dropdown">
@@ -194,10 +206,10 @@ class Accordion extends Component {
                       </button>
                       <ul className="dropdown-menu">
                         <li><a href="#" onClick={(e) => this.handleEdit(e, i)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
-                        <li><a href="#"><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
+                        <li><a href="#" onClick={() => this.createNewGroupOne(groupIndexInJson)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
-                        <li><a href="#" onClick={this.props.deleteGroupLevelOne.bind(null, groupsLevelOneToCopy, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
+                        <li><a href="#" onClick={this.props.deleteGroupLevelOne.bind(null, groupIndexInJson, elem)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
                       </ul>
                     </div>
                   </div>

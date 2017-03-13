@@ -84,35 +84,28 @@ export function setSubAccordionToOpen(groupKeys) {
 }
 // Markers
 //*************************************************************************************************************************************
-export function markGroupLevelOneForCopy(groupsLevelOneToCopy, element, index) {
+export function markGroupLevelOneForCopy(element, groupIndexInJson) {
 	return {
 		type: 'MARK_GROUP_L1',
-		groupsLevelOneToCopy,
 		element,
-		index
+		groupIndexInJson
 	}
 }
 
-export function markGroupLevelTwoForCopy(subAccordionItems, groupsLevelTwoToCopy, groupLevelOneKey, element, index) {
+export function markGroupLevelTwoForCopy(element, groupOneIndex, indexInGroupOne) {
 	return {
 		type: 'MARK_GROUP_L2',
-		subAccordionItems,
-		groupsLevelTwoToCopy,
-		groupLevelOneKey,
 		element,
-		index
+		groupOneIndex,
+		indexInGroupOne
 	}
 }
 
-export function markFieldToCopy(fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, element, index) {
+export function markFieldToCopy(field, indexInJson) {
 	return {
 		type: 'MARK_FIELD',
-		fields,
-		fieldsToCopy,
-		groupLevelOneKey,
-		groupLevelTwoKey,
-		element,
-		index
+		field,
+		indexInJson
 	}
 }
 
@@ -120,34 +113,29 @@ export function markFieldToCopy(fields, fieldsToCopy, groupLevelOneKey, groupLev
 
 // Deleters
 //*************************************************************************************************************************
-export function deleteGroupLevelOne(groupsLevelOneToCopy, element, index) {
+export function deleteGroupLevelOne(groupOneIndex, element) {
 	return {
 		type: 'DELETE_GROUP_L1',
-		groupsLevelOneToCopy,
-		element,
-		index
+		groupOneIndex,
+		element
 	}
 }
 
-export function deleteGroupLevelTwo(subAccordionItems, groupsLevelTwoToCopy, groupLevelOneKey, element, index) {
+export function deleteGroupLevelTwo(groupOneKey, element, indexInGroupOne, subAccLength) {
 	return {
 		type: 'DELETE_GROUP_L2',
-		subAccordionItems,
-		groupsLevelTwoToCopy,
-		groupLevelOneKey,
+		groupOneKey,
 		element,
-		index
+		indexInGroupOne,
+		subAccLength
 	}
 }
 
-export function deleteField(fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, element, index) {
+export function deleteField(element, indexInJson) {
 	return {
 		type: 'DELETE_FIELD',
-		fields,
-		fieldsToCopy,
-		groupLevelOneKey,
-		groupLevelTwoKey, element,
-		index
+		element,
+		indexInJson
 	}
 }
 
@@ -164,6 +152,24 @@ export function createField(fieldIndex, groupKeys, randomInt) {
 		randomInt
 	}
 }
+
+export function createGroupOne(groupOneIndexInJson, randomInt) {
+	return {
+		type: 'CREATE_GROUP_ONE',
+		groupOneIndexInJson,
+		randomInt
+	}
+}
+
+export function createGroupTwo(groupOneKey, indexInGroupOne, randomInt) {
+	return {
+		type: 'CREATE_GROUP_TWO',
+		groupOneKey,
+		indexInGroupOne,
+		randomInt
+	}
+}
+
 //import * as user from "../actionCreators";
 //import { importJSON } from "../actionCreators"
 

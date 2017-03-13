@@ -44,10 +44,12 @@ export default class Textbox extends Component {
     jsonCopy.groups.forEach((elem) => {
         delete elem['marked'];
         delete elem['open'];
+        delete elem['marked'];
       elem.groups.forEach((i) => {
         delete i['fields'];
         delete i['marked'];
         delete i['open'];
+        delete i['marked'];
       });
     });
 

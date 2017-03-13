@@ -4,8 +4,6 @@ import Field from "./Field";
 import { removeArrayElement } from './../helpers';
 import { getRandomInt } from './../helpers';
 
-// stateless functional component
-
 class AccordionSection extends Component {
 
   constructor(props) {
@@ -18,7 +16,9 @@ class AccordionSection extends Component {
     this.updateJsonData = this.updateJsonData.bind(this);
     this.insertfieldsToCopy = this.insertfieldsToCopy.bind(this);
     this.createNewField = this.createNewField.bind(this);
+    this.handleDeleteField = this.handleDeleteField.bind(this);
     this.cutAndShift = this.cutAndShift.bind(this);
+    this.handleMarking = this.handleMarking.bind(this);
 
     this.state = {
       jsonData: this.props.store.database.jsonData,
@@ -48,10 +48,22 @@ class AccordionSection extends Component {
   createNewField(groupKeys, fieldIndex) {
     const rand = getRandomInt(1, 1000);
     let keysArr = groupKeys.split('|');
-
-    console.log('fieldIndex', fieldIndex);
    
     this.props.createField(fieldIndex, groupKeys, rand);
+    this.props.setSubAccordionToOpen(keysArr);
+  }
+
+  handleDeleteField(elem, fieldIndex) {
+    let keysArr = elem.group.split('|');
+
+    this.props.deleteField(elem, fieldIndex);
+    this.props.setSubAccordionToOpen(keysArr);
+  }
+
+  handleMarking(elem, fieldIndex) {
+    let keysArr = elem.group.split('|');
+
+    this.props.markFieldToCopy(elem, fieldIndex);
     this.props.setSubAccordionToOpen(keysArr);
   }
 
@@ -82,7 +94,7 @@ class AccordionSection extends Component {
 
     fields.forEach((i) => {
       const buttonId = 'btn_field_' + i.key;
-
+      console.log('f', i);
       $('#' + buttonId).removeClass('marked');
       if (i.marked) {
         $('#' + buttonId).addClass('marked');
@@ -199,7 +211,7 @@ class AccordionSection extends Component {
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
-                            <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">
+                            <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">
                               <i className="fa fa-check" aria-hidden="true"></i>
                             </button>
                             <div className="dropdown">
@@ -210,7 +222,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
-                                <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -227,7 +239,7 @@ class AccordionSection extends Component {
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
-                            <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">
+                            <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">
                               <i className="fa fa-check" aria-hidden="true"></i>
                             </button>
                             <div className="dropdown">
@@ -238,7 +250,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
-                                <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -255,7 +267,7 @@ class AccordionSection extends Component {
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
-                            <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">
+                            <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">
                               <i className="fa fa-check" aria-hidden="true"></i>
                             </button>
                             <div className="dropdown">
@@ -266,7 +278,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
-                                <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -283,7 +295,7 @@ class AccordionSection extends Component {
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
-                            <button onClick={this.props.markFieldToCopy.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)} id={buttonId} type="button" className="btn btn-default btn-xs">
+                            <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">
                               <i className="fa fa-check" aria-hidden="true"></i>
                             </button>
                             <div className="dropdown">
@@ -294,7 +306,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
-                                <li><a href="#" onClick={this.props.deleteField.bind(null, fields, fieldsToCopy, groupLevelOneKey, groupLevelTwoKey, elem, i)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>

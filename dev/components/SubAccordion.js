@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import AccordionSection from './AccordionSection';
-import { removeArrayElement } from './../helpers'; 
+import { removeArrayElement } from './../helpers';
+import { getRandomInt } from './../helpers';
 
 class SubAccordion extends Component {
 
@@ -13,6 +14,9 @@ class SubAccordion extends Component {
     this.updateGroupsLevelTwoToCopy = this.updateGroupsLevelTwoToCopy.bind(this);
     this.updateMarking = this.updateMarking.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.createNewGroupTwo = this.createNewGroupTwo.bind(this);
+    this.handleDeleteGroupOne = this.handleDeleteGroupOne.bind(this);
+    this.handleMarking = this.handleMarking.bind(this);
 
     this.state = {
       jsonData: this.props.store.database.jsonData,
@@ -44,6 +48,25 @@ class SubAccordion extends Component {
     setTimeout(() => {
       this.updateMarking(newItems)
     }, 100);
+  }
+
+  createNewGroupTwo(groupLevelOneKey, indexInGroupOne) {
+    const rand = getRandomInt(1, 1000);
+
+    this.props.createGroupTwo(groupLevelOneKey, indexInGroupOne, rand);
+    this.props.setAccordionToOpen(groupLevelOneKey);
+  }
+
+  handleDeleteGroupOne(groupLevelOneKey, elem, indexInGroupOne) {
+    const subAccLength = this.state.subAccordionItems.length;
+
+    this.props.deleteGroupLevelTwo(groupLevelOneKey, elem, indexInGroupOne, subAccLength);
+    this.props.setAccordionToOpen(groupLevelOneKey);
+  }
+
+  handleMarking(element, groupOneIndex, indexInGroupOne, groupLevelOneKey) {
+    this.props.markGroupLevelTwoForCopy(element, groupOneIndex, indexInGroupOne);
+    this.props.setAccordionToOpen(groupLevelOneKey);
   }
 
   updateSubAccordionItems(newItems) {
@@ -180,14 +203,25 @@ class SubAccordion extends Component {
             <div className="acc-width">
               <div>
                 {this.state.subAccordionItems.map((elem, j) => {
-                  let buttonId = "btn_group_level_two_mark_" + elem.key;
+                  let buttonId = "btn_group_level_two_mark_" + elem.key,
+                      jsonData = this.state.jsonData,
+                      groupOneIndex,
+                      indexInGroupOne;
+
+                  groupOneIndex = jsonData.groups.map((group, i) => {
+                    return group.key;
+                  }).indexOf(groupLevelOneKey);
+
+                  indexInGroupOne = jsonData.groups[groupOneIndex].groups.map((group, i) => {
+                    return group.key;
+                  }).indexOf(elem.key);
 
                   return (
                     <div key={j}>
                       <div className="group-bar-level-one"><AccordionSection {...this.props} click={this.click} groupTwo={j} groupOne={this.props.groupOne} groupLevelOneKey={groupLevelOneKey} elem={elem}/></div>
                       <div className="group-buttons-level-one">
                         <div className="btn-group-vertical" role="group" aria-label="edit">
-                          <button id={buttonId} type="button" className="btn btn-default btn-xs" onClick={this.props.markGroupLevelTwoForCopy.bind(null, subAccordionItems, groupsLevelTwoToCopy, groupLevelOneKey, elem, j)}>
+                          <button id={buttonId} type="button" className="btn btn-default btn-xs" onClick={() => this.handleMarking(elem, groupOneIndex, indexInGroupOne, groupLevelOneKey)}>
                             <i className="fa fa-check" aria-hidden="true"></i>
                           </button>
                           <div className="dropdown">
@@ -196,10 +230,10 @@ class SubAccordion extends Component {
                             </button>
                             <ul className="dropdown-menu">
                               <li><a href="#" onClick={(e) => this.handleEdit(e, groupLevelOneKey, elem.key)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
-                              <li><a href="#"><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
+                              <li><a href="#" onClick={() => this.createNewGroupTwo(groupLevelOneKey, indexInGroupOne)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
                               <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
-                              <li><a href="#" onClick={this.props.deleteGroupLevelTwo.bind(null, subAccordionItems, groupsLevelTwoToCopy, groupLevelOneKey, elem, j)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
+                              <li><a href="#" onClick={() => this.handleDeleteGroupOne(groupLevelOneKey, elem, indexInGroupOne)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
                             </ul>
                           </div>          
                         </div>

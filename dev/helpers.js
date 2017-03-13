@@ -56,17 +56,10 @@ export function setAccordionItems(jsonDataCopy) {
         key: i.key,
         title: i.title,
         content: i.groups,
-        open: false,
-        marked: false
+        open: i.open,
+        marked: i.marked
       });
     });
-
-   /* accordion.forEach((i) => {
-   		i.content.forEach((j) => {
-   			j['marked'] = false;
-   			j['open'] = false;
-   		});
-   	});*/
 
     return accordion;
 }
