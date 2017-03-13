@@ -12,6 +12,7 @@ class Configurator extends Component {
 	    super(props);
 
 	    this.handleFieldData = this.handleFieldData.bind(this);
+	    this.sticky_relocate = this.sticky_relocate.bind(this);
 	    
 	    this.state = {
 	  		jsonData: this.props.store.database.jsonData,
@@ -124,6 +125,7 @@ class Configurator extends Component {
 
     componentDidMount() {
     	const exportKey = this.state.fieldToEdit.exportKey;
+    	var self = this;
 
         $("input").keypress( function(e) {
 		    let chr = String.fromCharCode(e.which);
@@ -138,6 +140,11 @@ class Configurator extends Component {
 		} else {
 			$('#inputExportKey').val('exportKey');
 		}
+
+		$(function() {
+	    	$(window).scroll(self.sticky_relocate);
+	    	self.sticky_relocate();
+		});
   	}
 
   	componentWillReceiveProps(nextProps) {
@@ -150,6 +157,8 @@ class Configurator extends Component {
 	        groupOneToEdit = {...this.state.groupOneToEdit},
 	        groupTwoToEdit = {...this.state.groupTwoToEdit};
 
+	    var self = this;
+
 	    jsonData = newJsonData;
 	    fieldToEdit = newFieldToEdit;
 	    groupOneToEdit = newGroupOneToEdit;
@@ -161,6 +170,11 @@ class Configurator extends Component {
 	        groupOneToEdit,
 	        groupTwoToEdit
 	    });
+
+	    $(function() {
+	    	$(window).scroll(self.sticky_relocate);
+	    	self.sticky_relocate();
+		});
 	}
 
 	componentDidUpdate() {
@@ -175,6 +189,19 @@ class Configurator extends Component {
 		}
 	}
 
+	sticky_relocate() {
+	    /*var window_top = $(window).scrollTop();
+	    var div_top = $('#sticky-anchor').offset().top;
+	    
+	    if (window_top > div_top) {
+	        $('#sticky').addClass('stick');
+	        $('#sticky-anchor').height($('#sticky').outerHeight());
+	    } else {
+	        $('#sticky').removeClass('stick');
+	        $('#sticky-anchor').height(0);
+	    }*/
+	}
+
     render() {
     	return (
     		<div id="configuratorWrapper">
@@ -182,18 +209,21 @@ class Configurator extends Component {
 					<Accordion {...this.props}/>
 				</div>
 				<div className="col-md-4 editor-panel">
-					<h2>Konfigurationspanel</h2>
-					<div id="panelWrapper">
-						<form onSubmit={(e) => this.handleFieldData(e)}>
-							<StandardPanelInput {...this.props} />
-							<br/>
-							<OptionalPanelInput {...this.props} />
-							<br/>
-							<Parameters {...this.props} />
-							<div id="submitButtonWrapper" className="config-wrapper display-hidden">
-								<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
-							</div> 
-						</form>
+					<div id="sticky-anchor"></div>
+					<div id="sticky">
+						<h2>Konfigurationspanel</h2>
+						<div id="panelWrapper">
+							<form onSubmit={(e) => this.handleFieldData(e)}>
+								<StandardPanelInput {...this.props} />
+								<br/>
+								<OptionalPanelInput {...this.props} />
+								<br/>
+								<Parameters {...this.props} />
+								<div id="submitButtonWrapper" className="config-wrapper display-hidden">
+									<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
+								</div> 
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>

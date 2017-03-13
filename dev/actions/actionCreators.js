@@ -170,6 +170,26 @@ export function createGroupTwo(groupOneKey, indexInGroupOne, randomInt) {
 	}
 }
 
+//**************************************************************************************************
+
+//Inserters
+//**************************************************************************************************
+
+export function insertGroupLevelOne(groupOneIndex) {
+	return {
+		type: 'INSERT_GROUP_ONE',
+		groupOneIndex
+	}
+}
+
+export function insertGroupLevelTwo(groupOneIndex, indexInGroupOne) {
+	return {
+		type: 'INSERT_GROUP_TWO',
+		groupOneIndex,
+		indexInGroupOne
+	}
+}
+
 //import * as user from "../actionCreators";
 //import { importJSON } from "../actionCreators"
 

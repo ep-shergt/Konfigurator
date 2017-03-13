@@ -5,6 +5,7 @@ import groupOneToCreate from './../data/GroupOneToCreate';
 import groupTwoToCreate from './../data/groupTwoToCreate';
 import { removeArrayElement } from './../helpers';
 import { insertArrayElement } from './../helpers';
+import { getRandomInt } from './../helpers';
 import jsonpath from './../jp';
 
 const timestamp = + new Date(),
@@ -73,7 +74,6 @@ const changeJSONAndAccordion = (state = intialState, action) => {
 				groupTwoKey = 'grp_2_' + (newTimestamp + randomInt).toString();
 
 			groupOneToCreate.key = groupOneKey;
-			console.log('ub', groupOneToCreate);
 			groupOneToCreate.groups[0].key = groupTwoKey;
 
 			fieldToCreate.key = 'fld_' + (newTimestamp + randomInt).toString();
@@ -202,7 +202,6 @@ const changeJSONAndAccordion = (state = intialState, action) => {
 				jsonData = {...state.jsonData},
 				groupOneIndex;
 
-			console.log('group', groupOne);
 			groupOneIndex = jsonData.groups.map((elem, i) => {
     			return elem.key;
   			}).indexOf(groupOne.key);
@@ -462,6 +461,76 @@ const changeJSONAndAccordion = (state = intialState, action) => {
 			state = {...state, jsonData, accordion, fieldsToCopy};
 		    return state;
 		    break;
+		}
+
+		case "INSERT_GROUP_ONE": {
+			const {groupOneIndex} = action;
+			let jsonData = {...state.jsonData},
+				accordion = [...state.accordion],
+				groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
+				groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
+				fieldsToCopy = [...state.fieldsToCopy],
+				counter = 0;
+
+			groupsLevelOneToCopy.map((key, index) => {
+				let groupIndexInJson,
+					newTimestamp = + new Date(),
+					randomInt = getRandomInt(1, 1000),
+					groupOneKey = 'grp_1_' + (newTimestamp + randomInt).toString(),
+					groupCopy;
+
+				groupIndexInJson = jsonData.groups.map((group, i) => {
+		            return group.key;
+		        }).indexOf(key);
+
+		        groupCopy = {...jsonData.groups[groupIndexInJson]};
+		        groupCopy.key = groupOneKey;
+		        groupCopy.groups.map((groupTwo, index) => {
+		        	let groupIndexInJson,
+						newTimestamp = + new Date(),
+						randomInt2 = getRandomInt(1, 1000),
+						groupTwoKey = 'grp_2_' + (newTimestamp + randomInt2).toString(),
+						fieldGroup = key + '|' + groupTwo.key;
+
+		        	jsonData.fields.map((field, i) => {
+		        		const rand = getRandomInt(1, 1000);
+
+		        		if (field.group === fieldGroup) {
+		        			field.group = groupOneKey + '|' + groupTwoKey;
+		        			field.key = 'fld_' + (newTimestamp + rand).toString();
+		        		}
+		        	});
+
+					groupTwo.key = groupTwoKey;
+		        });
+
+		      	jsonData.groups = insertArrayElement(jsonData.groups, groupCopy, groupOneIndex + counter);
+		      	counter++;   
+			});
+
+			jsonData.groups.forEach((groupOne) => {
+				groupOne.marked = false;
+				groupOne.groups.forEach((groupTwo) => {
+					groupTwo.marked = false;
+				});
+			});
+
+			jsonData.fields.forEach((field) => {
+				field.marked = false;
+			});
+
+			accordion = setAccordionItems(jsonData);
+			groupsLevelOneToCopy.length = [];
+			groupsLevelTwoToCopy.length = [];
+			fieldsToCopy.length = [];
+
+			state = {...state, jsonData, accordion, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy};
+			break;
+		}
+
+		case "INSERT_GROUP_TWO": {
+			console.log('affe');
+			break;
 		}
 
 		default:

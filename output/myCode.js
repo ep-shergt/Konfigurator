@@ -56,11 +56,11 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _reactRouter = __webpack_require__(232);
+	var _reactRouter = __webpack_require__(234);
 
 	var _reactRedux = __webpack_require__(200);
 
-	var _store = __webpack_require__(293);
+	var _store = __webpack_require__(295);
 
 	var _store2 = _interopRequireDefault(_store);
 
@@ -23328,6 +23328,8 @@
 	exports.createField = createField;
 	exports.createGroupOne = createGroupOne;
 	exports.createGroupTwo = createGroupTwo;
+	exports.insertGroupLevelOne = insertGroupLevelOne;
+	exports.insertGroupLevelTwo = insertGroupLevelTwo;
 
 	// Changers
 	//***************************************************************************
@@ -23497,6 +23499,26 @@
 			groupOneKey: groupOneKey,
 			indexInGroupOne: indexInGroupOne,
 			randomInt: randomInt
+		};
+	}
+
+	//**************************************************************************************************
+
+	//Inserters
+	//**************************************************************************************************
+
+	function insertGroupLevelOne(groupOneIndex) {
+		return {
+			type: 'INSERT_GROUP_ONE',
+			groupOneIndex: groupOneIndex
+		};
+	}
+
+	function insertGroupLevelTwo(groupOneIndex, indexInGroupOne) {
+		return {
+			type: 'INSERT_GROUP_TWO',
+			groupOneIndex: groupOneIndex,
+			indexInGroupOne: indexInGroupOne
 		};
 	}
 
@@ -25144,17 +25166,17 @@
 
 	var _Accordion2 = _interopRequireDefault(_Accordion);
 
-	var _helpers = __webpack_require__(228);
+	var _helpers = __webpack_require__(230);
 
-	var _StandardPanelInput = __webpack_require__(229);
+	var _StandardPanelInput = __webpack_require__(231);
 
 	var _StandardPanelInput2 = _interopRequireDefault(_StandardPanelInput);
 
-	var _OptionalPanelInput = __webpack_require__(230);
+	var _OptionalPanelInput = __webpack_require__(232);
 
 	var _OptionalPanelInput2 = _interopRequireDefault(_OptionalPanelInput);
 
-	var _Parameters = __webpack_require__(231);
+	var _Parameters = __webpack_require__(233);
 
 	var _Parameters2 = _interopRequireDefault(_Parameters);
 
@@ -25175,6 +25197,7 @@
 			var _this = _possibleConstructorReturn(this, (Configurator.__proto__ || Object.getPrototypeOf(Configurator)).call(this, props));
 
 			_this.handleFieldData = _this.handleFieldData.bind(_this);
+			_this.sticky_relocate = _this.sticky_relocate.bind(_this);
 
 			_this.state = {
 				jsonData: _this.props.store.database.jsonData,
@@ -25292,6 +25315,7 @@
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				var exportKey = this.state.fieldToEdit.exportKey;
+				var self = this;
 
 				$("input").keypress(function (e) {
 					var chr = String.fromCharCode(e.which);
@@ -25305,6 +25329,11 @@
 				} else {
 					$('#inputExportKey').val('exportKey');
 				}
+
+				$(function () {
+					$(window).scroll(self.sticky_relocate);
+					self.sticky_relocate();
+				});
 			}
 		}, {
 			key: 'componentWillReceiveProps',
@@ -25318,6 +25347,8 @@
 				    groupOneToEdit = _extends({}, this.state.groupOneToEdit),
 				    groupTwoToEdit = _extends({}, this.state.groupTwoToEdit);
 
+				var self = this;
+
 				jsonData = newJsonData;
 				fieldToEdit = newFieldToEdit;
 				groupOneToEdit = newGroupOneToEdit;
@@ -25328,6 +25359,11 @@
 					fieldToEdit: fieldToEdit,
 					groupOneToEdit: groupOneToEdit,
 					groupTwoToEdit: groupTwoToEdit
+				});
+
+				$(function () {
+					$(window).scroll(self.sticky_relocate);
+					self.sticky_relocate();
 				});
 			}
 		}, {
@@ -25342,6 +25378,20 @@
 				} else {
 					$('#inputExportKey').val('exportKey');
 				}
+			}
+		}, {
+			key: 'sticky_relocate',
+			value: function sticky_relocate() {
+				/*var window_top = $(window).scrollTop();
+	   var div_top = $('#sticky-anchor').offset().top;
+	   
+	   if (window_top > div_top) {
+	       $('#sticky').addClass('stick');
+	       $('#sticky-anchor').height($('#sticky').outerHeight());
+	   } else {
+	       $('#sticky').removeClass('stick');
+	       $('#sticky-anchor').height(0);
+	   }*/
 			}
 		}, {
 			key: 'render',
@@ -25359,31 +25409,36 @@
 					_react2.default.createElement(
 						'div',
 						{ className: 'col-md-4 editor-panel' },
-						_react2.default.createElement(
-							'h2',
-							null,
-							'Konfigurationspanel'
-						),
+						_react2.default.createElement('div', { id: 'sticky-anchor' }),
 						_react2.default.createElement(
 							'div',
-							{ id: 'panelWrapper' },
+							{ id: 'sticky' },
 							_react2.default.createElement(
-								'form',
-								{ onSubmit: function onSubmit(e) {
-										return _this2.handleFieldData(e);
-									} },
-								_react2.default.createElement(_StandardPanelInput2.default, this.props),
-								_react2.default.createElement('br', null),
-								_react2.default.createElement(_OptionalPanelInput2.default, this.props),
-								_react2.default.createElement('br', null),
-								_react2.default.createElement(_Parameters2.default, this.props),
+								'h2',
+								null,
+								'Konfigurationspanel'
+							),
+							_react2.default.createElement(
+								'div',
+								{ id: 'panelWrapper' },
 								_react2.default.createElement(
-									'div',
-									{ id: 'submitButtonWrapper', className: 'config-wrapper display-hidden' },
+									'form',
+									{ onSubmit: function onSubmit(e) {
+											return _this2.handleFieldData(e);
+										} },
+									_react2.default.createElement(_StandardPanelInput2.default, this.props),
+									_react2.default.createElement('br', null),
+									_react2.default.createElement(_OptionalPanelInput2.default, this.props),
+									_react2.default.createElement('br', null),
+									_react2.default.createElement(_Parameters2.default, this.props),
 									_react2.default.createElement(
-										'button',
-										{ type: 'submit', className: 'btn btn-primary btn-field-confirm' },
-										'Best\xE4tigen'
+										'div',
+										{ id: 'submitButtonWrapper', className: 'config-wrapper display-hidden' },
+										_react2.default.createElement(
+											'button',
+											{ type: 'submit', className: 'btn btn-primary btn-field-confirm' },
+											'Best\xE4tigen'
+										)
 									)
 								)
 							)
@@ -25422,7 +25477,7 @@
 
 	var _SubAccordion2 = _interopRequireDefault(_SubAccordion);
 
-	var _helpers = __webpack_require__(228);
+	var _helpers = __webpack_require__(230);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25453,6 +25508,7 @@
 	    _this.openMainTitlePanel = _this.openMainTitlePanel.bind(_this);
 	    _this.handleEdit = _this.handleEdit.bind(_this);
 	    _this.createNewGroupOne = _this.createNewGroupOne.bind(_this);
+	    _this.handleInsert = _this.handleInsert.bind(_this);
 
 	    _this.state = {
 	      jsonData: _this.props.store.database.jsonData,
@@ -25615,6 +25671,11 @@
 	      $('#idAutoCollapse').prop("checked", groupOneToEdit.autocollapse);
 	    }
 	  }, {
+	    key: 'handleInsert',
+	    value: function handleInsert(event, groupIndexInJson) {
+	      this.props.insertGroupLevelOne(groupIndexInJson);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this4 = this;
@@ -25743,7 +25804,9 @@
 	                        null,
 	                        _react2.default.createElement(
 	                          'a',
-	                          { href: '#' },
+	                          { href: '#', onClick: function onClick(e) {
+	                              return _this4.handleInsert(e, groupIndexInJson);
+	                            } },
 	                          _react2.default.createElement('i', { className: 'fa-margin fa fa-arrow-down', 'aria-hidden': 'true' }),
 	                          'Einf\xFCgen'
 	                        )
@@ -25794,11 +25857,11 @@
 
 	var _reactDom = __webpack_require__(32);
 
-	var _AccordionSection = __webpack_require__(339);
+	var _AccordionSection = __webpack_require__(228);
 
 	var _AccordionSection2 = _interopRequireDefault(_AccordionSection);
 
-	var _helpers = __webpack_require__(228);
+	var _helpers = __webpack_require__(230);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25828,6 +25891,7 @@
 	    _this.createNewGroupTwo = _this.createNewGroupTwo.bind(_this);
 	    _this.handleDeleteGroupOne = _this.handleDeleteGroupOne.bind(_this);
 	    _this.handleMarking = _this.handleMarking.bind(_this);
+	    _this.handleInsert = _this.handleInsert.bind(_this);
 
 	    _this.state = {
 	      jsonData: _this.props.store.database.jsonData,
@@ -26001,6 +26065,12 @@
 	      $('#panelWrapper').attr('grouponekey', groupOneKey);
 	    }
 	  }, {
+	    key: 'handleInsert',
+	    value: function handleInsert(event, groupOneIndex, indexInGroupOne, groupLevelOneKey) {
+	      this.props.insertGroupLevelTwo(groupOneIndex, indexInGroupOne);
+	      this.props.setAccordionToOpen(groupLevelOneKey);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this4 = this;
@@ -26134,7 +26204,9 @@
 	                              null,
 	                              _react2.default.createElement(
 	                                'a',
-	                                { href: '#' },
+	                                { href: '#', onClick: function onClick(e) {
+	                                    return _this4.handleInsert(e, groupOneIndex, indexInGroupOne, groupLevelOneKey);
+	                                  } },
 	                                _react2.default.createElement('i', { className: 'fa-margin fa fa-arrow-down', 'aria-hidden': 'true' }),
 	                                'Einf\xFCgen'
 	                              )
@@ -26172,6 +26244,1002 @@
 
 /***/ },
 /* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _Field = __webpack_require__(229);
+
+	var _Field2 = _interopRequireDefault(_Field);
+
+	var _helpers = __webpack_require__(230);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AccordionSection = function (_Component) {
+	  _inherits(AccordionSection, _Component);
+
+	  function AccordionSection(props) {
+	    _classCallCheck(this, AccordionSection);
+
+	    var _this = _possibleConstructorReturn(this, (AccordionSection.__proto__ || Object.getPrototypeOf(AccordionSection)).call(this, props));
+
+	    _this.updateFields = _this.updateFields.bind(_this);
+	    _this.markForCopy = _this.markForCopy.bind(_this);
+	    _this.updateMarking = _this.updateMarking.bind(_this);
+	    _this.updateFieldsToCopy = _this.updateFieldsToCopy.bind(_this);
+	    _this.updateJsonData = _this.updateJsonData.bind(_this);
+	    _this.insertfieldsToCopy = _this.insertfieldsToCopy.bind(_this);
+	    _this.createNewField = _this.createNewField.bind(_this);
+	    _this.handleDeleteField = _this.handleDeleteField.bind(_this);
+	    _this.cutAndShift = _this.cutAndShift.bind(_this);
+	    _this.handleMarking = _this.handleMarking.bind(_this);
+
+	    _this.state = {
+	      jsonData: _this.props.store.database.jsonData,
+	      fields: [],
+	      fieldsToCopy: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(AccordionSection, [{
+	    key: "componentWillReceiveProps",
+	    value: function componentWillReceiveProps(nextProps) {
+	      var _this2 = this;
+
+	      var newFields = nextProps.elem.content,
+	          newFieldsToCopy = nextProps.store.database.fieldsToCopy,
+	          newJsonData = nextProps.store.database.jsonData;
+
+	      this.updateFieldsToCopy(newFieldsToCopy);
+	      this.updateFields(newFields);
+	      this.updateJsonData(newJsonData);
+
+	      setTimeout(function () {
+	        _this2.updateMarking(newFields);
+	      }, 100);
+	    }
+	  }, {
+	    key: "insertfieldsToCopy",
+	    value: function insertfieldsToCopy(elem, index) {}
+	  }, {
+	    key: "createNewField",
+	    value: function createNewField(groupKeys, fieldIndex) {
+	      var rand = (0, _helpers.getRandomInt)(1, 1000);
+	      var keysArr = groupKeys.split('|');
+
+	      this.props.createField(fieldIndex, groupKeys, rand);
+	      this.props.setSubAccordionToOpen(keysArr);
+	    }
+	  }, {
+	    key: "handleDeleteField",
+	    value: function handleDeleteField(elem, fieldIndex) {
+	      var keysArr = elem.group.split('|');
+
+	      this.props.deleteField(elem, fieldIndex);
+	      this.props.setSubAccordionToOpen(keysArr);
+	    }
+	  }, {
+	    key: "handleMarking",
+	    value: function handleMarking(elem, fieldIndex) {
+	      var keysArr = elem.group.split('|');
+
+	      this.props.markFieldToCopy(elem, fieldIndex);
+	      this.props.setSubAccordionToOpen(keysArr);
+	    }
+	  }, {
+	    key: "cutAndShift",
+	    value: function cutAndShift(elem, index) {}
+	  }, {
+	    key: "updateFields",
+	    value: function updateFields(newFields) {
+	      var fields = [].concat(_toConsumableArray(this.state.fields)),
+	          helpingFields = [];
+
+	      newFields.forEach(function (i) {
+	        i['marked'] = i.marked !== undefined ? i.marked : false;
+	        helpingFields.push(i);
+	      });
+
+	      fields = helpingFields;
+
+	      this.setState({
+	        fields: fields
+	      });
+	    }
+	  }, {
+	    key: "updateMarking",
+	    value: function updateMarking(newFields) {
+	      var fields = [].concat(_toConsumableArray(this.state.fields));
+
+	      fields = newFields;
+
+	      fields.forEach(function (i) {
+	        var buttonId = 'btn_field_' + i.key;
+
+	        $('#' + buttonId).removeClass('marked');
+	        if (i.marked) {
+	          $('#' + buttonId).addClass('marked');
+	        } else {
+	          $('#' + buttonId).removeClass('marked');
+	        }
+	      });
+	    }
+	  }, {
+	    key: "updateFieldsToCopy",
+	    value: function updateFieldsToCopy(newFieldsToCopy) {
+	      var fieldsToCopy = [].concat(_toConsumableArray(this.state.fieldsToCopy));
+
+	      fieldsToCopy = newFieldsToCopy;
+
+	      this.setState({
+	        fieldsToCopy: fieldsToCopy
+	      });
+	    }
+	  }, {
+	    key: "updateJsonData",
+	    value: function updateJsonData(newJsonData) {
+	      var jsonData = _extends({}, this.state.jsonData);
+
+	      jsonData = newJsonData;
+
+	      this.setState({
+	        jsonData: jsonData
+	      });
+	    }
+	  }, {
+	    key: "markForCopy",
+	    value: function markForCopy(elem, index) {
+	      var buttonId = 'btn_field_' + elem.key;
+	      var fieldsToCopy = [].concat(_toConsumableArray(this.state.fieldsToCopy)),
+	          fields = [].concat(_toConsumableArray(this.state.fields)),
+	          indexForElementToRemove = void 0;
+
+	      if (elem.marked) {
+	        indexForElementToRemove = fieldsToCopy.map(function (key, i) {
+	          return key;
+	        }).indexOf(elem.key);
+
+	        fieldsToCopy = (0, _helpers.removeArrayElement)(fieldsToCopy, indexForElementToRemove);
+	        fields[index].marked = false;
+	        $('#' + buttonId).removeClass('marked');
+	      } else {
+	        fields[index].marked = true;
+	        fieldsToCopy.push(fields[index].key);
+	        $('#' + buttonId).addClass('marked');
+	      }
+
+	      this.setState({
+	        fieldsToCopy: fieldsToCopy,
+	        fields: fields
+	      });
+	    }
+	  }, {
+	    key: "componentWillMount",
+	    value: function componentWillMount() {
+	      var _this3 = this;
+
+	      var newFields = this.props.elem.content,
+	          newFieldsToCopy = this.props.store.database.fieldsToCopy;
+
+	      this.updateFieldsToCopy(newFieldsToCopy);
+	      this.updateFields(newFields);
+
+	      setTimeout(function () {
+	        _this3.updateMarking(newFields);
+	      }, 100);
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this4 = this;
+
+	      var _state = this.state,
+	          fields = _state.fields,
+	          fieldsToCopy = _state.fieldsToCopy;
+
+	      var groupLevelOneKey = this.props.groupLevelOneKey,
+	          groupLevelTwoKey = this.props.elem.key;
+
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(
+	          "div",
+	          {
+	            className: "title",
+	            onClick: function onClick(e) {
+	              return _this4.props.click(e, _this4.props.groupTwo);
+	            }
+	          },
+	          _react2.default.createElement(
+	            "span",
+	            { className: "title-text" },
+	            this.props.elem.title
+	          ),
+	          _react2.default.createElement(
+	            "span",
+	            { className: "arrow-wrapper" },
+	            _react2.default.createElement("i", { className: this.props.elem.open ? "fa fa-angle-down fa-rotate-180" : "fa fa-angle-down"
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: this.props.elem.open ? "content content-open" : "content"
+	          },
+	          _react2.default.createElement(
+	            "div",
+	            { className: this.props.elem.open ? "content-text content-text-open" : "content-text"
+	            },
+	            this.state.fields.map(function (elem, i) {
+	              var _React$createElement, _React$createElement2, _React$createElement3, _React$createElement4;
+
+	              var fieldId = 'field_' + elem.key,
+	                  buttonId = "btn_field_" + elem.key,
+	                  groupKeys = elem.group,
+	                  jsonData = _this4.state.jsonData,
+	                  fieldIndexInJsonData = void 0;
+
+	              fieldIndexInJsonData = jsonData.fields.map(function (field, i) {
+	                return field.key;
+	              }).indexOf(elem.key);
+
+	              switch (true) {
+	                case elem.clearBefore && elem.clearAfter:
+	                  return _react2.default.createElement(
+	                    "div",
+	                    { key: i, id: fieldId, className: "clear-both" },
+	                    _react2.default.createElement(
+	                      "ul",
+	                      { className: "field-ul" },
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                      ),
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(
+	                          "div",
+	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
+	                          _react2.default.createElement(
+	                            "button",
+	                            { onClick: function onClick() {
+	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
+	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
+	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
+	                          ),
+	                          _react2.default.createElement(
+	                            "div",
+	                            { className: "dropdown" },
+	                            _react2.default.createElement(
+	                              "button",
+	                              (_React$createElement = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement, "type", "button"), _defineProperty(_React$createElement, "data-toggle", "dropdown"), _defineProperty(_React$createElement, "aria-haspopup", "true"), _defineProperty(_React$createElement, "aria-expanded", "false"), _React$createElement),
+	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
+	                            ),
+	                            _react2.default.createElement(
+	                              "ul",
+	                              { className: "dropdown-menu" },
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
+	                                  " Neues Element anlegen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.cutAndShift(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
+	                                  " Ausschneiden und verschieben"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.insertfieldsToCopy(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
+	                                  " Aus Zwischenablage einf\xFCgen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
+	                                  " Element l\xF6schen"
+	                                )
+	                              )
+	                            )
+	                          )
+	                        )
+	                      )
+	                    )
+	                  );
+	                  break;
+
+	                case elem.clearBefore && !elem.clearAfter:
+	                  return _react2.default.createElement(
+	                    "div",
+	                    { key: i, id: fieldId, className: "clear-left" },
+	                    _react2.default.createElement(
+	                      "ul",
+	                      { className: "field-ul" },
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                      ),
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(
+	                          "div",
+	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
+	                          _react2.default.createElement(
+	                            "button",
+	                            { onClick: function onClick() {
+	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
+	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
+	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
+	                          ),
+	                          _react2.default.createElement(
+	                            "div",
+	                            { className: "dropdown" },
+	                            _react2.default.createElement(
+	                              "button",
+	                              (_React$createElement2 = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement2, "type", "button"), _defineProperty(_React$createElement2, "data-toggle", "dropdown"), _defineProperty(_React$createElement2, "aria-haspopup", "true"), _defineProperty(_React$createElement2, "aria-expanded", "false"), _React$createElement2),
+	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
+	                            ),
+	                            _react2.default.createElement(
+	                              "ul",
+	                              { className: "dropdown-menu" },
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
+	                                  " Neues Element anlegen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.cutAndShift(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
+	                                  " Ausschneiden und verschieben"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.insertfieldsToCopy(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
+	                                  " Aus Zwischenablage einf\xFCgen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
+	                                  " Element l\xF6schen"
+	                                )
+	                              )
+	                            )
+	                          )
+	                        )
+	                      )
+	                    )
+	                  );
+	                  break;
+
+	                case !elem.clearBefore && elem.clearAfter:
+	                  return _react2.default.createElement(
+	                    "div",
+	                    { key: i, id: fieldId, className: "clear-right" },
+	                    _react2.default.createElement(
+	                      "ul",
+	                      { className: "field-ul" },
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                      ),
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(
+	                          "div",
+	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
+	                          _react2.default.createElement(
+	                            "button",
+	                            { onClick: function onClick() {
+	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
+	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
+	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
+	                          ),
+	                          _react2.default.createElement(
+	                            "div",
+	                            { className: "dropdown" },
+	                            _react2.default.createElement(
+	                              "button",
+	                              (_React$createElement3 = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement3, "type", "button"), _defineProperty(_React$createElement3, "data-toggle", "dropdown"), _defineProperty(_React$createElement3, "aria-haspopup", "true"), _defineProperty(_React$createElement3, "aria-expanded", "false"), _React$createElement3),
+	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
+	                            ),
+	                            _react2.default.createElement(
+	                              "ul",
+	                              { className: "dropdown-menu" },
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
+	                                  " Neues Element anlegen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.cutAndShift(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
+	                                  " Ausschneiden und verschieben"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.insertfieldsToCopy(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
+	                                  " Aus Zwischenablage einf\xFCgen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
+	                                  " Element l\xF6schen"
+	                                )
+	                              )
+	                            )
+	                          )
+	                        )
+	                      )
+	                    )
+	                  );
+	                  break;
+
+	                case !elem.clearBefore && !elem.clearAfter:
+	                  return _react2.default.createElement(
+	                    "div",
+	                    { key: i, id: fieldId },
+	                    _react2.default.createElement(
+	                      "ul",
+	                      { className: "field-ul" },
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                      ),
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "field-li" },
+	                        _react2.default.createElement(
+	                          "div",
+	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
+	                          _react2.default.createElement(
+	                            "button",
+	                            { onClick: function onClick() {
+	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
+	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
+	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
+	                          ),
+	                          _react2.default.createElement(
+	                            "div",
+	                            { className: "dropdown" },
+	                            _react2.default.createElement(
+	                              "button",
+	                              (_React$createElement4 = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement4, "type", "button"), _defineProperty(_React$createElement4, "data-toggle", "dropdown"), _defineProperty(_React$createElement4, "aria-haspopup", "true"), _defineProperty(_React$createElement4, "aria-expanded", "false"), _React$createElement4),
+	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
+	                            ),
+	                            _react2.default.createElement(
+	                              "ul",
+	                              { className: "dropdown-menu" },
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
+	                                  " Neues Element anlegen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.cutAndShift(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
+	                                  " Ausschneiden und verschieben"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.insertfieldsToCopy(elem, i);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
+	                                  " Aus Zwischenablage einf\xFCgen"
+	                                )
+	                              ),
+	                              _react2.default.createElement(
+	                                "li",
+	                                null,
+	                                _react2.default.createElement(
+	                                  "a",
+	                                  { href: "#", onClick: function onClick() {
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
+	                                    } },
+	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
+	                                  " Element l\xF6schen"
+	                                )
+	                              )
+	                            )
+	                          )
+	                        )
+	                      )
+	                    )
+	                  );
+	                  break;
+	              }
+	            })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AccordionSection;
+	}(_react.Component);
+
+	exports.default = AccordionSection;
+
+/***/ },
+/* 229 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Field = function (_Component) {
+	  _inherits(Field, _Component);
+
+	  function Field(props) {
+	    _classCallCheck(this, Field);
+
+	    var _this = _possibleConstructorReturn(this, (Field.__proto__ || Object.getPrototypeOf(Field)).call(this, props));
+
+	    _this.updateField = _this.updateField.bind(_this);
+	    _this.handleClick = _this.handleClick.bind(_this);
+
+	    _this.state = {
+	      field: _this.props.field
+	    };
+	    return _this;
+	  }
+
+	  _createClass(Field, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      var newField = nextProps.field;
+	      this.updateField(newField);
+	    }
+	  }, {
+	    key: 'updateField',
+	    value: function updateField(newField) {
+	      var field = _extends({}, this.state.field);
+	      field = newField;
+	      this.setState({ field: field });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {}
+	  }, {
+	    key: 'handleClick',
+	    value: function handleClick(event, field) {
+	      var groupKeys = field.group.split('|');
+
+	      $('.config-wrapper').addClass('display-hidden');
+	      $('#standardInputWrapper').removeClass('display-hidden');
+	      $('#fieldTypeWrapper').removeClass('display-hidden');
+	      $('#exportKeyWrapper').removeClass('display-hidden');
+	      $('#inputExportKey').attr('required', true);
+	      $('#submitButtonWrapper').removeClass('display-hidden');
+	      $('#optionalInputWrapper').removeClass('display-hidden');
+	      $('#colSelectWrapper').removeClass('display-hidden');
+	      $('#clearWrapper').removeClass('display-hidden');
+	      $('#tooltipWrapper').removeClass('display-hidden');
+	      $('#idParamsWrapperForAll').removeClass('display-hidden');
+	      $('#panelWrapper').attr('configtype', 'field');
+
+	      this.props.changeFieldToEdit(field);
+
+	      $('#inputTitle').val(field.title);
+	      $('#colSelectField').val(field.cols);
+	      $('#fieldType').val(field.type);
+	      $('#inputExportKey').val(field.exportKey);
+	      $('#idClearBefore').prop("checked", field.clearBefore);
+	      $('#idClearAfter').prop("checked", field.clearAfter);
+	      $('#inputTooltip').val(field.tooltip);
+
+	      switch (field.type) {
+	        case 'code':
+	          $('#codeParamsWrapper').removeClass('display-hidden');
+	          $('#cssParam').val(field.parameters.css);
+	          $('#htmlParam').val(field.parameters.html);
+	          $('#jsParam').val(field.parameters.js);
+	          break;
+
+	        case 'text':
+	          $('#textParamsWrapper').removeClass('display-hidden');
+	          $('#idTextClass').val(field.parameters.class);
+	          $('#idTextPlaceholder').val(field.parameters.placeholder);
+	          $('#idTextWidth').val(field.parameters.width);
+	          break;
+
+	        case 'textarea':
+	          $('#textParamsWrapper').removeClass('display-hidden');
+	          $('#idTextClass').val(field.parameters.class);
+	          $('#idTextPlaceholder').val(field.parameters.placeholder);
+	          $('#idTextWidth').val(field.parameters.width);
+	          break;
+	      }
+
+	      this.props.setSubAccordionToOpen(groupKeys);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var field = this.state.field;
+
+	      switch (this.state.field.type) {
+	        case 'code':
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'field-inner-ul' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-more-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'title-overflow' },
+	                  this.state.field.title
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-less-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'field-icon' },
+	                  _react2.default.createElement('i', { className: 'fa fa-file-code-o fa-2x field-code', 'aria-hidden': 'true' })
+	                )
+	              )
+	            )
+	          );
+	          break;
+
+	        case 'radio':
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'field-inner-ul' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-more-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'title-overflow' },
+	                  this.state.field.title
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-less-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'field-icon' },
+	                  _react2.default.createElement('i', { className: 'fa fa-dot-circle-o fa-2x field-radio', 'aria-hidden': 'true' })
+	                )
+	              )
+	            )
+	          );
+	          break;
+
+	        case 'check':
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'field-inner-ul' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-more-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'title-overflow' },
+	                  this.state.field.title
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-less-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'field-icon' },
+	                  _react2.default.createElement('i', { className: 'fa fa-check-square-o fa-2x field-check', 'aria-hidden': 'true' })
+	                )
+	              )
+	            )
+	          );
+	          break;
+
+	        case 'select':
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'field-inner-ul' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-more-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'title-overflow' },
+	                  this.state.field.title
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-less-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'field-icon' },
+	                  _react2.default.createElement('i', { className: 'fa fa-list-ol fa-2x field-select', 'aria-hidden': 'true' })
+	                )
+	              )
+	            )
+	          );
+	          break;
+
+	        case 'text':
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'field-inner-ul' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-more-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'title-overflow' },
+	                  this.state.field.title
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-less-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'field-icon' },
+	                  _react2.default.createElement('i', { className: 'fa fa-commenting fa-2x field-text', 'aria-hidden': 'true' })
+	                )
+	              )
+	            )
+	          );
+	          break;
+
+	        case 'textarea':
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'field-inner-ul' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-more-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'title-overflow' },
+	                  this.state.field.title
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-less-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'field-icon' },
+	                  _react2.default.createElement('i', { className: 'fa fa-file-text fa-2x field-textarea', 'aria-hidden': 'true' })
+	                )
+	              )
+	            )
+	          );
+	          break;
+
+	        default:
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'field-node field-li', onClick: function onClick(e) {
+	                return _this2.handleClick(e, field);
+	              } },
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'field-inner-ul' },
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-more-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'title-overflow' },
+	                  this.state.field.title
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'li',
+	                { className: 'field-inner-li field-li-less-width' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'field-icon' },
+	                  _react2.default.createElement('i', { className: 'fa fa-question-circle fa-2x', 'aria-hidden': 'true' })
+	                )
+	              )
+	            )
+	          );
+	          break;
+	      }
+	    }
+	  }]);
+
+	  return Field;
+	}(_react.Component);
+
+	exports.default = Field;
+
+/***/ },
+/* 230 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26258,7 +27326,7 @@
 	}
 
 /***/ },
-/* 229 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26472,7 +27540,7 @@
 	exports.default = StandardPanelInput;
 
 /***/ },
-/* 230 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26698,7 +27766,7 @@
 	exports.default = OptionalPanelInput;
 
 /***/ },
-/* 231 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26717,7 +27785,7 @@
 
 	var _reactDom = __webpack_require__(32);
 
-	var _helpers = __webpack_require__(228);
+	var _helpers = __webpack_require__(230);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26893,7 +27961,7 @@
 	exports.default = Parameters;
 
 /***/ },
-/* 232 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26901,7 +27969,7 @@
 	exports.__esModule = true;
 	exports.createMemoryHistory = exports.hashHistory = exports.browserHistory = exports.applyRouterMiddleware = exports.formatPattern = exports.useRouterHistory = exports.match = exports.routerShape = exports.locationShape = exports.PropTypes = exports.RoutingContext = exports.RouterContext = exports.createRoutes = exports.useRoutes = exports.RouteContext = exports.Lifecycle = exports.History = exports.Route = exports.Redirect = exports.IndexRoute = exports.IndexRedirect = exports.withRouter = exports.IndexLink = exports.Link = exports.Router = undefined;
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
 	Object.defineProperty(exports, 'createRoutes', {
 	  enumerable: true,
@@ -26910,7 +27978,7 @@
 	  }
 	});
 
-	var _PropTypes2 = __webpack_require__(234);
+	var _PropTypes2 = __webpack_require__(236);
 
 	Object.defineProperty(exports, 'locationShape', {
 	  enumerable: true,
@@ -26925,7 +27993,7 @@
 	  }
 	});
 
-	var _PatternUtils = __webpack_require__(239);
+	var _PatternUtils = __webpack_require__(241);
 
 	Object.defineProperty(exports, 'formatPattern', {
 	  enumerable: true,
@@ -26934,85 +28002,85 @@
 	  }
 	});
 
-	var _Router2 = __webpack_require__(240);
+	var _Router2 = __webpack_require__(242);
 
 	var _Router3 = _interopRequireDefault(_Router2);
 
-	var _Link2 = __webpack_require__(271);
+	var _Link2 = __webpack_require__(273);
 
 	var _Link3 = _interopRequireDefault(_Link2);
 
-	var _IndexLink2 = __webpack_require__(272);
+	var _IndexLink2 = __webpack_require__(274);
 
 	var _IndexLink3 = _interopRequireDefault(_IndexLink2);
 
-	var _withRouter2 = __webpack_require__(273);
+	var _withRouter2 = __webpack_require__(275);
 
 	var _withRouter3 = _interopRequireDefault(_withRouter2);
 
-	var _IndexRedirect2 = __webpack_require__(274);
+	var _IndexRedirect2 = __webpack_require__(276);
 
 	var _IndexRedirect3 = _interopRequireDefault(_IndexRedirect2);
 
-	var _IndexRoute2 = __webpack_require__(276);
+	var _IndexRoute2 = __webpack_require__(278);
 
 	var _IndexRoute3 = _interopRequireDefault(_IndexRoute2);
 
-	var _Redirect2 = __webpack_require__(275);
+	var _Redirect2 = __webpack_require__(277);
 
 	var _Redirect3 = _interopRequireDefault(_Redirect2);
 
-	var _Route2 = __webpack_require__(277);
+	var _Route2 = __webpack_require__(279);
 
 	var _Route3 = _interopRequireDefault(_Route2);
 
-	var _History2 = __webpack_require__(278);
+	var _History2 = __webpack_require__(280);
 
 	var _History3 = _interopRequireDefault(_History2);
 
-	var _Lifecycle2 = __webpack_require__(279);
+	var _Lifecycle2 = __webpack_require__(281);
 
 	var _Lifecycle3 = _interopRequireDefault(_Lifecycle2);
 
-	var _RouteContext2 = __webpack_require__(280);
+	var _RouteContext2 = __webpack_require__(282);
 
 	var _RouteContext3 = _interopRequireDefault(_RouteContext2);
 
-	var _useRoutes2 = __webpack_require__(281);
+	var _useRoutes2 = __webpack_require__(283);
 
 	var _useRoutes3 = _interopRequireDefault(_useRoutes2);
 
-	var _RouterContext2 = __webpack_require__(268);
+	var _RouterContext2 = __webpack_require__(270);
 
 	var _RouterContext3 = _interopRequireDefault(_RouterContext2);
 
-	var _RoutingContext2 = __webpack_require__(282);
+	var _RoutingContext2 = __webpack_require__(284);
 
 	var _RoutingContext3 = _interopRequireDefault(_RoutingContext2);
 
 	var _PropTypes3 = _interopRequireDefault(_PropTypes2);
 
-	var _match2 = __webpack_require__(283);
+	var _match2 = __webpack_require__(285);
 
 	var _match3 = _interopRequireDefault(_match2);
 
-	var _useRouterHistory2 = __webpack_require__(287);
+	var _useRouterHistory2 = __webpack_require__(289);
 
 	var _useRouterHistory3 = _interopRequireDefault(_useRouterHistory2);
 
-	var _applyRouterMiddleware2 = __webpack_require__(288);
+	var _applyRouterMiddleware2 = __webpack_require__(290);
 
 	var _applyRouterMiddleware3 = _interopRequireDefault(_applyRouterMiddleware2);
 
-	var _browserHistory2 = __webpack_require__(289);
+	var _browserHistory2 = __webpack_require__(291);
 
 	var _browserHistory3 = _interopRequireDefault(_browserHistory2);
 
-	var _hashHistory2 = __webpack_require__(292);
+	var _hashHistory2 = __webpack_require__(294);
 
 	var _hashHistory3 = _interopRequireDefault(_hashHistory2);
 
-	var _createMemoryHistory2 = __webpack_require__(284);
+	var _createMemoryHistory2 = __webpack_require__(286);
 
 	var _createMemoryHistory3 = _interopRequireDefault(_createMemoryHistory2);
 
@@ -27054,7 +28122,7 @@
 	exports.createMemoryHistory = _createMemoryHistory3.default;
 
 /***/ },
-/* 233 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27152,7 +28220,7 @@
 	}
 
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27162,15 +28230,15 @@
 
 	var _react = __webpack_require__(1);
 
-	var _deprecateObjectProperties = __webpack_require__(235);
+	var _deprecateObjectProperties = __webpack_require__(237);
 
 	var _deprecateObjectProperties2 = _interopRequireDefault(_deprecateObjectProperties);
 
-	var _InternalPropTypes = __webpack_require__(238);
+	var _InternalPropTypes = __webpack_require__(240);
 
 	var InternalPropTypes = _interopRequireWildcard(_InternalPropTypes);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -27259,7 +28327,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27267,7 +28335,7 @@
 	exports.__esModule = true;
 	exports.canUseMembrane = undefined;
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -27340,7 +28408,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27349,7 +28417,7 @@
 	exports.default = routerWarning;
 	exports._resetWarned = _resetWarned;
 
-	var _warning = __webpack_require__(237);
+	var _warning = __webpack_require__(239);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -27381,7 +28449,7 @@
 	}
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27448,7 +28516,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27485,7 +28553,7 @@
 	var routes = exports.routes = oneOfType([route, arrayOf(route)]);
 
 /***/ },
-/* 239 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27703,7 +28771,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 240 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27712,11 +28780,11 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _createHashHistory = __webpack_require__(241);
+	var _createHashHistory = __webpack_require__(243);
 
 	var _createHashHistory2 = _interopRequireDefault(_createHashHistory);
 
-	var _useQueries = __webpack_require__(257);
+	var _useQueries = __webpack_require__(259);
 
 	var _useQueries2 = _interopRequireDefault(_useQueries);
 
@@ -27728,21 +28796,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _createTransitionManager = __webpack_require__(260);
+	var _createTransitionManager = __webpack_require__(262);
 
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
-	var _InternalPropTypes = __webpack_require__(238);
+	var _InternalPropTypes = __webpack_require__(240);
 
-	var _RouterContext = __webpack_require__(268);
+	var _RouterContext = __webpack_require__(270);
 
 	var _RouterContext2 = _interopRequireDefault(_RouterContext);
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
-	var _RouterUtils = __webpack_require__(270);
+	var _RouterUtils = __webpack_require__(272);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -27933,7 +29001,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 241 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27944,7 +29012,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -27952,17 +29020,17 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _Actions = __webpack_require__(243);
+	var _Actions = __webpack_require__(245);
 
-	var _PathUtils = __webpack_require__(244);
+	var _PathUtils = __webpack_require__(246);
 
-	var _ExecutionEnvironment = __webpack_require__(245);
+	var _ExecutionEnvironment = __webpack_require__(247);
 
-	var _DOMUtils = __webpack_require__(246);
+	var _DOMUtils = __webpack_require__(248);
 
-	var _DOMStateStorage = __webpack_require__(247);
+	var _DOMStateStorage = __webpack_require__(249);
 
-	var _createDOMHistory = __webpack_require__(248);
+	var _createDOMHistory = __webpack_require__(250);
 
 	var _createDOMHistory2 = _interopRequireDefault(_createDOMHistory);
 
@@ -28185,7 +29253,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 242 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28252,7 +29320,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 243 */
+/* 245 */
 /***/ function(module, exports) {
 
 	/**
@@ -28288,7 +29356,7 @@
 	};
 
 /***/ },
-/* 244 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -28299,7 +29367,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -28341,7 +29409,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 245 */
+/* 247 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28351,7 +29419,7 @@
 	exports.canUseDOM = canUseDOM;
 
 /***/ },
-/* 246 */
+/* 248 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28431,7 +29499,7 @@
 	}
 
 /***/ },
-/* 247 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/*eslint-disable no-empty */
@@ -28443,7 +29511,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -28510,7 +29578,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 248 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -28525,11 +29593,11 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _ExecutionEnvironment = __webpack_require__(245);
+	var _ExecutionEnvironment = __webpack_require__(247);
 
-	var _DOMUtils = __webpack_require__(246);
+	var _DOMUtils = __webpack_require__(248);
 
-	var _createHistory = __webpack_require__(249);
+	var _createHistory = __webpack_require__(251);
 
 	var _createHistory2 = _interopRequireDefault(_createHistory);
 
@@ -28556,7 +29624,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 249 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -28567,29 +29635,29 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _deepEqual = __webpack_require__(250);
+	var _deepEqual = __webpack_require__(252);
 
 	var _deepEqual2 = _interopRequireDefault(_deepEqual);
 
-	var _PathUtils = __webpack_require__(244);
+	var _PathUtils = __webpack_require__(246);
 
-	var _AsyncUtils = __webpack_require__(253);
+	var _AsyncUtils = __webpack_require__(255);
 
-	var _Actions = __webpack_require__(243);
+	var _Actions = __webpack_require__(245);
 
-	var _createLocation2 = __webpack_require__(254);
+	var _createLocation2 = __webpack_require__(256);
 
 	var _createLocation3 = _interopRequireDefault(_createLocation2);
 
-	var _runTransitionHook = __webpack_require__(255);
+	var _runTransitionHook = __webpack_require__(257);
 
 	var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-	var _deprecate = __webpack_require__(256);
+	var _deprecate = __webpack_require__(258);
 
 	var _deprecate2 = _interopRequireDefault(_deprecate);
 
@@ -28850,12 +29918,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 250 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pSlice = Array.prototype.slice;
-	var objectKeys = __webpack_require__(251);
-	var isArguments = __webpack_require__(252);
+	var objectKeys = __webpack_require__(253);
+	var isArguments = __webpack_require__(254);
 
 	var deepEqual = module.exports = function (actual, expected, opts) {
 	  if (!opts) opts = {};
@@ -28950,7 +30018,7 @@
 
 
 /***/ },
-/* 251 */
+/* 253 */
 /***/ function(module, exports) {
 
 	exports = module.exports = typeof Object.keys === 'function'
@@ -28965,7 +30033,7 @@
 
 
 /***/ },
-/* 252 */
+/* 254 */
 /***/ function(module, exports) {
 
 	var supportsArgumentsClass = (function(){
@@ -28991,7 +30059,7 @@
 
 
 /***/ },
-/* 253 */
+/* 255 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29054,7 +30122,7 @@
 	}
 
 /***/ },
-/* 254 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -29065,13 +30133,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _Actions = __webpack_require__(243);
+	var _Actions = __webpack_require__(245);
 
-	var _PathUtils = __webpack_require__(244);
+	var _PathUtils = __webpack_require__(246);
 
 	function createLocation() {
 	  var location = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
@@ -29111,7 +30179,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 255 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -29120,7 +30188,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -29141,7 +30209,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 256 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -29150,7 +30218,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -29166,7 +30234,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 257 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -29177,19 +30245,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _queryString = __webpack_require__(258);
+	var _queryString = __webpack_require__(260);
 
-	var _runTransitionHook = __webpack_require__(255);
+	var _runTransitionHook = __webpack_require__(257);
 
 	var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-	var _PathUtils = __webpack_require__(244);
+	var _PathUtils = __webpack_require__(246);
 
-	var _deprecate = __webpack_require__(256);
+	var _deprecate = __webpack_require__(258);
 
 	var _deprecate2 = _interopRequireDefault(_deprecate);
 
@@ -29348,11 +30416,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 258 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var strictUriEncode = __webpack_require__(259);
+	var strictUriEncode = __webpack_require__(261);
 
 	exports.extract = function (str) {
 		return str.split('?')[1] || '';
@@ -29420,7 +30488,7 @@
 
 
 /***/ },
-/* 259 */
+/* 261 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29432,7 +30500,7 @@
 
 
 /***/ },
-/* 260 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -29443,25 +30511,25 @@
 
 	exports.default = createTransitionManager;
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _computeChangedRoutes2 = __webpack_require__(261);
+	var _computeChangedRoutes2 = __webpack_require__(263);
 
 	var _computeChangedRoutes3 = _interopRequireDefault(_computeChangedRoutes2);
 
-	var _TransitionUtils = __webpack_require__(262);
+	var _TransitionUtils = __webpack_require__(264);
 
-	var _isActive2 = __webpack_require__(264);
+	var _isActive2 = __webpack_require__(266);
 
 	var _isActive3 = _interopRequireDefault(_isActive2);
 
-	var _getComponents = __webpack_require__(265);
+	var _getComponents = __webpack_require__(267);
 
 	var _getComponents2 = _interopRequireDefault(_getComponents);
 
-	var _matchRoutes = __webpack_require__(267);
+	var _matchRoutes = __webpack_require__(269);
 
 	var _matchRoutes2 = _interopRequireDefault(_matchRoutes);
 
@@ -29740,14 +30808,14 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 261 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _PatternUtils = __webpack_require__(239);
+	var _PatternUtils = __webpack_require__(241);
 
 	function routeParamsChanged(route, prevState, nextState) {
 	  if (!route.path) return false;
@@ -29822,7 +30890,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 262 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -29832,9 +30900,9 @@
 	exports.runChangeHooks = runChangeHooks;
 	exports.runLeaveHooks = runLeaveHooks;
 
-	var _AsyncUtils = __webpack_require__(263);
+	var _AsyncUtils = __webpack_require__(265);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -29950,7 +31018,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 263 */
+/* 265 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30043,7 +31111,7 @@
 	}
 
 /***/ },
-/* 264 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30054,7 +31122,7 @@
 
 	exports.default = isActive;
 
-	var _PatternUtils = __webpack_require__(239);
+	var _PatternUtils = __webpack_require__(241);
 
 	function deepEqual(a, b) {
 	  if (a == b) return true;
@@ -30200,16 +31268,16 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 265 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _AsyncUtils = __webpack_require__(263);
+	var _AsyncUtils = __webpack_require__(265);
 
-	var _makeStateWithLocation = __webpack_require__(266);
+	var _makeStateWithLocation = __webpack_require__(268);
 
 	var _makeStateWithLocation2 = _interopRequireDefault(_makeStateWithLocation);
 
@@ -30251,7 +31319,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 266 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -30262,9 +31330,9 @@
 
 	exports.default = makeStateWithLocation;
 
-	var _deprecateObjectProperties = __webpack_require__(235);
+	var _deprecateObjectProperties = __webpack_require__(237);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -30306,7 +31374,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 267 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -30319,19 +31387,19 @@
 
 	exports.default = matchRoutes;
 
-	var _AsyncUtils = __webpack_require__(263);
+	var _AsyncUtils = __webpack_require__(265);
 
-	var _makeStateWithLocation = __webpack_require__(266);
+	var _makeStateWithLocation = __webpack_require__(268);
 
 	var _makeStateWithLocation2 = _interopRequireDefault(_makeStateWithLocation);
 
-	var _PatternUtils = __webpack_require__(239);
+	var _PatternUtils = __webpack_require__(241);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30563,7 +31631,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 268 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -30582,17 +31650,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _deprecateObjectProperties = __webpack_require__(235);
+	var _deprecateObjectProperties = __webpack_require__(237);
 
 	var _deprecateObjectProperties2 = _interopRequireDefault(_deprecateObjectProperties);
 
-	var _getRouteParams = __webpack_require__(269);
+	var _getRouteParams = __webpack_require__(271);
 
 	var _getRouteParams2 = _interopRequireDefault(_getRouteParams);
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -30725,14 +31793,14 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 269 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _PatternUtils = __webpack_require__(239);
+	var _PatternUtils = __webpack_require__(241);
 
 	/**
 	 * Extracts an object of params the given route cares about from
@@ -30756,7 +31824,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 270 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -30768,7 +31836,7 @@
 	exports.createRouterObject = createRouterObject;
 	exports.createRoutingHistory = createRoutingHistory;
 
-	var _deprecateObjectProperties = __webpack_require__(235);
+	var _deprecateObjectProperties = __webpack_require__(237);
 
 	var _deprecateObjectProperties2 = _interopRequireDefault(_deprecateObjectProperties);
 
@@ -30794,7 +31862,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 271 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -30807,7 +31875,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -30815,7 +31883,7 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _PropTypes = __webpack_require__(234);
+	var _PropTypes = __webpack_require__(236);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30976,7 +32044,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 272 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30989,7 +32057,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Link = __webpack_require__(271);
+	var _Link = __webpack_require__(273);
 
 	var _Link2 = _interopRequireDefault(_Link);
 
@@ -31009,7 +32077,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 273 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31032,7 +32100,7 @@
 
 	var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 
-	var _PropTypes = __webpack_require__(234);
+	var _PropTypes = __webpack_require__(236);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31079,7 +32147,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 274 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31090,7 +32158,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -31098,11 +32166,11 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _Redirect = __webpack_require__(275);
+	var _Redirect = __webpack_require__(277);
 
 	var _Redirect2 = _interopRequireDefault(_Redirect);
 
-	var _InternalPropTypes = __webpack_require__(238);
+	var _InternalPropTypes = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31148,7 +32216,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 275 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31163,11 +32231,11 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
-	var _PatternUtils = __webpack_require__(239);
+	var _PatternUtils = __webpack_require__(241);
 
-	var _InternalPropTypes = __webpack_require__(238);
+	var _InternalPropTypes = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31256,7 +32324,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 276 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31267,7 +32335,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -31275,9 +32343,9 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
-	var _InternalPropTypes = __webpack_require__(238);
+	var _InternalPropTypes = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31322,7 +32390,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 277 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31337,9 +32405,9 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
-	var _InternalPropTypes = __webpack_require__(238);
+	var _InternalPropTypes = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31385,18 +32453,18 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 278 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _InternalPropTypes = __webpack_require__(238);
+	var _InternalPropTypes = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31420,14 +32488,14 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 279 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -31494,14 +32562,14 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 280 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -31545,7 +32613,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 281 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31554,15 +32622,15 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _useQueries = __webpack_require__(257);
+	var _useQueries = __webpack_require__(259);
 
 	var _useQueries2 = _interopRequireDefault(_useQueries);
 
-	var _createTransitionManager = __webpack_require__(260);
+	var _createTransitionManager = __webpack_require__(262);
 
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -31602,7 +32670,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 282 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31613,11 +32681,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _RouterContext = __webpack_require__(268);
+	var _RouterContext = __webpack_require__(270);
 
 	var _RouterContext2 = _interopRequireDefault(_RouterContext);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -31638,7 +32706,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 283 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31647,23 +32715,23 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _Actions = __webpack_require__(243);
+	var _Actions = __webpack_require__(245);
 
 	var _invariant = __webpack_require__(208);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _createMemoryHistory = __webpack_require__(284);
+	var _createMemoryHistory = __webpack_require__(286);
 
 	var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
 
-	var _createTransitionManager = __webpack_require__(260);
+	var _createTransitionManager = __webpack_require__(262);
 
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
-	var _RouteUtils = __webpack_require__(233);
+	var _RouteUtils = __webpack_require__(235);
 
-	var _RouterUtils = __webpack_require__(270);
+	var _RouterUtils = __webpack_require__(272);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31727,7 +32795,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 284 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31735,15 +32803,15 @@
 	exports.__esModule = true;
 	exports.default = createMemoryHistory;
 
-	var _useQueries = __webpack_require__(257);
+	var _useQueries = __webpack_require__(259);
 
 	var _useQueries2 = _interopRequireDefault(_useQueries);
 
-	var _useBasename = __webpack_require__(285);
+	var _useBasename = __webpack_require__(287);
 
 	var _useBasename2 = _interopRequireDefault(_useBasename);
 
-	var _createMemoryHistory = __webpack_require__(286);
+	var _createMemoryHistory = __webpack_require__(288);
 
 	var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
 
@@ -31764,7 +32832,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 285 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31775,19 +32843,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _ExecutionEnvironment = __webpack_require__(245);
+	var _ExecutionEnvironment = __webpack_require__(247);
 
-	var _PathUtils = __webpack_require__(244);
+	var _PathUtils = __webpack_require__(246);
 
-	var _runTransitionHook = __webpack_require__(255);
+	var _runTransitionHook = __webpack_require__(257);
 
 	var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-	var _deprecate = __webpack_require__(256);
+	var _deprecate = __webpack_require__(258);
 
 	var _deprecate2 = _interopRequireDefault(_deprecate);
 
@@ -31928,7 +32996,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 286 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31939,7 +33007,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(242);
+	var _warning = __webpack_require__(244);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -31947,11 +33015,11 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _PathUtils = __webpack_require__(244);
+	var _PathUtils = __webpack_require__(246);
 
-	var _Actions = __webpack_require__(243);
+	var _Actions = __webpack_require__(245);
 
-	var _createHistory = __webpack_require__(249);
+	var _createHistory = __webpack_require__(251);
 
 	var _createHistory2 = _interopRequireDefault(_createHistory);
 
@@ -32088,7 +33156,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 287 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32096,11 +33164,11 @@
 	exports.__esModule = true;
 	exports.default = useRouterHistory;
 
-	var _useQueries = __webpack_require__(257);
+	var _useQueries = __webpack_require__(259);
 
 	var _useQueries2 = _interopRequireDefault(_useQueries);
 
-	var _useBasename = __webpack_require__(285);
+	var _useBasename = __webpack_require__(287);
 
 	var _useBasename2 = _interopRequireDefault(_useBasename);
 
@@ -32116,7 +33184,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 288 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -32129,11 +33197,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _RouterContext = __webpack_require__(268);
+	var _RouterContext = __webpack_require__(270);
 
 	var _RouterContext2 = _interopRequireDefault(_RouterContext);
 
-	var _routerWarning = __webpack_require__(236);
+	var _routerWarning = __webpack_require__(238);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -32179,18 +33247,18 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 289 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createBrowserHistory = __webpack_require__(290);
+	var _createBrowserHistory = __webpack_require__(292);
 
 	var _createBrowserHistory2 = _interopRequireDefault(_createBrowserHistory);
 
-	var _createRouterHistory = __webpack_require__(291);
+	var _createRouterHistory = __webpack_require__(293);
 
 	var _createRouterHistory2 = _interopRequireDefault(_createRouterHistory);
 
@@ -32200,7 +33268,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 290 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -32215,17 +33283,17 @@
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _Actions = __webpack_require__(243);
+	var _Actions = __webpack_require__(245);
 
-	var _PathUtils = __webpack_require__(244);
+	var _PathUtils = __webpack_require__(246);
 
-	var _ExecutionEnvironment = __webpack_require__(245);
+	var _ExecutionEnvironment = __webpack_require__(247);
 
-	var _DOMUtils = __webpack_require__(246);
+	var _DOMUtils = __webpack_require__(248);
 
-	var _DOMStateStorage = __webpack_require__(247);
+	var _DOMStateStorage = __webpack_require__(249);
 
-	var _createDOMHistory = __webpack_require__(248);
+	var _createDOMHistory = __webpack_require__(250);
 
 	var _createDOMHistory2 = _interopRequireDefault(_createDOMHistory);
 
@@ -32386,7 +33454,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 291 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32399,7 +33467,7 @@
 	  return history;
 	};
 
-	var _useRouterHistory = __webpack_require__(287);
+	var _useRouterHistory = __webpack_require__(289);
 
 	var _useRouterHistory2 = _interopRequireDefault(_useRouterHistory);
 
@@ -32410,18 +33478,18 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 292 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createHashHistory = __webpack_require__(241);
+	var _createHashHistory = __webpack_require__(243);
 
 	var _createHashHistory2 = _interopRequireDefault(_createHashHistory);
 
-	var _createRouterHistory = __webpack_require__(291);
+	var _createRouterHistory = __webpack_require__(293);
 
 	var _createRouterHistory2 = _interopRequireDefault(_createRouterHistory);
 
@@ -32431,7 +33499,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 293 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32443,27 +33511,27 @@
 
 	var _redux = __webpack_require__(179);
 
-	var _axios = __webpack_require__(294);
+	var _axios = __webpack_require__(296);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _reactRouterRedux = __webpack_require__(319);
+	var _reactRouterRedux = __webpack_require__(321);
 
-	var _reactRouter = __webpack_require__(232);
+	var _reactRouter = __webpack_require__(234);
 
-	var _reduxLogger = __webpack_require__(324);
+	var _reduxLogger = __webpack_require__(326);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
-	var _reduxThunk = __webpack_require__(330);
+	var _reduxThunk = __webpack_require__(332);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reduxPromiseMiddleware = __webpack_require__(331);
+	var _reduxPromiseMiddleware = __webpack_require__(333);
 
 	var _reduxPromiseMiddleware2 = _interopRequireDefault(_reduxPromiseMiddleware);
 
-	var _index = __webpack_require__(333);
+	var _index = __webpack_require__(335);
 
 	var _index2 = _interopRequireDefault(_index);
 
@@ -32561,21 +33629,21 @@
 	exports.default = store;
 
 /***/ },
-/* 294 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(295);
+	module.exports = __webpack_require__(297);
 
 /***/ },
-/* 295 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
-	var bind = __webpack_require__(297);
-	var Axios = __webpack_require__(298);
-	var defaults = __webpack_require__(299);
+	var utils = __webpack_require__(298);
+	var bind = __webpack_require__(299);
+	var Axios = __webpack_require__(300);
+	var defaults = __webpack_require__(301);
 
 	/**
 	 * Create an instance of Axios
@@ -32608,15 +33676,15 @@
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(316);
-	axios.CancelToken = __webpack_require__(317);
-	axios.isCancel = __webpack_require__(313);
+	axios.Cancel = __webpack_require__(318);
+	axios.CancelToken = __webpack_require__(319);
+	axios.isCancel = __webpack_require__(315);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(318);
+	axios.spread = __webpack_require__(320);
 
 	module.exports = axios;
 
@@ -32625,12 +33693,12 @@
 
 
 /***/ },
-/* 296 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(297);
+	var bind = __webpack_require__(299);
 
 	/*global toString:true*/
 
@@ -32930,7 +33998,7 @@
 
 
 /***/ },
-/* 297 */
+/* 299 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32947,17 +34015,17 @@
 
 
 /***/ },
-/* 298 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(299);
-	var utils = __webpack_require__(296);
-	var InterceptorManager = __webpack_require__(310);
-	var dispatchRequest = __webpack_require__(311);
-	var isAbsoluteURL = __webpack_require__(314);
-	var combineURLs = __webpack_require__(315);
+	var defaults = __webpack_require__(301);
+	var utils = __webpack_require__(298);
+	var InterceptorManager = __webpack_require__(312);
+	var dispatchRequest = __webpack_require__(313);
+	var isAbsoluteURL = __webpack_require__(316);
+	var combineURLs = __webpack_require__(317);
 
 	/**
 	 * Create a new instance of Axios
@@ -33038,13 +34106,13 @@
 
 
 /***/ },
-/* 299 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(296);
-	var normalizeHeaderName = __webpack_require__(300);
+	var utils = __webpack_require__(298);
+	var normalizeHeaderName = __webpack_require__(302);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -33061,10 +34129,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(301);
+	    adapter = __webpack_require__(303);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(301);
+	    adapter = __webpack_require__(303);
 	  }
 	  return adapter;
 	}
@@ -33138,12 +34206,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 300 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
+	var utils = __webpack_require__(298);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -33156,18 +34224,18 @@
 
 
 /***/ },
-/* 301 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(296);
-	var settle = __webpack_require__(302);
-	var buildURL = __webpack_require__(305);
-	var parseHeaders = __webpack_require__(306);
-	var isURLSameOrigin = __webpack_require__(307);
-	var createError = __webpack_require__(303);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(308);
+	var utils = __webpack_require__(298);
+	var settle = __webpack_require__(304);
+	var buildURL = __webpack_require__(307);
+	var parseHeaders = __webpack_require__(308);
+	var isURLSameOrigin = __webpack_require__(309);
+	var createError = __webpack_require__(305);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(310);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -33263,7 +34331,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(309);
+	      var cookies = __webpack_require__(311);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -33340,12 +34408,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 302 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(303);
+	var createError = __webpack_require__(305);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -33371,12 +34439,12 @@
 
 
 /***/ },
-/* 303 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(304);
+	var enhanceError = __webpack_require__(306);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -33394,7 +34462,7 @@
 
 
 /***/ },
-/* 304 */
+/* 306 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33419,12 +34487,12 @@
 
 
 /***/ },
-/* 305 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
+	var utils = __webpack_require__(298);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -33493,12 +34561,12 @@
 
 
 /***/ },
-/* 306 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
+	var utils = __webpack_require__(298);
 
 	/**
 	 * Parse headers into an object
@@ -33536,12 +34604,12 @@
 
 
 /***/ },
-/* 307 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
+	var utils = __webpack_require__(298);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -33610,7 +34678,7 @@
 
 
 /***/ },
-/* 308 */
+/* 310 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33652,12 +34720,12 @@
 
 
 /***/ },
-/* 309 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
+	var utils = __webpack_require__(298);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -33711,12 +34779,12 @@
 
 
 /***/ },
-/* 310 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
+	var utils = __webpack_require__(298);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -33769,15 +34837,15 @@
 
 
 /***/ },
-/* 311 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
-	var transformData = __webpack_require__(312);
-	var isCancel = __webpack_require__(313);
-	var defaults = __webpack_require__(299);
+	var utils = __webpack_require__(298);
+	var transformData = __webpack_require__(314);
+	var isCancel = __webpack_require__(315);
+	var defaults = __webpack_require__(301);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -33854,12 +34922,12 @@
 
 
 /***/ },
-/* 312 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(296);
+	var utils = __webpack_require__(298);
 
 	/**
 	 * Transform the data for a request or a response
@@ -33880,7 +34948,7 @@
 
 
 /***/ },
-/* 313 */
+/* 315 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33891,7 +34959,7 @@
 
 
 /***/ },
-/* 314 */
+/* 316 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33911,7 +34979,7 @@
 
 
 /***/ },
-/* 315 */
+/* 317 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33929,7 +34997,7 @@
 
 
 /***/ },
-/* 316 */
+/* 318 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33954,12 +35022,12 @@
 
 
 /***/ },
-/* 317 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(316);
+	var Cancel = __webpack_require__(318);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -34017,7 +35085,7 @@
 
 
 /***/ },
-/* 318 */
+/* 320 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34050,7 +35118,7 @@
 
 
 /***/ },
-/* 319 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34060,7 +35128,7 @@
 	});
 	exports.routerMiddleware = exports.routerActions = exports.goForward = exports.goBack = exports.go = exports.replace = exports.push = exports.CALL_HISTORY_METHOD = exports.routerReducer = exports.LOCATION_CHANGE = exports.syncHistoryWithStore = undefined;
 
-	var _reducer = __webpack_require__(320);
+	var _reducer = __webpack_require__(322);
 
 	Object.defineProperty(exports, 'LOCATION_CHANGE', {
 	  enumerable: true,
@@ -34075,7 +35143,7 @@
 	  }
 	});
 
-	var _actions = __webpack_require__(321);
+	var _actions = __webpack_require__(323);
 
 	Object.defineProperty(exports, 'CALL_HISTORY_METHOD', {
 	  enumerable: true,
@@ -34120,11 +35188,11 @@
 	  }
 	});
 
-	var _sync = __webpack_require__(322);
+	var _sync = __webpack_require__(324);
 
 	var _sync2 = _interopRequireDefault(_sync);
 
-	var _middleware = __webpack_require__(323);
+	var _middleware = __webpack_require__(325);
 
 	var _middleware2 = _interopRequireDefault(_middleware);
 
@@ -34134,7 +35202,7 @@
 	exports.routerMiddleware = _middleware2['default'];
 
 /***/ },
-/* 320 */
+/* 322 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34177,7 +35245,7 @@
 	}
 
 /***/ },
-/* 321 */
+/* 323 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34219,7 +35287,7 @@
 	var routerActions = exports.routerActions = { push: push, replace: replace, go: go, goBack: goBack, goForward: goForward };
 
 /***/ },
-/* 322 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34232,7 +35300,7 @@
 
 	exports['default'] = syncHistoryWithStore;
 
-	var _reducer = __webpack_require__(320);
+	var _reducer = __webpack_require__(322);
 
 	var defaultSelectLocationState = function defaultSelectLocationState(state) {
 	  return state.routing;
@@ -34379,7 +35447,7 @@
 	}
 
 /***/ },
-/* 323 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34389,7 +35457,7 @@
 	});
 	exports['default'] = routerMiddleware;
 
-	var _actions = __webpack_require__(321);
+	var _actions = __webpack_require__(323);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -34417,7 +35485,7 @@
 	}
 
 /***/ },
-/* 324 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34428,11 +35496,11 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _core = __webpack_require__(325);
+	var _core = __webpack_require__(327);
 
-	var _helpers = __webpack_require__(326);
+	var _helpers = __webpack_require__(328);
 
-	var _defaults = __webpack_require__(329);
+	var _defaults = __webpack_require__(331);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
@@ -34535,7 +35603,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 325 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34548,9 +35616,9 @@
 
 	exports.printBuffer = printBuffer;
 
-	var _helpers = __webpack_require__(326);
+	var _helpers = __webpack_require__(328);
 
-	var _diff = __webpack_require__(327);
+	var _diff = __webpack_require__(329);
 
 	var _diff2 = _interopRequireDefault(_diff);
 
@@ -34677,7 +35745,7 @@
 	}
 
 /***/ },
-/* 326 */
+/* 328 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34701,7 +35769,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 327 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34711,7 +35779,7 @@
 	});
 	exports.default = diffLogger;
 
-	var _deepDiff = __webpack_require__(328);
+	var _deepDiff = __webpack_require__(330);
 
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 
@@ -34800,7 +35868,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 328 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -35229,7 +36297,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 329 */
+/* 331 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35280,7 +36348,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 330 */
+/* 332 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35308,7 +36376,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 331 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35325,7 +36393,7 @@
 
 	exports.default = promiseMiddleware;
 
-	var _isPromise = __webpack_require__(332);
+	var _isPromise = __webpack_require__(334);
 
 	var _isPromise2 = _interopRequireDefault(_isPromise);
 
@@ -35482,7 +36550,7 @@
 	}
 
 /***/ },
-/* 332 */
+/* 334 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35503,7 +36571,7 @@
 	}
 
 /***/ },
-/* 333 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35514,9 +36582,9 @@
 
 	var _redux = __webpack_require__(179);
 
-	var _reactRouterRedux = __webpack_require__(319);
+	var _reactRouterRedux = __webpack_require__(321);
 
-	var _changeJSONAndAccordion = __webpack_require__(334);
+	var _changeJSONAndAccordion = __webpack_require__(336);
 
 	var _changeJSONAndAccordion2 = _interopRequireDefault(_changeJSONAndAccordion);
 
@@ -35530,7 +36598,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 334 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35541,25 +36609,25 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _helpers = __webpack_require__(228);
+	var _helpers = __webpack_require__(230);
 
 	var _EmptyJSON = __webpack_require__(212);
 
 	var _EmptyJSON2 = _interopRequireDefault(_EmptyJSON);
 
-	var _FieldToCreate = __webpack_require__(335);
+	var _FieldToCreate = __webpack_require__(337);
 
 	var _FieldToCreate2 = _interopRequireDefault(_FieldToCreate);
 
-	var _GroupOneToCreate = __webpack_require__(336);
+	var _GroupOneToCreate = __webpack_require__(338);
 
 	var _GroupOneToCreate2 = _interopRequireDefault(_GroupOneToCreate);
 
-	var _groupTwoToCreate2 = __webpack_require__(337);
+	var _groupTwoToCreate2 = __webpack_require__(339);
 
 	var _groupTwoToCreate3 = _interopRequireDefault(_groupTwoToCreate2);
 
-	var _jp = __webpack_require__(338);
+	var _jp = __webpack_require__(340);
 
 	var _jp2 = _interopRequireDefault(_jp);
 
@@ -35643,7 +36711,6 @@
 					    groupTwoKey = 'grp_2_' + (_newTimestamp + _randomInt).toString();
 
 					_groupOneToCreate.key = groupOneKey;
-					console.log('ub', _groupOneToCreate);
 					_groupOneToCreate.groups[0].key = groupTwoKey;
 
 					_fieldToCreate2.key = 'fld_' + (_newTimestamp + _randomInt).toString();
@@ -35790,7 +36857,6 @@
 					    _jsonData7 = _extends({}, state.jsonData),
 					    _groupOneIndex = void 0;
 
-					console.log('group', groupOne);
 					_groupOneIndex = _jsonData7.groups.map(function (elem, i) {
 						return elem.key;
 					}).indexOf(groupOne.key);
@@ -36079,6 +37145,79 @@
 					break;
 				}
 
+			case "INSERT_GROUP_ONE":
+				{
+					var _groupOneIndex6 = action.groupOneIndex;
+
+					var _jsonData15 = _extends({}, state.jsonData),
+					    _accordion18 = [].concat(_toConsumableArray(state.accordion)),
+					    _groupsLevelOneToCopy3 = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
+					    _groupsLevelTwoToCopy3 = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
+					    _fieldsToCopy3 = [].concat(_toConsumableArray(state.fieldsToCopy)),
+					    counter = 0;
+
+					_groupsLevelOneToCopy3.map(function (key, index) {
+						var groupIndexInJson = void 0,
+						    newTimestamp = +new Date(),
+						    randomInt = (0, _helpers.getRandomInt)(1, 1000),
+						    groupOneKey = 'grp_1_' + (newTimestamp + randomInt).toString(),
+						    groupCopy = void 0;
+
+						groupIndexInJson = _jsonData15.groups.map(function (group, i) {
+							return group.key;
+						}).indexOf(key);
+
+						groupCopy = _extends({}, _jsonData15.groups[groupIndexInJson]);
+						groupCopy.key = groupOneKey;
+						groupCopy.groups.map(function (groupTwo, index) {
+							var groupIndexInJson = void 0,
+							    newTimestamp = +new Date(),
+							    randomInt2 = (0, _helpers.getRandomInt)(1, 1000),
+							    groupTwoKey = 'grp_2_' + (newTimestamp + randomInt2).toString(),
+							    fieldGroup = key + '|' + groupTwo.key;
+
+							_jsonData15.fields.map(function (field, i) {
+								var rand = (0, _helpers.getRandomInt)(1, 1000);
+
+								if (field.group === fieldGroup) {
+									field.group = groupOneKey + '|' + groupTwoKey;
+									field.key = 'fld_' + (newTimestamp + rand).toString();
+								}
+							});
+
+							groupTwo.key = groupTwoKey;
+						});
+
+						_jsonData15.groups = (0, _helpers.insertArrayElement)(_jsonData15.groups, groupCopy, _groupOneIndex6 + counter);
+						counter++;
+					});
+
+					_jsonData15.groups.forEach(function (groupOne) {
+						groupOne.marked = false;
+						groupOne.groups.forEach(function (groupTwo) {
+							groupTwo.marked = false;
+						});
+					});
+
+					_jsonData15.fields.forEach(function (field) {
+						field.marked = false;
+					});
+
+					_accordion18 = (0, _helpers.setAccordionItems)(_jsonData15);
+					_groupsLevelOneToCopy3.length = [];
+					_groupsLevelTwoToCopy3.length = [];
+					_fieldsToCopy3.length = [];
+
+					state = _extends({}, state, { jsonData: _jsonData15, accordion: _accordion18, groupsLevelOneToCopy: _groupsLevelOneToCopy3, groupsLevelTwoToCopy: _groupsLevelTwoToCopy3, fieldsToCopy: _fieldsToCopy3 });
+					break;
+				}
+
+			case "INSERT_GROUP_TWO":
+				{
+					console.log('affe');
+					break;
+				}
+
 			default:
 				return state;
 		}
@@ -36088,7 +37227,7 @@
 	exports.default = changeJSONAndAccordion;
 
 /***/ },
-/* 335 */
+/* 337 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -36115,7 +37254,7 @@
 	exports.default = FieldToCreate;
 
 /***/ },
-/* 336 */
+/* 338 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36139,7 +37278,7 @@
 	exports.default = GroupOneToCreate;
 
 /***/ },
-/* 337 */
+/* 339 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36157,7 +37296,7 @@
 	exports.default = GroupTwoToCreate;
 
 /***/ },
-/* 338 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/* WEBPACK VAR INJECTION */(function(global) {"use strict";
@@ -37527,1002 +38666,6 @@
 	    }, { "./lib/index": 5 }] }, {}, ["jsonpath"])("jsonpath");
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 339 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _Field = __webpack_require__(340);
-
-	var _Field2 = _interopRequireDefault(_Field);
-
-	var _helpers = __webpack_require__(228);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var AccordionSection = function (_Component) {
-	  _inherits(AccordionSection, _Component);
-
-	  function AccordionSection(props) {
-	    _classCallCheck(this, AccordionSection);
-
-	    var _this = _possibleConstructorReturn(this, (AccordionSection.__proto__ || Object.getPrototypeOf(AccordionSection)).call(this, props));
-
-	    _this.updateFields = _this.updateFields.bind(_this);
-	    _this.markForCopy = _this.markForCopy.bind(_this);
-	    _this.updateMarking = _this.updateMarking.bind(_this);
-	    _this.updateFieldsToCopy = _this.updateFieldsToCopy.bind(_this);
-	    _this.updateJsonData = _this.updateJsonData.bind(_this);
-	    _this.insertfieldsToCopy = _this.insertfieldsToCopy.bind(_this);
-	    _this.createNewField = _this.createNewField.bind(_this);
-	    _this.handleDeleteField = _this.handleDeleteField.bind(_this);
-	    _this.cutAndShift = _this.cutAndShift.bind(_this);
-	    _this.handleMarking = _this.handleMarking.bind(_this);
-
-	    _this.state = {
-	      jsonData: _this.props.store.database.jsonData,
-	      fields: [],
-	      fieldsToCopy: []
-	    };
-	    return _this;
-	  }
-
-	  _createClass(AccordionSection, [{
-	    key: "componentWillReceiveProps",
-	    value: function componentWillReceiveProps(nextProps) {
-	      var _this2 = this;
-
-	      var newFields = nextProps.elem.content,
-	          newFieldsToCopy = nextProps.store.database.fieldsToCopy,
-	          newJsonData = nextProps.store.database.jsonData;
-
-	      this.updateFieldsToCopy(newFieldsToCopy);
-	      this.updateFields(newFields);
-	      this.updateJsonData(newJsonData);
-
-	      setTimeout(function () {
-	        _this2.updateMarking(newFields);
-	      }, 100);
-	    }
-	  }, {
-	    key: "insertfieldsToCopy",
-	    value: function insertfieldsToCopy(elem, index) {}
-	  }, {
-	    key: "createNewField",
-	    value: function createNewField(groupKeys, fieldIndex) {
-	      var rand = (0, _helpers.getRandomInt)(1, 1000);
-	      var keysArr = groupKeys.split('|');
-
-	      this.props.createField(fieldIndex, groupKeys, rand);
-	      this.props.setSubAccordionToOpen(keysArr);
-	    }
-	  }, {
-	    key: "handleDeleteField",
-	    value: function handleDeleteField(elem, fieldIndex) {
-	      var keysArr = elem.group.split('|');
-
-	      this.props.deleteField(elem, fieldIndex);
-	      this.props.setSubAccordionToOpen(keysArr);
-	    }
-	  }, {
-	    key: "handleMarking",
-	    value: function handleMarking(elem, fieldIndex) {
-	      var keysArr = elem.group.split('|');
-
-	      this.props.markFieldToCopy(elem, fieldIndex);
-	      this.props.setSubAccordionToOpen(keysArr);
-	    }
-	  }, {
-	    key: "cutAndShift",
-	    value: function cutAndShift(elem, index) {}
-	  }, {
-	    key: "updateFields",
-	    value: function updateFields(newFields) {
-	      var fields = [].concat(_toConsumableArray(this.state.fields)),
-	          helpingFields = [];
-
-	      newFields.forEach(function (i) {
-	        i['marked'] = i.marked !== undefined ? i.marked : false;
-	        helpingFields.push(i);
-	      });
-
-	      fields = helpingFields;
-
-	      this.setState({
-	        fields: fields
-	      });
-	    }
-	  }, {
-	    key: "updateMarking",
-	    value: function updateMarking(newFields) {
-	      var fields = [].concat(_toConsumableArray(this.state.fields));
-
-	      fields = newFields;
-
-	      fields.forEach(function (i) {
-	        var buttonId = 'btn_field_' + i.key;
-	        console.log('f', i);
-	        $('#' + buttonId).removeClass('marked');
-	        if (i.marked) {
-	          $('#' + buttonId).addClass('marked');
-	        } else {
-	          $('#' + buttonId).removeClass('marked');
-	        }
-	      });
-	    }
-	  }, {
-	    key: "updateFieldsToCopy",
-	    value: function updateFieldsToCopy(newFieldsToCopy) {
-	      var fieldsToCopy = [].concat(_toConsumableArray(this.state.fieldsToCopy));
-
-	      fieldsToCopy = newFieldsToCopy;
-
-	      this.setState({
-	        fieldsToCopy: fieldsToCopy
-	      });
-	    }
-	  }, {
-	    key: "updateJsonData",
-	    value: function updateJsonData(newJsonData) {
-	      var jsonData = _extends({}, this.state.jsonData);
-
-	      jsonData = newJsonData;
-
-	      this.setState({
-	        jsonData: jsonData
-	      });
-	    }
-	  }, {
-	    key: "markForCopy",
-	    value: function markForCopy(elem, index) {
-	      var buttonId = 'btn_field_' + elem.key;
-	      var fieldsToCopy = [].concat(_toConsumableArray(this.state.fieldsToCopy)),
-	          fields = [].concat(_toConsumableArray(this.state.fields)),
-	          indexForElementToRemove = void 0;
-
-	      if (elem.marked) {
-	        indexForElementToRemove = fieldsToCopy.map(function (key, i) {
-	          return key;
-	        }).indexOf(elem.key);
-
-	        fieldsToCopy = (0, _helpers.removeArrayElement)(fieldsToCopy, indexForElementToRemove);
-	        fields[index].marked = false;
-	        $('#' + buttonId).removeClass('marked');
-	      } else {
-	        fields[index].marked = true;
-	        fieldsToCopy.push(fields[index].key);
-	        $('#' + buttonId).addClass('marked');
-	      }
-
-	      this.setState({
-	        fieldsToCopy: fieldsToCopy,
-	        fields: fields
-	      });
-	    }
-	  }, {
-	    key: "componentWillMount",
-	    value: function componentWillMount() {
-	      var _this3 = this;
-
-	      var newFields = this.props.elem.content,
-	          newFieldsToCopy = this.props.store.database.fieldsToCopy;
-
-	      this.updateFieldsToCopy(newFieldsToCopy);
-	      this.updateFields(newFields);
-
-	      setTimeout(function () {
-	        _this3.updateMarking(newFields);
-	      }, 100);
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var _this4 = this;
-
-	      var _state = this.state,
-	          fields = _state.fields,
-	          fieldsToCopy = _state.fieldsToCopy;
-
-	      var groupLevelOneKey = this.props.groupLevelOneKey,
-	          groupLevelTwoKey = this.props.elem.key;
-
-	      return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(
-	          "div",
-	          {
-	            className: "title",
-	            onClick: function onClick(e) {
-	              return _this4.props.click(e, _this4.props.groupTwo);
-	            }
-	          },
-	          _react2.default.createElement(
-	            "span",
-	            { className: "title-text" },
-	            this.props.elem.title
-	          ),
-	          _react2.default.createElement(
-	            "span",
-	            { className: "arrow-wrapper" },
-	            _react2.default.createElement("i", { className: this.props.elem.open ? "fa fa-angle-down fa-rotate-180" : "fa fa-angle-down"
-	            })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: this.props.elem.open ? "content content-open" : "content"
-	          },
-	          _react2.default.createElement(
-	            "div",
-	            { className: this.props.elem.open ? "content-text content-text-open" : "content-text"
-	            },
-	            this.state.fields.map(function (elem, i) {
-	              var _React$createElement, _React$createElement2, _React$createElement3, _React$createElement4;
-
-	              var fieldId = 'field_' + elem.key,
-	                  buttonId = "btn_field_" + elem.key,
-	                  groupKeys = elem.group,
-	                  jsonData = _this4.state.jsonData,
-	                  fieldIndexInJsonData = void 0;
-
-	              fieldIndexInJsonData = jsonData.fields.map(function (field, i) {
-	                return field.key;
-	              }).indexOf(elem.key);
-
-	              switch (true) {
-	                case elem.clearBefore && elem.clearAfter:
-	                  return _react2.default.createElement(
-	                    "div",
-	                    { key: i, id: fieldId, className: "clear-both" },
-	                    _react2.default.createElement(
-	                      "ul",
-	                      { className: "field-ul" },
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
-	                      ),
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(
-	                          "div",
-	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
-	                          _react2.default.createElement(
-	                            "button",
-	                            { onClick: function onClick() {
-	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
-	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
-	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
-	                          ),
-	                          _react2.default.createElement(
-	                            "div",
-	                            { className: "dropdown" },
-	                            _react2.default.createElement(
-	                              "button",
-	                              (_React$createElement = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement, "type", "button"), _defineProperty(_React$createElement, "data-toggle", "dropdown"), _defineProperty(_React$createElement, "aria-haspopup", "true"), _defineProperty(_React$createElement, "aria-expanded", "false"), _React$createElement),
-	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
-	                            ),
-	                            _react2.default.createElement(
-	                              "ul",
-	                              { className: "dropdown-menu" },
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
-	                                  " Neues Element anlegen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.cutAndShift(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
-	                                  " Ausschneiden und verschieben"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.insertfieldsToCopy(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
-	                                  " Aus Zwischenablage einf\xFCgen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
-	                                  " Element l\xF6schen"
-	                                )
-	                              )
-	                            )
-	                          )
-	                        )
-	                      )
-	                    )
-	                  );
-	                  break;
-
-	                case elem.clearBefore && !elem.clearAfter:
-	                  return _react2.default.createElement(
-	                    "div",
-	                    { key: i, id: fieldId, className: "clear-left" },
-	                    _react2.default.createElement(
-	                      "ul",
-	                      { className: "field-ul" },
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
-	                      ),
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(
-	                          "div",
-	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
-	                          _react2.default.createElement(
-	                            "button",
-	                            { onClick: function onClick() {
-	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
-	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
-	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
-	                          ),
-	                          _react2.default.createElement(
-	                            "div",
-	                            { className: "dropdown" },
-	                            _react2.default.createElement(
-	                              "button",
-	                              (_React$createElement2 = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement2, "type", "button"), _defineProperty(_React$createElement2, "data-toggle", "dropdown"), _defineProperty(_React$createElement2, "aria-haspopup", "true"), _defineProperty(_React$createElement2, "aria-expanded", "false"), _React$createElement2),
-	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
-	                            ),
-	                            _react2.default.createElement(
-	                              "ul",
-	                              { className: "dropdown-menu" },
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
-	                                  " Neues Element anlegen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.cutAndShift(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
-	                                  " Ausschneiden und verschieben"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.insertfieldsToCopy(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
-	                                  " Aus Zwischenablage einf\xFCgen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
-	                                  " Element l\xF6schen"
-	                                )
-	                              )
-	                            )
-	                          )
-	                        )
-	                      )
-	                    )
-	                  );
-	                  break;
-
-	                case !elem.clearBefore && elem.clearAfter:
-	                  return _react2.default.createElement(
-	                    "div",
-	                    { key: i, id: fieldId, className: "clear-right" },
-	                    _react2.default.createElement(
-	                      "ul",
-	                      { className: "field-ul" },
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
-	                      ),
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(
-	                          "div",
-	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
-	                          _react2.default.createElement(
-	                            "button",
-	                            { onClick: function onClick() {
-	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
-	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
-	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
-	                          ),
-	                          _react2.default.createElement(
-	                            "div",
-	                            { className: "dropdown" },
-	                            _react2.default.createElement(
-	                              "button",
-	                              (_React$createElement3 = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement3, "type", "button"), _defineProperty(_React$createElement3, "data-toggle", "dropdown"), _defineProperty(_React$createElement3, "aria-haspopup", "true"), _defineProperty(_React$createElement3, "aria-expanded", "false"), _React$createElement3),
-	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
-	                            ),
-	                            _react2.default.createElement(
-	                              "ul",
-	                              { className: "dropdown-menu" },
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
-	                                  " Neues Element anlegen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.cutAndShift(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
-	                                  " Ausschneiden und verschieben"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.insertfieldsToCopy(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
-	                                  " Aus Zwischenablage einf\xFCgen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
-	                                  " Element l\xF6schen"
-	                                )
-	                              )
-	                            )
-	                          )
-	                        )
-	                      )
-	                    )
-	                  );
-	                  break;
-
-	                case !elem.clearBefore && !elem.clearAfter:
-	                  return _react2.default.createElement(
-	                    "div",
-	                    { key: i, id: fieldId },
-	                    _react2.default.createElement(
-	                      "ul",
-	                      { className: "field-ul" },
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
-	                      ),
-	                      _react2.default.createElement(
-	                        "li",
-	                        { className: "field-li" },
-	                        _react2.default.createElement(
-	                          "div",
-	                          { className: "btn-group-vertical li-div", role: "group", "aria-label": "edit" },
-	                          _react2.default.createElement(
-	                            "button",
-	                            { onClick: function onClick() {
-	                                return _this4.handleMarking(elem, fieldIndexInJsonData);
-	                              }, id: buttonId, type: "button", className: "btn btn-default btn-xs" },
-	                            _react2.default.createElement("i", { className: "fa fa-check", "aria-hidden": "true" })
-	                          ),
-	                          _react2.default.createElement(
-	                            "div",
-	                            { className: "dropdown" },
-	                            _react2.default.createElement(
-	                              "button",
-	                              (_React$createElement4 = { type: "button", className: "btn btn-default btn-xs" }, _defineProperty(_React$createElement4, "type", "button"), _defineProperty(_React$createElement4, "data-toggle", "dropdown"), _defineProperty(_React$createElement4, "aria-haspopup", "true"), _defineProperty(_React$createElement4, "aria-expanded", "false"), _React$createElement4),
-	                              _react2.default.createElement("i", { className: "fa fa-pencil-square-o", "aria-hidden": "true" })
-	                            ),
-	                            _react2.default.createElement(
-	                              "ul",
-	                              { className: "dropdown-menu" },
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.createNewField(groupKeys, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-plus", "aria-hidden": "true" }),
-	                                  " Neues Element anlegen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.cutAndShift(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-scissors", "aria-hidden": "true" }),
-	                                  " Ausschneiden und verschieben"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.insertfieldsToCopy(elem, i);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-arrow-down", "aria-hidden": "true" }),
-	                                  " Aus Zwischenablage einf\xFCgen"
-	                                )
-	                              ),
-	                              _react2.default.createElement(
-	                                "li",
-	                                null,
-	                                _react2.default.createElement(
-	                                  "a",
-	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData);
-	                                    } },
-	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
-	                                  " Element l\xF6schen"
-	                                )
-	                              )
-	                            )
-	                          )
-	                        )
-	                      )
-	                    )
-	                  );
-	                  break;
-	              }
-	            })
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return AccordionSection;
-	}(_react.Component);
-
-	exports.default = AccordionSection;
-
-/***/ },
-/* 340 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Field = function (_Component) {
-	  _inherits(Field, _Component);
-
-	  function Field(props) {
-	    _classCallCheck(this, Field);
-
-	    var _this = _possibleConstructorReturn(this, (Field.__proto__ || Object.getPrototypeOf(Field)).call(this, props));
-
-	    _this.updateField = _this.updateField.bind(_this);
-	    _this.handleClick = _this.handleClick.bind(_this);
-
-	    _this.state = {
-	      field: _this.props.field
-	    };
-	    return _this;
-	  }
-
-	  _createClass(Field, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      var newField = nextProps.field;
-	      this.updateField(newField);
-	    }
-	  }, {
-	    key: 'updateField',
-	    value: function updateField(newField) {
-	      var field = _extends({}, this.state.field);
-	      field = newField;
-	      this.setState({ field: field });
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {}
-	  }, {
-	    key: 'handleClick',
-	    value: function handleClick(event, field) {
-	      var groupKeys = field.group.split('|');
-
-	      $('.config-wrapper').addClass('display-hidden');
-	      $('#standardInputWrapper').removeClass('display-hidden');
-	      $('#fieldTypeWrapper').removeClass('display-hidden');
-	      $('#exportKeyWrapper').removeClass('display-hidden');
-	      $('#inputExportKey').attr('required', true);
-	      $('#submitButtonWrapper').removeClass('display-hidden');
-	      $('#optionalInputWrapper').removeClass('display-hidden');
-	      $('#colSelectWrapper').removeClass('display-hidden');
-	      $('#clearWrapper').removeClass('display-hidden');
-	      $('#tooltipWrapper').removeClass('display-hidden');
-	      $('#idParamsWrapperForAll').removeClass('display-hidden');
-	      $('#panelWrapper').attr('configtype', 'field');
-
-	      this.props.changeFieldToEdit(field);
-
-	      $('#inputTitle').val(field.title);
-	      $('#colSelectField').val(field.cols);
-	      $('#fieldType').val(field.type);
-	      $('#inputExportKey').val(field.exportKey);
-	      $('#idClearBefore').prop("checked", field.clearBefore);
-	      $('#idClearAfter').prop("checked", field.clearAfter);
-	      $('#inputTooltip').val(field.tooltip);
-
-	      switch (field.type) {
-	        case 'code':
-	          $('#codeParamsWrapper').removeClass('display-hidden');
-	          $('#cssParam').val(field.parameters.css);
-	          $('#htmlParam').val(field.parameters.html);
-	          $('#jsParam').val(field.parameters.js);
-	          break;
-
-	        case 'text':
-	          $('#textParamsWrapper').removeClass('display-hidden');
-	          $('#idTextClass').val(field.parameters.class);
-	          $('#idTextPlaceholder').val(field.parameters.placeholder);
-	          $('#idTextWidth').val(field.parameters.width);
-	          break;
-
-	        case 'textarea':
-	          $('#textParamsWrapper').removeClass('display-hidden');
-	          $('#idTextClass').val(field.parameters.class);
-	          $('#idTextPlaceholder').val(field.parameters.placeholder);
-	          $('#idTextWidth').val(field.parameters.width);
-	          break;
-	      }
-
-	      this.props.setSubAccordionToOpen(groupKeys);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var field = this.state.field;
-
-	      switch (this.state.field.type) {
-	        case 'code':
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'field-node field-li', onClick: function onClick(e) {
-	                return _this2.handleClick(e, field);
-	              } },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'field-inner-ul' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-more-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'title-overflow' },
-	                  this.state.field.title
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-less-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'field-icon' },
-	                  _react2.default.createElement('i', { className: 'fa fa-file-code-o fa-2x field-code', 'aria-hidden': 'true' })
-	                )
-	              )
-	            )
-	          );
-	          break;
-
-	        case 'radio':
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'field-node field-li', onClick: function onClick(e) {
-	                return _this2.handleClick(e, field);
-	              } },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'field-inner-ul' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-more-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'title-overflow' },
-	                  this.state.field.title
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-less-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'field-icon' },
-	                  _react2.default.createElement('i', { className: 'fa fa-dot-circle-o fa-2x field-radio', 'aria-hidden': 'true' })
-	                )
-	              )
-	            )
-	          );
-	          break;
-
-	        case 'check':
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'field-node field-li', onClick: function onClick(e) {
-	                return _this2.handleClick(e, field);
-	              } },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'field-inner-ul' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-more-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'title-overflow' },
-	                  this.state.field.title
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-less-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'field-icon' },
-	                  _react2.default.createElement('i', { className: 'fa fa-check-square-o fa-2x field-check', 'aria-hidden': 'true' })
-	                )
-	              )
-	            )
-	          );
-	          break;
-
-	        case 'select':
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'field-node field-li', onClick: function onClick(e) {
-	                return _this2.handleClick(e, field);
-	              } },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'field-inner-ul' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-more-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'title-overflow' },
-	                  this.state.field.title
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-less-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'field-icon' },
-	                  _react2.default.createElement('i', { className: 'fa fa-list-ol fa-2x field-select', 'aria-hidden': 'true' })
-	                )
-	              )
-	            )
-	          );
-	          break;
-
-	        case 'text':
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'field-node field-li', onClick: function onClick(e) {
-	                return _this2.handleClick(e, field);
-	              } },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'field-inner-ul' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-more-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'title-overflow' },
-	                  this.state.field.title
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-less-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'field-icon' },
-	                  _react2.default.createElement('i', { className: 'fa fa-commenting fa-2x field-text', 'aria-hidden': 'true' })
-	                )
-	              )
-	            )
-	          );
-	          break;
-
-	        case 'textarea':
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'field-node field-li', onClick: function onClick(e) {
-	                return _this2.handleClick(e, field);
-	              } },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'field-inner-ul' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-more-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'title-overflow' },
-	                  this.state.field.title
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-less-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'field-icon' },
-	                  _react2.default.createElement('i', { className: 'fa fa-file-text fa-2x field-textarea', 'aria-hidden': 'true' })
-	                )
-	              )
-	            )
-	          );
-	          break;
-
-	        default:
-	          return _react2.default.createElement(
-	            'div',
-	            { className: 'field-node field-li', onClick: function onClick(e) {
-	                return _this2.handleClick(e, field);
-	              } },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'field-inner-ul' },
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-more-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'title-overflow' },
-	                  this.state.field.title
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                { className: 'field-inner-li field-li-less-width' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'field-icon' },
-	                  _react2.default.createElement('i', { className: 'fa fa-question-circle fa-2x', 'aria-hidden': 'true' })
-	                )
-	              )
-	            )
-	          );
-	          break;
-	      }
-	    }
-	  }]);
-
-	  return Field;
-	}(_react.Component);
-
-	exports.default = Field;
 
 /***/ }
 /******/ ]);

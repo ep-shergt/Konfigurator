@@ -94,7 +94,7 @@ class AccordionSection extends Component {
 
     fields.forEach((i) => {
       const buttonId = 'btn_field_' + i.key;
-      console.log('f', i);
+      
       $('#' + buttonId).removeClass('marked');
       if (i.marked) {
         $('#' + buttonId).addClass('marked');

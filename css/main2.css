@@ -1,3 +1,4 @@
+
 .drop-node {
 	background-color: #e0eeee;
 	padding: 30px;
@@ -339,4 +340,11 @@ ul.button-list>li {
 
 .param-input-margin {
 	margin-top: 10px;
+}
+
+#sticky.stick {
+    margin-top: 0 !important;
+    position: fixed;
+    top: 0;
+    z-index: 10000;
 }

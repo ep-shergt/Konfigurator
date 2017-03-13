@@ -18,6 +18,7 @@ class Accordion extends Component {
     this.openMainTitlePanel = this.openMainTitlePanel.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.createNewGroupOne = this.createNewGroupOne.bind(this);
+    this.handleInsert = this.handleInsert.bind(this);
 
     this.state = {
       jsonData: this.props.store.database.jsonData,
@@ -117,7 +118,7 @@ class Accordion extends Component {
 
     accordion.forEach((i) => {
       const buttonId = 'btn_group_level_one_mark_' + i.key;
-      
+
       $('#' + buttonId).removeClass('marked');
       if (i.marked) {
         $('#' + buttonId).addClass('marked');
@@ -164,6 +165,10 @@ class Accordion extends Component {
     $('#idAutoCollapse').prop("checked", groupOneToEdit.autocollapse);
   }
 
+  handleInsert(event, groupIndexInJson) {
+    this.props.insertGroupLevelOne(groupIndexInJson);
+  }
+
   render() {
     let {groupsLevelOneToCopy} = this.state;
 
@@ -208,7 +213,7 @@ class Accordion extends Component {
                         <li><a href="#" onClick={(e) => this.handleEdit(e, i)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                         <li><a href="#" onClick={() => this.createNewGroupOne(groupIndexInJson)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                         <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
-                        <li><a href="#"><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
+                        <li><a href="#" onClick={(e) => this.handleInsert(e, groupIndexInJson)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
                         <li><a href="#" onClick={this.props.deleteGroupLevelOne.bind(null, groupIndexInJson, elem)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
                       </ul>
                     </div>
