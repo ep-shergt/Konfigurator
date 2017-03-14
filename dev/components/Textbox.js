@@ -90,7 +90,6 @@ export default class Textbox extends Component {
           self.setState({
             jsonData
           });
-          self.props.changeJSONOnLoading(self.state.jsonData);
       };
       fileReader.readAsText(fileToLoad, "UTF-8");
     } catch (err) {

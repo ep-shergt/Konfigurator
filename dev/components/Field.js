@@ -33,10 +33,10 @@ class Field extends Component {
     const groupKeys = field.group.split('|');
 
     $('.config-wrapper').addClass('display-hidden');
+    $('.param-wrapper').addClass('display-hidden');
     $('#standardInputWrapper').removeClass('display-hidden');
     $('#fieldTypeWrapper').removeClass('display-hidden');
     $('#exportKeyWrapper').removeClass('display-hidden');
-    $('#inputExportKey').attr('required', true);
     $('#submitButtonWrapper').removeClass('display-hidden');
     $('#optionalInputWrapper').removeClass('display-hidden')
     $('#colSelectWrapper').removeClass('display-hidden');
@@ -75,6 +75,28 @@ class Field extends Component {
         $('#idTextClass').val(field.parameters.class);
         $('#idTextPlaceholder').val(field.parameters.placeholder);
         $('#idTextWidth').val(field.parameters.width);
+        break;
+
+      case 'check':
+        $('#selectParamsWrapper').removeClass('display-hidden');
+        $('#fillerDiv').removeClass('display-hidden');
+        $('#idInline').prop("checked", field.parameters.inline);
+        $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
+        break;
+
+      case 'radio':
+        $('#selectParamsWrapper').removeClass('display-hidden');
+        $('#fillerDiv').removeClass('display-hidden');
+        $('#idInline').prop("checked", field.parameters.inline);
+        $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
+        break;
+
+      case 'select':
+        $('#selectParamsWrapper').removeClass('display-hidden');
+        $('#idSelectMultiple').removeClass('display-hidden');
+        $('#idInline').prop("checked", field.parameters.inline);
+        $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
+        $('#idMultiple').prop("checked", field.parameters.multiple);
         break;
     }
 

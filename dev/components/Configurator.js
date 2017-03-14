@@ -105,6 +105,22 @@ class Configurator extends Component {
     					newFieldToEdit.parameters.class = $('#idTextClass').val();
         				newFieldToEdit.parameters.placeholder = $('#idTextPlaceholder').val();
         				newFieldToEdit.parameters.width = $('#idTextWidth').val();
+
+        			case 'check':
+    					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
+        				break;
+
+        			case 'radio':
+    					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
+        				break;
+
+        			case 'select':
+    					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
+        				break;
     			}
 
     			this.props.changeField(newFieldToEdit);
@@ -124,7 +140,6 @@ class Configurator extends Component {
     }
 
     componentDidMount() {
-    	const exportKey = this.state.fieldToEdit.exportKey;
     	var self = this;
 
         $("input").keypress( function(e) {
@@ -135,12 +150,7 @@ class Configurator extends Component {
 
 		$('#dateMainTitle').val(this.state.jsonData.valid_from);
 		$('#endDateMainTitle').val(this.state.jsonData.valid_to);
-		if (exportKey !== undefined && exportKey !== "") {
-			$('#inputExportKey').val(this.state.fieldToEdit.exportKey);
-		} else {
-			$('#inputExportKey').val('exportKey');
-		}
-
+		
 		$(function() {
 	    	$(window).scroll(self.sticky_relocate);
 	    	self.sticky_relocate();
@@ -178,21 +188,14 @@ class Configurator extends Component {
 	}
 
 	componentDidUpdate() {
-		const exportKey = this.state.fieldToEdit.exportKey;
-
 		$('#dateMainTitle').val(this.state.jsonData.valid_from);
 		$('#endDateMainTitle').val(this.state.jsonData.valid_to);
-		if (exportKey !== undefined && exportKey !== "") {
-			$('#inputExportKey').val(this.state.fieldToEdit.exportKey);
-		} else {
-			$('#inputExportKey').val('exportKey');
-		}
 	}
 
 	sticky_relocate() {
 	    /*var window_top = $(window).scrollTop();
 	    var div_top = $('#sticky-anchor').offset().top;
-	    
+
 	    if (window_top > div_top) {
 	        $('#sticky').addClass('stick');
 	        $('#sticky-anchor').height($('#sticky').outerHeight());

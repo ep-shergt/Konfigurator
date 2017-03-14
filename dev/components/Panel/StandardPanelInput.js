@@ -31,6 +31,21 @@ class StandardPanelInput extends Component {
       case 'textarea':
         $('#textParamsWrapper').removeClass('display-hidden');
         break;
+
+      case 'check':
+        $('#selectParamsWrapper').removeClass('display-hidden');
+        $('#fillerDiv').removeClass('display-hidden');
+        break;
+
+      case 'radio':
+        $('#selectParamsWrapper').removeClass('display-hidden');
+        $('#fillerDiv').removeClass('display-hidden');
+        break;
+
+      case 'select':
+        $('#selectParamsWrapper').removeClass('display-hidden');
+        $('#idSelectMultiple').removeClass('display-hidden');
+        break;
     }
 
     fieldToEdit['parameters'] = {};

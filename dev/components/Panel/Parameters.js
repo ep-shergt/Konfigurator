@@ -76,7 +76,21 @@ class Parameters extends Component {
 		          <input id="idTextWidth" type="text" className="form-control input-sm"
 		                 name="inputTextWidthParams" placeholder="Breite in Pixel" onChange={this.handleWidthChange.bind(this)}/>            
 		        </div>
-		      </div>
+		     </div>
+		     <div id="selectParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
+		     	<div className="row vertical-align">
+		            <div className="input-group col-xs-4">
+		                <label className="label-check"><input id="idInline" type="checkbox" value="inline" />  inline</label>
+		            </div>
+		            <div id="fillerDiv" className="input-group col-xs-4 display-hidden param-wrapper"></div>
+		            <div id="idSelectMultiple" className="input-group col-xs-4 display-hidden param-wrapper">
+		                <label className="label-check"><input id="idMultiple" type="checkbox" value="multiple" />  multiple</label>
+		            </div>
+		            <div className="input-group col-xs-4">
+		                <label className="label-check"><input id="idInlineBreak" type="checkbox" value="inlineBreak" />  inlineBreak</label>
+		            </div>
+		          </div>
+		     </div>
 		</div>
     )
   }

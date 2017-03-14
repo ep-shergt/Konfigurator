@@ -28,8 +28,8 @@ export function getRandomInt(min, max) {
 
 export function setAccordionItems(jsonDataCopy) {
     let accordion = [],
-        jsonData = {...jsonDataCopy},
-        groups = [...jsonData.groups];
+        jsonDataNew = {...jsonDataCopy},
+        groups = [...jsonDataNew.groups];
     
     groups.forEach((group) => {
       if (group.groups[0] !== undefined) {
@@ -40,7 +40,7 @@ export function setAccordionItems(jsonDataCopy) {
               fieldGroupKey = groupLevelOneKey + '|' + groupLevelTwoKey,
               fieldsPerGroup = [];
 
-          jsonData.fields.forEach((field) => {
+          jsonDataNew.fields.forEach((field) => {
             if (field.group === fieldGroupKey) {
               fieldsPerGroup.push(field);
             }
