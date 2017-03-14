@@ -32,8 +32,8 @@ class OptionalPanelInput extends Component {
       <div id="optionalInputWrapper" className="display-hidden config-wrapper">
         <p className="heading-parameter">Zusätzliche Einstellungen</p>
         <div id="colSelectWrapper" className="input-group col-xs-5 config-wrapper display-hidden">
-          <span className="input-group-addon">Spalten</span>
-          <select className="form-control" id="colSelect" name="colSelect">
+          <span className="input-group-addon">cols</span>
+          <select className="form-control input-sm" id="colSelect" name="colSelect">
             <option></option>
             <option>0</option>
             <option>1</option>
@@ -52,7 +52,7 @@ class OptionalPanelInput extends Component {
           <br/>
         </div>
         <div id="tooltipWrapper" className="input-group config-wrapper display-hidden">
-            <span className="input-group-addon">Tooltip</span>
+            <span className="input-group-addon">tooltip</span>
             <input id="inputTooltip" type="text" className="form-control input-sm" name="inputTooltip" placeholder="Tooltip - Text" />            
         </div>
         <div id="clearWrapper" className="container-fluid config-wrapper display-hidden">

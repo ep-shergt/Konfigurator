@@ -27,6 +27,7 @@ let	accordion = setAccordionItems(jsonDataCopy),
 	groupOneToEdit = {},
 	groupTwoToEdit = {},
 	fieldsToCopy = [],
+	fieldType = fieldToCreate.type,
 	initialState = {
 		jsonData,
 		accordion,
@@ -38,7 +39,8 @@ let	accordion = setAccordionItems(jsonDataCopy),
 		fieldsToCopy, 
 		fieldToCreate, 
 		groupOneToCreate,
-		groupTwoToCreate
+		groupTwoToCreate,
+		fieldType
 	}
 
 const changeJSONAndAccordion = (state = initialState, action) => {	
@@ -155,6 +157,13 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 			accordion = setAccordionItems(jsonData);
 
 			state = {...state, jsonData, accordion};
+			break;
+		}
+
+		case "CHANGE_FIELD_TYPE": {
+			const {fieldType} = action;
+
+			state = {...state, fieldType};
 			break;
 		}
 

@@ -51,7 +51,9 @@ class StandardPanelInput extends Component {
     fieldToEdit['parameters'] = {};
 
     this.props.changeField(fieldToEdit);
-    this.props.setSubAccordionToOpen(groupKeys);    
+    this.props.changeFieldType(type);
+    this.props.setSubAccordionToOpen(groupKeys);
+
   }
 
   componentDidMount() {
@@ -88,23 +90,23 @@ class StandardPanelInput extends Component {
       <div id="standardInputWrapper" className="config-wrapper display-hidden">
         <p className="heading-parameter">Pflichteinstellungen</p>
         <div className="input-group">
-          <span className="input-group-addon">Titel</span>
+          <span className="input-group-addon">title</span>
           <input required id="inputTitle" type="text" className="form-control" name="inputTitle" placeholder="" />           
         </div>
         <div id="datepickerWrapper" className="config-wrapper display-hidden">
           <div className="bootstrap-iso">
             <div className="container-fluid">
               <div className="form-group ">
-                <span className="label label-info">Gültig von</span>
+                <span className="label label-info">valid_from</span>
                 <input className="form-control" id="dateMainTitle" name="date" type="text"/>
-                <span className="label label-info">bis</span>
+                <span className="label label-info">valid_to</span>
                 <input className="form-control" id="endDateMainTitle" name="date" type="text"/>
               </div>
            </div>
           </div>
         </div>
         <div id="fieldTypeWrapper" className="input-group col-xs-5 config-wrapper display-hidden">
-          <span className="input-group-addon">Feldtyp</span>
+          <span className="input-group-addon">type</span>
           <select onChange={this.handleTypeChange.bind(this)} className="form-control input-sm" id="fieldType" name="fieldType">
             <option>code</option>
             <option>radio</option>
@@ -115,7 +117,7 @@ class StandardPanelInput extends Component {
           </select>
         </div>
         <div id="exportKeyWrapper" className="input-group config-wrapper display-hidden">
-          <span className="input-group-addon">ExportKey</span>
+          <span className="input-group-addon">exportKey</span>
           <input id="inputExportKey" type="text" className="form-control input-sm" name="inputExportKey" placeholder="" />           
           <br/>
         </div>

@@ -64,6 +64,13 @@ export function changeGroupTwo(groupTwo, groupOneKey) {
 		groupOneKey
 	}
 }
+
+export function changeFieldType(fieldType) {
+	return {
+		type: 'CHANGE_FIELD_TYPE',
+		fieldType
+	}
+}
 //*******************************************************************************
 
 

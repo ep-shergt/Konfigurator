@@ -348,3 +348,39 @@ ul.button-list>li {
     top: 0;
     z-index: 10000;
 }
+
+.span-margin {
+	margin-left: 8px;
+	margin-right: 8px;
+}
+
+.fa-plus-extra {
+	font-size: 16px !important;
+}
+
+.btn-add {
+	height: 28px;
+}
+
+.br-right {
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+.br-left {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+}
+
+.div-margin {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.cube-element:hover {
+	cursor: pointer;
+}
+
+.narcissus_17w311v {
+	width: 350px !important;
+}
