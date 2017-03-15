@@ -384,3 +384,11 @@ ul.button-list>li {
 .narcissus_17w311v {
 	width: 350px !important;
 }
+
+.modal-container {
+    position: relative;
+ }
+ 
+.modal-container .modal, .modal-container .modal-backdrop {
+    position: absolute;
+}

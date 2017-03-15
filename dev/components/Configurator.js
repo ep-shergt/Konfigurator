@@ -208,7 +208,7 @@ class Configurator extends Component {
     render() {
     	return (
     		<div id="configuratorWrapper">
-				<div className="col-md-8">
+				<div id="idAccWrapper" className="col-md-8">
 					<Accordion {...this.props}/>
 				</div>
 				<div className="col-md-4 editor-panel">
