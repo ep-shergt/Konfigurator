@@ -92,6 +92,7 @@ export default class Textbox extends Component {
           });
       };
       fileReader.readAsText(fileToLoad, "UTF-8");
+
     } catch (err) {
       console.log('%c Fehler: Keine Datei ausgewählt!', 'color: red; font-weight: bold');
       $('#fileError').removeClass('display-hidden');

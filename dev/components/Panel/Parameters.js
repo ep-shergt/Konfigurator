@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { isInRange } from './../../helpers';
-import {ModalContainer, ModalDialog} from 'react-modal-dialog'; 
+import {ModalContainer, ModalDialog} from 'react-modal-dialog';
+import { removeArrayElement } from './../../helpers';
+import { insertArrayElement } from './../../helpers';
 
 class Parameters extends Component {
 
 	constructor(props) {
 	    super(props);
 
-	    this.generateModalElements = this.generateModalElements.bind(this);
 	    this.addElements = this.addElements.bind(this);
-	    this.removeElements = this.removeElements.bind(this);
-	    this.handleClick = this.handleClick.bind(this);
-	    this.handleClose = this.handleClose.bind(this);
-	    this.handleModalData = this.handleModalData.bind(this);
+	    this.updateFieldToEdit = this.updateFieldToEdit.bind(this);
+	    this.generateElements = this.generateElements.bind(this);
+	    this.removeElement = this.removeElement.bind(this);
 
 	    this.state = {
-	      jsonData: this.props.store.database.jsonData,
-	      fieldToEdit: this.props.store.database.fieldToEdit,
-	      elementsForModal: 1,
-	      fieldType: this.props.store.database.fieldType,
-	      isShowingModal: false
+		    jsonData: this.props.store.database.jsonData,
+		    fieldToEdit: this.props.store.database.fieldToEdit,
+		    fieldType: this.props.store.database.fieldType
 	    };
 	}
 
@@ -32,108 +30,145 @@ class Parameters extends Component {
 	    }
 	}
 
-	handleClick(event) {
-		this.setState({
-			isShowingModal: true
-		});
+	updateFieldToEdit(newFieldToEdit) {
+	    let fieldToEdit = {...this.state.fieldToEdit};
 
-		$('.narcissus_86uon7').on('click', () => {
-			this.setState({
-				isShowingModal: false
-			});
-			$('#idAccWrapper').removeClass('display-hidden');
-		});
-	}
+	    fieldToEdit = newFieldToEdit;
 
-	handleModalData(event) {
-		event.preventDefault();
-
-		this.setState({		
-			isShowingModal: false
-		});
-
-		$('#idAccWrapper').removeClass('display-hidden');
-	}
-
-	handleClose() {
-		/*if (this.state.confirmClose) {
-			this.setState({
-				isShowingModal: false
-			});
-			$('#idAccWrapper').removeClass('display-hidden');
-
-			this.setState({
-				confirmClose: false
-			});			
-		}*/
-
+	    this.setState({ 
+	      fieldToEdit
+	    });
 	}
 
     componentWillReceiveProps(nextProps) {
         let newJsonData = nextProps.store.database.jsonData,
         	fieldType = nextProps.store.database.fieldType,
-            jsonData = {...this.state.jsonData};
+        	newFieldToEdit = nextProps.store.database.fieldToEdit,
+            jsonData = {...this.state.jsonData},
+            fieldToEdit = {...this.state.fieldToEdit};
 
 	    jsonData = newJsonData;
+	    fieldToEdit = newFieldToEdit;
 
 	    this.setState({
 	        jsonData,
-	        fieldType
+	        fieldType,
+	        fieldToEdit,
 	    });
 
-	    this.generateModalElements(this.state.elementsForModal, fieldType);
+	    if (fieldType === 'check' || fieldType === 'radio' || fieldType === 'select') {
+			this.generateElements(fieldToEdit.parameters.options);
+		}
     }
-
-	generateModalElements(elementsForModal, fieldType) {
-		let modalElements = "",
-			self = this;
-
-	    for (var i = 1; i <= elementsForModal; i++) {
-	    	let id = 'cube_' + fieldType + '_' + i.toString();
-	        modalElements += '<span class="span-margin cube-element">' +
-				          			'<i class="fa fa-cube" aria-hidden="true" id=' + id + '></i>' +
-				          	  '</span>';
-	    }
-	    $('#modalAnchor').empty();
-	    $('#modalAnchor').append(modalElements);
-	    $('.cube-element').on('click', (event) => {
-	    	$('#idAccWrapper').addClass('display-hidden');
-	    	self.handleClick(event);
-	    });
-	}
 
 	addElements(event) {
 		event.preventDefault();
 
-		let elementsForModal = this.state.elementsForModal;
+		let fieldToEdit = {...this.state.fieldToEdit},
+			obj = {
+				title: "",
+				value: "",
+				score: "",
+				default: false 
+			};
 
-		elementsForModal++;
-
-		this.setState({
-			elementsForModal
+		fieldToEdit.parameters.options.map((obj, i) => {
+			obj.title = $('#modalTitle_' + i.toString()).val();
+			obj.value = $('#modalValue_' + i.toString()).val();
+			obj.score = $('#modalScore_' + i.toString()).val();
+			obj.default = $('#modalDefault_' + i.toString()).is(":checked") ? true : false;
 		});
 
-		this.generateModalElements(elementsForModal, this.state.fieldType);	
+		fieldToEdit.parameters.options.push(obj);
+
+		this.setState({
+			fieldToEdit
+		});
+
+		this.generateElements(fieldToEdit.parameters.options);
 	}
 
-	removeElements(event) {
-		event.preventDefault();
+	removeElement(event) {
+		let fieldToEdit = {...this.state.fieldToEdit},
+			indexForRemove = Number(event.target.id.split('_')[1]);
 
-		let elementsForModal = this.state.elementsForModal;
-
-		if (elementsForModal > 1) {
-			elementsForModal--;
-		}
-
-		this.setState({
-			elementsForModal
+		fieldToEdit.parameters.options.map((obj, i) => {
+			obj.title = $('#modalTitle_' + i.toString()).val();
+			obj.value = $('#modalValue_' + i.toString()).val();
+			obj.score = $('#modalScore_' + i.toString()).val();
+			obj.default = $('#modalDefault_' + i.toString()).is(":checked") ? true : false;
 		});
 
-		this.generateModalElements(elementsForModal, this.state.fieldType);	
+		fieldToEdit.parameters.options = removeArrayElement(fieldToEdit.parameters.options, indexForRemove);
+
+		this.setState({
+			fieldToEdit
+		});
+
+		this.generateElements(fieldToEdit.parameters.options);
+	}
+
+	generateElements(options) {
+		let elemHtml = "",
+			fieldType = this.state.fieldType,
+			self = this,
+			elemArray;
+
+		for (var i = 0; i < options.length; i++) {
+			let addon = '_' + i.toString(),
+				id = fieldType + addon;
+
+			elemHtml += '<div class="space-between options-inputs" id=' + id + '>' +
+						    '<div class="delete-markup added">' +
+						    	'<i id="delete' + addon + '" class="fa fa-times fa-2x times-style" aria-hidden="true"></i>' +
+						    '</div>' +
+							'<div class="div-margin dyn-elem">' +
+								'<div class="qu-margin">' +
+									'<div class="input-group param-input-margin">' +
+							            '<span class="input-group-addon">Title</span>' +
+							            '<input required id="modalTitle' + addon + '" type="text" class="form-control input-sm"' +
+							                    'name="modalTitle' + addon + '" placeholder="Titel" />' +            
+							        '</div>' +
+							        '<div class="input-group param-input-margin">' +
+							            '<span class="input-group-addon">Value</span>' +
+							            '<input required id="modalValue' + addon + '" type="text" class="form-control input-sm"' +
+							                   'name="modalValue' + addon + '" placeholder="Wert" />' +       
+							        '</div>' +
+							        '<div class="input-group param-input-margin">' + 
+							            '<span class="input-group-addon">Score</span>' +
+							            '<input id="modalScore' + addon + '" type="text" class="form-control input-sm"' + 
+							                   'name="modalScore' + addon + '" placeholder="Score" />' +             
+							        '</div>' + 
+							        '<div class="param-input-margin align-center">' +
+							        	'<label><input id="modalDefault' + addon + '" type="checkbox" value="default" />  Default</label>' +		            	
+							        '</div>' +
+						        '</div>' +
+					    	'</div>' +
+					    '</div>';
+		}
+
+		$('#elementsAnchor').empty();
+	    $('#elementsAnchor').append(elemHtml);
+	    $('.added').on('click', (event) => {
+	    	self.removeElement(event);
+	    });
+
+	    elemArray = $('.options-inputs').toArray();
+	    for (var j = 0; j < elemArray.length; j++) {
+	    	$('#modalTitle_' + j.toString()).val(options[j].title);
+	    	$('#modalValue_' + j.toString()).val(options[j].value);
+	    	$('#modalScore_' + j.toString()).val(options[j].score);
+	    	$('#modalDefault_' + j.toString()).prop("checked", options[j].default);
+	    }
 	}
 
 	componentDidMount() {
-		this.generateModalElements(this.state.elementsForModal, this.props.store.database.fieldType);
+		let type = this.state.fieldType,
+			fieldToEdit = {...this.state.fieldToEdit};
+
+		if (type === 'check' || type === 'radio' || type === 'select') {
+			this.generateElements(fieldToEdit.parameters.options);
+		}
 	}
 
 	render() {
@@ -193,49 +228,15 @@ class Parameters extends Component {
 			            <div className="input-group col-xs-4">
 			                <label className="label-check"><input id="idInlineBreak" type="checkbox" value="inlineBreak" />  inlineBreak</label>
 			            </div>
-			          </div>
-			          <div id="modalEntry" className="div-margin">
-			          		<div className="div-margin">Elemente für options:</div>
-			          		<div id="modalAnchor"></div>
-			          		<a onClick={(e) => this.removeElements(e)} className="div-margin btn  btn-danger btn-sm btn-add br-right" href="#">
-  								<i className="fa fa-minus fa-plus-extra" aria-hidden="true"></i>
-							</a>
-							<a onClick={(e) => this.addElements(e)} className="div-margin btn  btn-success btn-sm btn-add br-left" href="#">
-  								<i className="fa fa-plus fa-plus-extra" aria-hidden="true"></i>
-							</a>
-							{
-						        this.state.isShowingModal &&
-						        <ModalContainer onClose={this.handleClose}>
-						            <ModalDialog onClose={this.handleClose}>
-						            	<h1 className="align-center">Options</h1>
-						            	<form onSubmit={(e) => this.handleModalData(e)}>     	
-						            		<div className="input-group param-input-margin">
-									            <span className="input-group-addon">Title</span>
-									            <input required id="modalTitle" type="text" className="form-control input-sm"
-									                   name="modalTitle" placeholder="Titel" />            
-									        </div>
-									        <div className="input-group param-input-margin">
-									            <span className="input-group-addon">Value</span>
-									            <input required id="modalValue" type="text" className="form-control input-sm"
-									                   name="modalValue" placeholder="Wert" />            
-									        </div>
-									        <div className="input-group param-input-margin">
-									            <span className="input-group-addon">Score</span>
-									            <input id="modalScore" type="text" className="form-control input-sm"
-									                   name="modalScore" placeholder="Score" />            
-									        </div>
-									        <div className="param-input-margin align-center">
-									        	<label><input id="idDefault" type="checkbox" value="default" />  Default</label>		            	
-									        </div>
-											<div id="modalButtonWrapper">
-												<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
-											</div>
-										</form> 
-						            </ModalDialog>
-						        </ModalContainer>
-						    }
-			          </div>
-			     </div>
+			         </div>
+					<div id="elementsAnchor" className="div-margin">
+
+					</div>
+	          		<span className="div-margin span-margin">Element anlegen</span>
+	          		<a onClick={(e) => this.addElements(e)} className="div-margin btn  btn-success btn-sm btn-add" href="#">
+						<i className="fa fa-plus fa-plus-extra" aria-hidden="true"></i>
+					</a>
+			    </div>
 			</div>
 	    )
 	}

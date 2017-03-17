@@ -45,6 +45,31 @@ let	accordion = setAccordionItems(jsonDataCopy),
 
 const changeJSONAndAccordion = (state = initialState, action) => {	
 	switch(action.type){
+		case "SHIFT_FIELDS": {
+			const {fieldIndexInJson} = action;
+
+			let jsonData = {...state.jsonData},
+				accordion = [...state.accordion],
+				fieldsToCopy = [...state.fieldsToCopy];
+
+			for (var i = 0; fieldsToCopy.length; i++) {
+				jsonData.fields = insertArrayElement(jsonData.fields, fieldsToCopy[i], fieldIndexInJson + i);
+			}
+
+			console.log('hier', jsonData.fields);
+		
+			jsonData.fields.forEach((field) => {
+				field.marked = false;
+			});
+
+			accordion = setAccordionItems(jsonData);
+			fieldsToCopy.length = [];
+
+			state = {...state, jsonData, accordion, fieldsToCopy};
+			return state;
+			break;
+		}
+
 		case "CREATE_FIELD": {
 			const {fieldIndex, groupKeys, randomInt} = action;
 
@@ -226,7 +251,6 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 			const {groupTwo, groupOneKey} = action;
 			let accordion = [...state.accordion],
 				jsonData = {...state.jsonData},
-				groupOneIndex,
 				groupTwoIndex;
 
 			groupOneIndex = jsonData.groups.map((elem, i) => {
@@ -406,29 +430,17 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				  buttonId = "btn_field_" + element.key;
 			let jsonData = {...state.jsonData},
 				accordion = [...state.accordion],
-				fieldsToCopy = [...state.fieldsToCopy],
-				groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
-		    	groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
-				indexForElementToRemove;
+				fieldsToCopy = [...state.fieldsToCopy];
 	
 			if (jsonData.fields.length > 1) {
 				jsonData.fields = removeArrayElement(jsonData.fields, indexInJson);
 			}
-
-			jsonData.groups.forEach((groupOne) => {
-				groupOne.marked = false;
-				groupOne.groups.forEach((groupTwo) => {
-					groupTwo.marked = false;
-				});
-			});
 
 			jsonData.fields.forEach((field) => {
 				field.marked = false;
 			});
 
 			accordion = setAccordionItems(jsonData);
-			groupsLevelOneToCopy.length = [];
-			groupsLevelTwoToCopy.length = [];
 			fieldsToCopy.length = [];
 
 			state = {...state, jsonData, accordion, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy};

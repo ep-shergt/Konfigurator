@@ -14,10 +14,11 @@ class StandardPanelInput extends Component {
 
   handleTypeChange(event) {
     const type = event.target.value;
-    let fieldToEdit = this.state.fieldToEdit,
+    let fieldToEdit = {...this.state.fieldToEdit},
         groupKeys = fieldToEdit.group.split('|');
 
     $('.param-wrapper').addClass('display-hidden');
+    fieldToEdit['parameters'] = {};
 
     switch(type) {
       case 'code':
@@ -35,22 +36,25 @@ class StandardPanelInput extends Component {
       case 'check':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#fillerDiv').removeClass('display-hidden');
+        fieldToEdit.parameters.options = [];
         break;
 
       case 'radio':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#fillerDiv').removeClass('display-hidden');
+        fieldToEdit.parameters.options = [];
         break;
 
       case 'select':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#idSelectMultiple').removeClass('display-hidden');
+        fieldToEdit.parameters.options = [];
         break;
     }
 
-    fieldToEdit['parameters'] = {};
+    fieldToEdit.type = type;
 
-    this.props.changeField(fieldToEdit);
+    this.props.changeFieldToEdit(fieldToEdit);
     this.props.changeFieldType(type);
     this.props.setSubAccordionToOpen(groupKeys);
 

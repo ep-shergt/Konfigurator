@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import Field from "./Field";
 import { removeArrayElement } from './../helpers';
 import { getRandomInt } from './../helpers';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 class AccordionSection extends Component {
 
@@ -17,7 +18,7 @@ class AccordionSection extends Component {
     this.insertfieldsToCopy = this.insertfieldsToCopy.bind(this);
     this.createNewField = this.createNewField.bind(this);
     this.handleDeleteField = this.handleDeleteField.bind(this);
-    this.cutAndShift = this.cutAndShift.bind(this);
+    this.shift = this.shift.bind(this);
     this.handleMarking = this.handleMarking.bind(this);
 
     this.state = {
@@ -67,8 +68,11 @@ class AccordionSection extends Component {
     this.props.setSubAccordionToOpen(keysArr);
   }
 
-  cutAndShift(elem, index) {
+  shift(groupKeys, fieldIndex) {
+    let keysArr = groupKeys.split('|');
 
+    this.props.shiftFields(fieldIndex);
+    this.props.setSubAccordionToOpen(keysArr);
   }
 
   updateFields(newFields) {
@@ -94,7 +98,7 @@ class AccordionSection extends Component {
 
     fields.forEach((i) => {
       const buttonId = 'btn_field_' + i.key;
-      
+
       $('#' + buttonId).removeClass('marked');
       if (i.marked) {
         $('#' + buttonId).addClass('marked');
@@ -174,16 +178,16 @@ class AccordionSection extends Component {
           className="title" 
           onClick={(e) => this.props.click(e, this.props.groupTwo)}
         >      
-         <span className="title-text">
+          <span className="title-text">
             {this.props.elem.title}
-         </span>
-         <span className="arrow-wrapper">
-           <i className={this.props.elem.open 
-             ? "fa fa-angle-down fa-rotate-180" 
-             : "fa fa-angle-down"}
-           ></i>
-         </span>
-       </div>
+          </span>
+          <span className="arrow-wrapper">
+            <i className={this.props.elem.open 
+              ? "fa fa-angle-down fa-rotate-180" 
+              : "fa fa-angle-down"}
+            ></i>
+          </span>
+        </div>
        <div className={this.props.elem.open 
          ? "content content-open" 
          : "content"}
@@ -191,7 +195,7 @@ class AccordionSection extends Component {
           <div className={this.props.elem.open 
             ? "content-text content-text-open" 
             : "content-text"}
-          > 
+          >
             {this.state.fields.map((elem, i) => {
               let fieldId = 'field_' + elem.key,
                   buttonId = "btn_field_" + elem.key,
@@ -220,8 +224,8 @@ class AccordionSection extends Component {
                               </button>
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
-                                <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
+                                <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
+                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
                                 <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
@@ -248,8 +252,8 @@ class AccordionSection extends Component {
                               </button>
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
-                                <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
+                                <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
+                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
                                 <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
@@ -276,8 +280,8 @@ class AccordionSection extends Component {
                               </button>
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
-                                <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
+                                <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
+                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
                                 <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
@@ -304,8 +308,8 @@ class AccordionSection extends Component {
                               </button>
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
-                                <li><a href="#" onClick={() => this.cutAndShift(elem, i)}><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden und verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Aus Zwischenablage einfügen</a></li>
+                                <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
+                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
                                 <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>

@@ -3,8 +3,10 @@ export function extractContent(html) {
 }
 
 export function removeArrayElement(oldArray, index) {
-	let newArray = [...oldArray.slice(0, index), ...oldArray.slice(index+1)];
-
+  const newIndex = index + 1;
+  console.log('ol', oldArray);
+	let newArray = [...oldArray.slice(0, index), ...oldArray.slice(newIndex)];
+  console.log('newr', newArray);
 	return newArray;
 }
 

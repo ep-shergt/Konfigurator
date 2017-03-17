@@ -71,6 +71,18 @@ export function changeFieldType(fieldType) {
 		fieldType
 	}
 }
+
+//********************************************************************************
+
+//Shifters
+//*************************************************************************************
+
+export function shiftFields(fieldIndexInJson) {
+	return {
+		type: 'SHIFT_FIELDS',
+		fieldIndexInJson
+	}
+}
 //*******************************************************************************
 
 

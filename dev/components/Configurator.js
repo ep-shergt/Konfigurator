@@ -27,7 +27,9 @@ class Configurator extends Component {
 
     	const configType = document.getElementById("panelWrapper").getAttribute("configtype"),
     		  groupOneKey = document.getElementById("panelWrapper").getAttribute("grouponekey"),
+        	  optionsLength = $(".options-inputs").toArray().length,
     	      cols = $('#colSelect').val();
+
 		let newJsonData = {...this.state.jsonData},
 			newGroupOneToEdit = {...this.state.groupOneToEdit},
 			newGroupTwoToEdit = {...this.state.groupTwoToEdit},
@@ -109,22 +111,61 @@ class Configurator extends Component {
         			case 'check':
     					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
         				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.options = [];
+
+        				for (var i = 0; i < optionsLength; i++) {
+        					let obj = {
+        						title: $('#modalTitle_' + i.toString()).val(),
+        						value: $('#modalValue_' + i.toString()).val(),
+        						score: $('#modalScore_' + i.toString()).val(),
+        						default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
+        					}
+
+        					newFieldToEdit.parameters.options.push(obj);
+        				}        				
         				break;
 
         			case 'radio':
     					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
         				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.options = [];
+
+        				for (var i = 0; i < optionsLength; i++) {
+        					let obj = {
+        						title: $('#modalTitle_' + i.toString()).val(),
+        						value: $('#modalValue_' + i.toString()).val(),
+        						score: $('#modalScore_' + i.toString()).val(),
+        						default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
+        					}
+
+        					newFieldToEdit.parameters.options.push(obj);
+        				}        				
         				break;
 
         			case 'select':
     					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
         				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
         				newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.options = [];
+
+        				for (var i = 0; i < optionsLength; i++) {
+        					let obj = {
+        						title: $('#modalTitle_' + i.toString()).val(),
+        						value: $('#modalValue_' + i.toString()).val(),
+        						score: $('#modalScore_' + i.toString()).val(),
+        						default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
+        					}
+
+        					newFieldToEdit.parameters.options.push(obj);
+        				}        				
         				break;
+
     			}
 
     			this.props.changeField(newFieldToEdit);
+    			this.props.changeFieldToEdit(newFieldToEdit);
     			this.props.setSubAccordionToOpen(groupKeys);
+        		$('#id_' + newFieldToEdit.key).removeClass('edit-field');
     			break;
 		}
 

@@ -129,6 +129,10 @@ ul.button-list>li {
 	width: 120px;
 }
 
+.edit-field {
+	background-color: #ffcccc !important;
+}
+
 .field-node:hover {
 	cursor: pointer;
 }
@@ -349,6 +353,14 @@ ul.button-list>li {
     z-index: 10000;
 }
 
+.workToDo {
+	color: crimson;
+}
+
+.goodToGo {
+	color: darkgreen;
+}
+
 .span-margin {
 	margin-left: 8px;
 	margin-right: 8px;
@@ -377,7 +389,49 @@ ul.button-list>li {
 	margin-bottom: 8px;
 }
 
-.cube-element:hover {
+.dyn-elem {
+	border: 1px solid #DDD;
+	background: -moz-linear-gradient(top, #EEE, #FFF);    
+	background: -webkit-linear-gradient(top, #eee, #fff);
+	background: -ms-linear-gradient(top, #eee, #fff);
+	background: -o-linear-gradient(top, #eee, #fff);
+	box-shadow: 1px 2px 4px rgba(0,0,0, .2);
+}
+
+.qu-margin {
+	margin: 15px;
+	margin-right: 50px !important;
+}
+
+.space-between {
+	margin-bottom: 20px;
+}
+
+.times-style {
+	padding-top: 3px;
+	padding-right: 5px;
+}
+
+
+.delete-markup {
+	color: firebrick;
+	float: right;
+	transition:; 1s ease-in-out;
+    zoom: 1;
+    opacity: 0.5;
+}
+
+.delete-markup:hover {
+	cursor: pointer;	
+    opacity: 1.0;
+}
+
+.title {
+	text-transform: none !important;
+	font-size: 16px;
+}
+
+/*.cube-element:hover {
 	cursor: pointer;
 }
 
@@ -391,4 +445,4 @@ ul.button-list>li {
  
 .modal-container .modal, .modal-container .modal-backdrop {
     position: absolute;
-}
+}*/
