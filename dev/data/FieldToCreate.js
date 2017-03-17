@@ -7,6 +7,7 @@ const FieldToCreate = {
    clearBefore: false,
    clearAfter: false,
    marked: false,
+   edited: false,
    parameters: {
       css: "",
       html: "",

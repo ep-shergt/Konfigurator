@@ -43,20 +43,51 @@ let	accordion = setAccordionItems(jsonDataCopy),
 		fieldType
 	}
 
-const changeJSONAndAccordion = (state = initialState, action) => {	
+const changeJSONAndAccordion = (state = initialState, action) => {
 	switch(action.type){
 		case "SHIFT_FIELDS": {
-			const {fieldIndexInJson} = action;
+			const {fieldIndexInJson} = action,
+				  jsonKeys = [];
 
 			let jsonData = {...state.jsonData},
 				accordion = [...state.accordion],
-				fieldsToCopy = [...state.fieldsToCopy];
+				fieldsToCopy = [...state.fieldsToCopy],
+				fieldObjects = [],
+				target,
+				newTargetIndex;
 
-			for (var i = 0; fieldsToCopy.length; i++) {
-				jsonData.fields = insertArrayElement(jsonData.fields, fieldsToCopy[i], fieldIndexInJson + i);
+			jsonData.fields.forEach((i) => {
+				jsonKeys.push(i.key);
+			});
+
+			fieldsToCopy = jsonKeys.filter(v => fieldsToCopy.includes(v));
+
+			target = jsonData.fields[fieldIndexInJson];
+
+			fieldsToCopy.forEach((key) => {
+				let fieldIndex,
+					fieldInJson;
+
+				fieldIndex = jsonData.fields.map((elem, i) => {
+    				return elem.key;
+  				}).indexOf(key);
+
+				fieldInJson = jsonData.fields[fieldIndex];
+				jsonData.fields = removeArrayElement(jsonData.fields, fieldIndex);
+				fieldObjects.push(fieldInJson);
+			});
+
+			newTargetIndex = jsonData.fields.map((elem, i) => {
+				return elem.key;
+			}).indexOf(target.key);
+
+			fieldObjects.forEach((field) => {
+				field.group = target.group;
+			});
+
+			for (var i = 0; i < fieldObjects.length; i++) {
+				jsonData.fields = insertArrayElement(jsonData.fields, fieldObjects[i], newTargetIndex + i);
 			}
-
-			console.log('hier', jsonData.fields);
 		
 			jsonData.fields.forEach((field) => {
 				field.marked = false;

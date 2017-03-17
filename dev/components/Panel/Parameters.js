@@ -105,7 +105,10 @@ class Parameters extends Component {
 			fieldToEdit
 		});
 
-		this.generateElements(fieldToEdit.parameters.options);
+		$('#' + fieldToEdit.type + '_' + indexForRemove.toString()).animate({height: "0px"}, 300);
+		setTimeout(() => {
+			this.generateElements(fieldToEdit.parameters.options);
+		}, 301);
 	}
 
 	generateElements(options) {

@@ -10,13 +10,29 @@ class Field extends Component {
     this.handleClick = this.handleClick.bind(this);
 
     this.state = {
-      field: this.props.field
+      field: this.props.field,
+      edited: (this.props.field.edited !== undefined) ? this.props.field.edited : false
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    let newField = nextProps.field;
+    let newField = nextProps.field,
+        edited = (nextProps.field.edited !== undefined) ? nextProps.field.edited : false;
+
+    const id = 'id_' + newField.key;
+
     this.updateField(newField);
+    this.setState({
+      edited
+    });
+
+    setTimeout(() => {
+      if (!edited) {
+        $('#' + id).addClass('edit-field');
+      } else {
+        $('#' + id).removeClass('edit-field');
+      }
+    }, 50);
   }
 
   updateField(newField) {
@@ -26,7 +42,16 @@ class Field extends Component {
   }
 
   componentDidMount() {
-    
+    const edited = this.state.edited,
+          id = 'id_' + this.state.field.key;
+
+    setTimeout(() => {
+      if (!edited) {
+        $('#' + id).addClass('edit-field');
+      } else {
+        $('#' + id).removeClass('edit-field');
+      }
+    }, 50);
   }
 
   handleClick(event, field) {
@@ -110,7 +135,7 @@ class Field extends Component {
     switch (this.state.field.type) {
       case 'code':
         return (
-          <div id={fieldId} className="field-node field-li edit-field" onClick={(e) => this.handleClick(e, field)}>
+          <div id={fieldId} className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li field-li-less-width">
@@ -125,7 +150,7 @@ class Field extends Component {
 
       case 'radio':
         return (
-          <div id={fieldId} className="field-node field-li edit-field" onClick={(e) => this.handleClick(e, field)}>
+          <div id={fieldId} className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li field-li-less-width">
@@ -140,7 +165,7 @@ class Field extends Component {
 
       case 'check':
         return (
-          <div id={fieldId} className="field-node field-li edit-field" onClick={(e) => this.handleClick(e, field)}>
+          <div id={fieldId} className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li field-li-less-width">
@@ -155,7 +180,7 @@ class Field extends Component {
 
       case 'select':
         return (
-          <div id={fieldId} className="field-node field-li edit-field" onClick={(e) => this.handleClick(e, field)}>
+          <div id={fieldId} className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li field-li-less-width">
@@ -170,7 +195,7 @@ class Field extends Component {
 
       case 'text':
         return (
-          <div id={fieldId} className="field-node field-li edit-field" onClick={(e) => this.handleClick(e, field)}>
+          <div id={fieldId} className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li field-li-less-width">
@@ -185,7 +210,7 @@ class Field extends Component {
 
       case 'textarea':
         return (
-          <div id={fieldId} className="field-node field-li edit-field" onClick={(e) => this.handleClick(e, field)}>
+          <div id={fieldId} className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li field-li-less-width">
@@ -200,7 +225,7 @@ class Field extends Component {
 
       default:
         return (
-          <div id={fieldId} className="field-node field-li edit-field" onClick={(e) => this.handleClick(e, field)}>
+          <div id={fieldId} className="field-node field-li" onClick={(e) => this.handleClick(e, field)}>
             <ul className="field-inner-ul">
               <li className="field-inner-li field-li-more-width"><div className="title-overflow">{this.state.field.title}</div></li>
               <li className="field-inner-li field-li-less-width">

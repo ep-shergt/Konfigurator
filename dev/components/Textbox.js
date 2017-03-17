@@ -55,6 +55,7 @@ export default class Textbox extends Component {
 
     jsonCopy.fields.forEach((field) => {
       delete field['marked'];
+      delete field['edited'];
     });
 
     jsonForExport = jsonCopy;

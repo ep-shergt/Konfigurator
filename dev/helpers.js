@@ -1,12 +1,17 @@
 export function extractContent(html) {
-    return (new DOMParser).parseFromString(html, "text/html").documentElement.textContent;
+  return (new DOMParser).parseFromString(html, "text/html").documentElement.textContent;
+}
+
+export function saveText(text, filename){
+  var a = document.createElement('a');
+  a.setAttribute('href', 'data:text/plain;charset=utf-u,'+encodeURIComponent(text));
+  a.setAttribute('download', filename);
+  a.click()
 }
 
 export function removeArrayElement(oldArray, index) {
   const newIndex = index + 1;
-  console.log('ol', oldArray);
 	let newArray = [...oldArray.slice(0, index), ...oldArray.slice(newIndex)];
-  console.log('newr', newArray);
 	return newArray;
 }
 

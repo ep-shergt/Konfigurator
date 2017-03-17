@@ -89,6 +89,7 @@ class Configurator extends Component {
     			newFieldToEdit.tooltip = $('#inputTooltip').val();
     			newFieldToEdit.clearBefore = $("#idClearBefore").is(":checked");
     			newFieldToEdit.clearAfter = $("#idClearAfter").is(":checked");
+    			newFieldToEdit.edited = true;
 
     			switch(fieldType) {
     				case 'code':
@@ -165,7 +166,6 @@ class Configurator extends Component {
     			this.props.changeField(newFieldToEdit);
     			this.props.changeFieldToEdit(newFieldToEdit);
     			this.props.setSubAccordionToOpen(groupKeys);
-        		$('#id_' + newFieldToEdit.key).removeClass('edit-field');
     			break;
 		}
 

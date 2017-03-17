@@ -27,6 +27,7 @@ const EmptyJSON = {
          "cols" :   "",
          "clearBefore" :  false,
          "clearAfter" :   false,
+         "edited" : false,
          "parameters" :   {
             "css" :   "",
             "html" :   "",

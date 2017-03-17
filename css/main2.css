@@ -99,6 +99,7 @@ ul.button-list>li {
 }
 
 .field-ul {
+	box-shadow: 6px 6px 5px #888888;
 	margin: 5px;
 	padding: 0;
 	list-style-type: none;
@@ -129,8 +130,17 @@ ul.button-list>li {
 	width: 120px;
 }
 
+.field-node:hover {
+	background-color: #afeeee !important;
+}
+
 .edit-field {
 	background-color: #ffcccc !important;
+}
+
+.edit-field:hover {
+	background-color: #ff9999 !important;
+	transition:; 1s ease-in-out;
 }
 
 .field-node:hover {
