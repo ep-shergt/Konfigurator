@@ -23430,9 +23430,10 @@
 		};
 	}
 
-	function shiftGroupsOne(groupOneKey) {
+	function shiftGroupsOne(groupIndexInJSON, groupOneKey) {
 		return {
 			type: 'SHIFT_GROUP_ONE',
+			groupIndexInJSON: groupIndexInJSON,
 			groupOneKey: groupOneKey
 		};
 	}
@@ -23709,6 +23710,10 @@
 
 	var _EmptyJSON2 = _interopRequireDefault(_EmptyJSON);
 
+	var _initJSON = __webpack_require__(397);
+
+	var _initJSON2 = _interopRequireDefault(_initJSON);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -23729,6 +23734,8 @@
 	    _this.destroyClickedElement = _this.destroyClickedElement.bind(_this);
 	    _this.loadFileAsText = _this.loadFileAsText.bind(_this);
 	    _this.clearJSONForExport = _this.clearJSONForExport.bind(_this);
+	    _this.initializeJSON = _this.initializeJSON.bind(_this);
+	    _this.loadFromStorage = _this.loadFromStorage.bind(_this);
 
 	    //getinitialState
 	    _this.state = {
@@ -23739,6 +23746,19 @@
 	  }
 
 	  _createClass(Textbox, [{
+	    key: 'loadFromStorage',
+	    value: function loadFromStorage(event) {
+	      var jsonDataString = localStorage.getItem('jsonData'),
+	          jsonData = JSON.parse(jsonDataString);
+
+	      this.setState({
+	        jsonData: jsonData
+	      });
+
+	      $('#mainArea').val(jsonDataString);
+	      this.props.initializeJSON(jsonData);
+	    }
+	  }, {
 	    key: 'saveTextAsFile',
 	    value: function saveTextAsFile(event) {
 	      var textToSave = document.getElementById("mainArea").value,
@@ -23755,7 +23775,6 @@
 	      document.body.appendChild(downloadLink);
 
 	      downloadLink.click();
-	      this.props.initializeJSON(_EmptyJSON2.default);
 	    }
 	  }, {
 	    key: 'clearJSONForExport',
@@ -23791,6 +23810,16 @@
 	    key: 'destroyClickedElement',
 	    value: function destroyClickedElement(event) {
 	      document.body.removeChild(event.target);
+	    }
+	  }, {
+	    key: 'initializeJSON',
+	    value: function initializeJSON(event) {
+	      this.setState({
+	        jsonData: _initJSON2.default
+	      });
+
+	      $('#mainArea').val(JSON.stringify(_initJSON2.default, null, 2));
+	      this.props.initializeJSON(_initJSON2.default);
 	    }
 	  }, {
 	    key: 'loadFileAsText',
@@ -23895,7 +23924,12 @@
 	          'Warnung: Keine Datei ausgew\xE4hlt!'
 	        ),
 	        _react2.default.createElement('input', { type: 'button', onClick: this.props.changeJSON.bind(null, this.state.jsonData), value: 'JSON aktualisieren' }),
-	        _react2.default.createElement('input', { type: 'button', onClick: this.props.initializeJSON.bind(null, this.state.jsonData), value: 'NEU' })
+	        _react2.default.createElement('input', { type: 'button', onClick: function onClick(e) {
+	            return _this3.initializeJSON(e);
+	          }, value: 'NEU' }),
+	        _react2.default.createElement('input', { type: 'button', onClick: function onClick(e) {
+	            return _this3.loadFromStorage(e);
+	          }, value: 'Zuletzt gespeichertes JSON laden' })
 	      );
 	    }
 	  }]);
@@ -25404,6 +25438,8 @@
 	      $('#dateMainTitle').removeAttr('required');
 	      $('#endDateMainTitle').removeAttr('required');
 	      $('#inputExportKey').removeAttr('required');
+
+	      localStorage.setItem('jsonData', JSON.stringify(newJsonData, null, 2));
 	    }
 	  }, {
 	    key: 'componentWillMount',
@@ -25594,6 +25630,7 @@
 	    _this.handleEdit = _this.handleEdit.bind(_this);
 	    _this.createNewGroupOne = _this.createNewGroupOne.bind(_this);
 	    _this.handleInsert = _this.handleInsert.bind(_this);
+	    _this.shift = _this.shift.bind(_this);
 
 	    _this.state = {
 	      jsonData: _this.props.store.database.jsonData,
@@ -25618,6 +25655,11 @@
 	      setTimeout(function () {
 	        _this2.updateMarking(newAccordion);
 	      }, 100);
+	    }
+	  }, {
+	    key: 'shift',
+	    value: function shift(groupIndexInJson, groupOneKey) {
+	      this.props.shiftGroupsOne(groupIndexInJson, groupOneKey);
 	    }
 	  }, {
 	    key: 'createNewGroupOne',
@@ -25879,9 +25921,11 @@
 	                        null,
 	                        _react2.default.createElement(
 	                          'a',
-	                          { href: '#' },
-	                          _react2.default.createElement('i', { className: 'fa-margin fa fa-scissors', 'aria-hidden': 'true' }),
-	                          ' Ausschneiden'
+	                          { href: '#', onClick: function onClick() {
+	                              return _this4.shift(groupIndexInJson, elem.key);
+	                            } },
+	                          _react2.default.createElement('i', { className: 'fa fa-arrows', 'aria-hidden': 'true' }),
+	                          ' Verschieben'
 	                        )
 	                      ),
 	                      _react2.default.createElement(
@@ -27100,7 +27144,7 @@
 	      this.props.changeFieldToEdit(field);
 
 	      $('#inputTitle').val(field.title);
-	      $('#colSelectField').val(field.cols);
+	      $('#colSelect').val(field.cols);
 	      $('#fieldType').val(field.type);
 	      $('#inputExportKey').val(field.exportKey);
 	      $('#idClearBefore').prop("checked", field.clearBefore);
@@ -27146,9 +27190,11 @@
 	        case 'select':
 	          $('#selectParamsWrapper').removeClass('display-hidden');
 	          $('#idSelectMultiple').removeClass('display-hidden');
+	          $('#idSelectContainer').removeClass('display-hidden');
 	          $('#idInline').prop("checked", field.parameters.inline);
 	          $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
 	          $('#idMultiple').prop("checked", field.parameters.multiple);
+	          $('#textAreaContainer').val(field.parameters.container);
 	          break;
 	      }
 
@@ -29677,7 +29723,9 @@
 	        case 'select':
 	          $('#selectParamsWrapper').removeClass('display-hidden');
 	          $('#idSelectMultiple').removeClass('display-hidden');
+	          $('#idSelectContainer').removeClass('display-hidden');
 	          fieldToEdit.parameters.options = [];
+	          fieldToEdit.parameters.container = "";
 	          break;
 	      }
 
@@ -30182,10 +30230,9 @@
 		}, {
 			key: 'removeElement',
 			value: function removeElement(event) {
-				var _this2 = this;
-
 				var fieldToEdit = _extends({}, this.state.fieldToEdit),
-				    indexForRemove = Number(event.target.id.split('_')[1]);
+				    indexForRemove = Number(event.target.id.split('_')[1]),
+				    self = this;
 
 				fieldToEdit.parameters.options.map(function (obj, i) {
 					obj.title = $('#modalTitle_' + i.toString()).val();
@@ -30202,7 +30249,7 @@
 
 				$('#' + fieldToEdit.type + '_' + indexForRemove.toString()).animate({ height: "0px" }, 300);
 				setTimeout(function () {
-					_this2.generateElements(fieldToEdit.parameters.options);
+					self.generateElements(fieldToEdit.parameters.options);
 				}, 301);
 			}
 		}, {
@@ -30250,7 +30297,7 @@
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this3 = this;
+				var _this2 = this;
 
 				return _react2.default.createElement(
 					'div',
@@ -30416,9 +30463,19 @@
 						_react2.default.createElement(
 							'a',
 							{ onClick: function onClick(e) {
-									return _this3.addElements(e);
+									return _this2.addElements(e);
 								}, className: 'div-margin btn  btn-success btn-sm btn-add', href: '#' },
 							_react2.default.createElement('i', { className: 'fa fa-plus fa-plus-extra', 'aria-hidden': 'true' })
+						),
+						_react2.default.createElement(
+							'div',
+							{ id: 'idSelectContainer', className: 'param-wrapper div-margin' },
+							_react2.default.createElement(
+								'span',
+								null,
+								'Container'
+							),
+							_react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'textAreaContainer' })
 						)
 					)
 				);
@@ -61447,7 +61504,7 @@
 
 	var _EmptyJSON2 = _interopRequireDefault(_EmptyJSON);
 
-	var _jp = __webpack_require__(399);
+	var _jp = __webpack_require__(396);
 
 	var _jp2 = _interopRequireDefault(_jp);
 
@@ -61494,14 +61551,43 @@
 		switch (action.type) {
 			case "SHIFT_GROUP_ONE":
 				{
-					var groupOneKey = action.groupOneKey;
+					var groupIndexInJson = action.groupIndexInJson,
+					    groupOneKey = action.groupOneKey;
 
 
 					var _accordion = [].concat(_toConsumableArray(state.accordion)),
 					    _jsonData = _extends({}, state.jsonData),
 					    _groupsLevelOneToCopy = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
 					    _groupsLevelTwoToCopy = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
-					    _fieldsToCopy = [].concat(_toConsumableArray(state.fieldsToCopy));
+					    _fieldsToCopy = [].concat(_toConsumableArray(state.fieldsToCopy)),
+					    groupObjects = [],
+					    newTargetIndex = [],
+					    jsonKeys = [];
+
+					_jsonData.groups.forEach(function (group) {
+						jsonKeys.push(group.key);
+					});
+
+					_groupsLevelOneToCopy = jsonKeys.filter(function (v) {
+						return _groupsLevelOneToCopy.includes(v);
+					});
+
+					_groupsLevelOneToCopy.forEach(function (key) {
+						_jsonData.groups.map(function (group, index) {
+							if (key === group.key) {
+								groupObjects.push(group);
+								_jsonData.groups = (0, _helpers.removeArrayElement)(_jsonData.groups, index);
+							}
+						});
+					});
+
+					newTargetIndex = _jsonData.groups.map(function (groupOne, i) {
+						return groupOne.key;
+					}).indexOf(groupOneKey);
+
+					for (var i = 0; i < groupObjects.length; i++) {
+						_jsonData.groups = (0, _helpers.insertArrayElement)(_jsonData.groups, groupObjects[i], newTargetIndex + i);
+					}
 
 					_jsonData.groups.forEach(function (groupOne) {
 						groupOne.marked = false;
@@ -61537,10 +61623,10 @@
 					    _groupsLevelOneToCopy2 = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
 					    _groupsLevelTwoToCopy2 = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
 					    _fieldsToCopy2 = [].concat(_toConsumableArray(state.fieldsToCopy)),
-					    groupObjects = [],
+					    _groupObjects = [],
 					    target = void 0,
-					    newTargetIndex = void 0,
-					    jsonKeys = [],
+					    _newTargetIndex = void 0,
+					    _jsonKeys = [],
 
 					// must have same length as groupObjects, needed for new groupkey for fields
 					groupKeys = [];
@@ -61549,11 +61635,11 @@
 
 					_jsonData2.groups.forEach(function (groupOne) {
 						groupOne.groups.forEach(function (groupTwo) {
-							jsonKeys.push(groupTwo.key);
+							_jsonKeys.push(groupTwo.key);
 						});
 					});
 
-					_groupsLevelTwoToCopy2 = jsonKeys.filter(function (v) {
+					_groupsLevelTwoToCopy2 = _jsonKeys.filter(function (v) {
 						return _groupsLevelTwoToCopy2.includes(v);
 					});
 
@@ -61568,20 +61654,21 @@
 
 							if (groupTwoIndex >= 0) {
 								var fieldGroups = groupOne.key + '|' + key;
+
 								groupTwoInJson = _jsonData2.groups[i].groups[groupTwoIndex];
 								_jsonData2.groups[i].groups = (0, _helpers.removeArrayElement)(_jsonData2.groups[i].groups, groupTwoIndex);
-								groupObjects.push(groupTwoInJson);
+								_groupObjects.push(groupTwoInJson);
 								groupKeys.push(fieldGroups);
 							}
 						});
 					});
 
-					newTargetIndex = _jsonData2.groups[groupOneIndex].groups.map(function (groupTwo, i) {
+					_newTargetIndex = _jsonData2.groups[groupOneIndex].groups.map(function (groupTwo, i) {
 						return groupTwo.key;
 					}).indexOf(target.key);
 
-					for (var i = 0; i < groupObjects.length; i++) {
-						_jsonData2.groups[groupOneIndex].groups = (0, _helpers.insertArrayElement)(_jsonData2.groups[groupOneIndex].groups, groupObjects[i], newTargetIndex + i);
+					for (var i = 0; i < _groupObjects.length; i++) {
+						_jsonData2.groups[groupOneIndex].groups = (0, _helpers.insertArrayElement)(_jsonData2.groups[groupOneIndex].groups, _groupObjects[i], _newTargetIndex + i);
 					}
 
 					groupKeys.forEach(function (key) {
@@ -61656,7 +61743,7 @@
 			case "SHIFT_FIELDS":
 				{
 					var fieldIndexInJson = action.fieldIndexInJson,
-					    _jsonKeys = [];
+					    _jsonKeys2 = [];
 
 
 					var _jsonData3 = _extends({}, state.jsonData),
@@ -61664,13 +61751,13 @@
 					    _fieldsToCopy3 = [].concat(_toConsumableArray(state.fieldsToCopy)),
 					    fieldObjects = [],
 					    _target = void 0,
-					    _newTargetIndex = void 0;
+					    _newTargetIndex2 = void 0;
 
 					_jsonData3.fields.forEach(function (i) {
-						_jsonKeys.push(i.key);
+						_jsonKeys2.push(i.key);
 					});
 
-					_fieldsToCopy3 = _jsonKeys.filter(function (v) {
+					_fieldsToCopy3 = _jsonKeys2.filter(function (v) {
 						return _fieldsToCopy3.includes(v);
 					});
 
@@ -61689,7 +61776,7 @@
 						fieldObjects.push(fieldInJson);
 					});
 
-					_newTargetIndex = _jsonData3.fields.map(function (elem, i) {
+					_newTargetIndex2 = _jsonData3.fields.map(function (elem, i) {
 						return elem.key;
 					}).indexOf(_target.key);
 
@@ -61698,7 +61785,7 @@
 					});
 
 					for (var i = 0; i < fieldObjects.length; i++) {
-						_jsonData3.fields = (0, _helpers.insertArrayElement)(_jsonData3.fields, fieldObjects[i], _newTargetIndex + i);
+						_jsonData3.fields = (0, _helpers.insertArrayElement)(_jsonData3.fields, fieldObjects[i], _newTargetIndex2 + i);
 					}
 
 					_jsonData3.fields.forEach(function (field) {
@@ -62052,11 +62139,13 @@
 
 			case "INITIALIZE_JSON":
 				{
+					var _jsonData12 = action.jsonData;
+
 					var _accordion14 = [].concat(_toConsumableArray(state.accordion));
+					console.log('bla');
+					_accordion14 = (0, _helpers.setAccordionItems)(_jsonData12);
 
-					_accordion14 = (0, _helpers.setAccordionItems)(_EmptyJSON2.default);
-
-					state = _extends({}, state, { jsonData: _EmptyJSON2.default, accordion: _accordion14 });
+					state = _extends({}, state, { jsonData: _jsonData12, accordion: _accordion14 });
 					break;
 				}
 
@@ -62073,7 +62162,7 @@
 					    buttonId = 'btn_group_level_one_mark_' + element.key;
 
 					var _accordion15 = [].concat(_toConsumableArray(state.accordion)),
-					    _jsonData12 = _extends({}, state.jsonData),
+					    _jsonData13 = _extends({}, state.jsonData),
 					    _groupsLevelOneToCopy3 = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
 					    _groupsLevelTwoToCopy3 = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
 					    _fieldsToCopy4 = [].concat(_toConsumableArray(state.fieldsToCopy)),
@@ -62081,82 +62170,21 @@
 					    fieldIndexToRemove = void 0;
 
 					if (_accordion15.length > 1) {
-						_jsonData12.groups = (0, _helpers.removeArrayElement)(_jsonData12.groups, _groupOneIndex4);
-
-						_jsonData12.fields.forEach(function (field) {
-							var groupKeys = field.group.split('|');
-
-							if (element.key === groupKeys[0]) {
-								fieldIndexToRemove = _jsonData12.fields.map(function (elem, i) {
-									return elem.group.split('|')[0];
-								}).indexOf(element.key);
-
-								_jsonData12.fields = (0, _helpers.removeArrayElement)(_jsonData12.fields, fieldIndexToRemove);
-							}
-						});
-					} else {
-						console.log('%c Löschen nicht möglich, da mindestens eine Gruppe vorhanden sein muss!', 'color: red; font-weight: bold');
-					}
-
-					_jsonData12.groups.forEach(function (groupOne) {
-						groupOne.marked = false;
-						groupOne.groups.forEach(function (groupTwo) {
-							groupTwo.marked = false;
-						});
-					});
-
-					_jsonData12.fields.forEach(function (field) {
-						field.marked = false;
-					});
-
-					_accordion15 = (0, _helpers.setAccordionItems)(_jsonData12);
-					_groupsLevelOneToCopy3.length = [];
-					_groupsLevelTwoToCopy3.length = [];
-					_fieldsToCopy4.length = [];
-
-					state = _extends({}, state, { jsonData: _jsonData12, accordion: _accordion15, groupsLevelOneToCopy: _groupsLevelOneToCopy3, groupsLevelTwoToCopy: _groupsLevelTwoToCopy3, fieldsToCopy: _fieldsToCopy4 });
-					return state;
-					break;
-				}
-
-			case "DELETE_GROUP_L2":
-				{
-					var _groupOneKey6 = action.groupOneKey,
-					    _element = action.element,
-					    _indexInGroupOne2 = action.indexInGroupOne,
-					    subAccLength = action.subAccLength,
-					    _buttonId = 'btn_group_level_two_mark_' + _element.key;
-
-					var _accordion16 = [].concat(_toConsumableArray(state.accordion)),
-					    _jsonData13 = _extends({}, state.jsonData),
-					    _groupsLevelOneToCopy4 = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
-					    _groupsLevelTwoToCopy4 = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
-					    _fieldsToCopy5 = [].concat(_toConsumableArray(state.fieldsToCopy)),
-					    _groupOneIndex5 = void 0,
-					    _fieldIndexToRemove = void 0,
-					    _indexForElementToRemove = void 0;
-
-					if (subAccLength > 1) {
-
-						_groupOneIndex5 = _jsonData13.groups.map(function (elem, i) {
-							return elem.key;
-						}).indexOf(_groupOneKey6);
-
-						_jsonData13.groups[_groupOneIndex5].groups = (0, _helpers.removeArrayElement)(_jsonData13.groups[_groupOneIndex5].groups, _indexInGroupOne2);
+						_jsonData13.groups = (0, _helpers.removeArrayElement)(_jsonData13.groups, _groupOneIndex4);
 
 						_jsonData13.fields.forEach(function (field) {
 							var groupKeys = field.group.split('|');
 
-							if (_element.key === groupKeys[1]) {
-								_fieldIndexToRemove = _jsonData13.fields.map(function (elem, i) {
-									return elem.group.split('|')[1];
-								}).indexOf(_element.key);
+							if (element.key === groupKeys[0]) {
+								fieldIndexToRemove = _jsonData13.fields.map(function (elem, i) {
+									return elem.group.split('|')[0];
+								}).indexOf(element.key);
 
-								_jsonData13.fields = (0, _helpers.removeArrayElement)(_jsonData13.fields, _fieldIndexToRemove);
+								_jsonData13.fields = (0, _helpers.removeArrayElement)(_jsonData13.fields, fieldIndexToRemove);
 							}
 						});
 					} else {
-						console.log('%c Löschen nicht möglich, da mindestens eine Untergruppe vorhanden sein muss!', 'color: red; font-weight: bold');
+						console.log('%c Löschen nicht möglich, da mindestens eine Gruppe vorhanden sein muss!', 'color: red; font-weight: bold');
 					}
 
 					_jsonData13.groups.forEach(function (groupOne) {
@@ -62170,12 +62198,73 @@
 						field.marked = false;
 					});
 
-					_accordion16 = (0, _helpers.setAccordionItems)(_jsonData13);
+					_accordion15 = (0, _helpers.setAccordionItems)(_jsonData13);
+					_groupsLevelOneToCopy3.length = [];
+					_groupsLevelTwoToCopy3.length = [];
+					_fieldsToCopy4.length = [];
+
+					state = _extends({}, state, { jsonData: _jsonData13, accordion: _accordion15, groupsLevelOneToCopy: _groupsLevelOneToCopy3, groupsLevelTwoToCopy: _groupsLevelTwoToCopy3, fieldsToCopy: _fieldsToCopy4 });
+					return state;
+					break;
+				}
+
+			case "DELETE_GROUP_L2":
+				{
+					var _groupOneKey6 = action.groupOneKey,
+					    _element = action.element,
+					    _indexInGroupOne2 = action.indexInGroupOne,
+					    subAccLength = action.subAccLength,
+					    _buttonId = 'btn_group_level_two_mark_' + _element.key;
+
+					var _accordion16 = [].concat(_toConsumableArray(state.accordion)),
+					    _jsonData14 = _extends({}, state.jsonData),
+					    _groupsLevelOneToCopy4 = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
+					    _groupsLevelTwoToCopy4 = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
+					    _fieldsToCopy5 = [].concat(_toConsumableArray(state.fieldsToCopy)),
+					    _groupOneIndex5 = void 0,
+					    _fieldIndexToRemove = void 0,
+					    _indexForElementToRemove = void 0;
+
+					if (subAccLength > 1) {
+
+						_groupOneIndex5 = _jsonData14.groups.map(function (elem, i) {
+							return elem.key;
+						}).indexOf(_groupOneKey6);
+
+						_jsonData14.groups[_groupOneIndex5].groups = (0, _helpers.removeArrayElement)(_jsonData14.groups[_groupOneIndex5].groups, _indexInGroupOne2);
+
+						_jsonData14.fields.forEach(function (field) {
+							var groupKeys = field.group.split('|');
+
+							if (_element.key === groupKeys[1]) {
+								_fieldIndexToRemove = _jsonData14.fields.map(function (elem, i) {
+									return elem.group.split('|')[1];
+								}).indexOf(_element.key);
+
+								_jsonData14.fields = (0, _helpers.removeArrayElement)(_jsonData14.fields, _fieldIndexToRemove);
+							}
+						});
+					} else {
+						console.log('%c Löschen nicht möglich, da mindestens eine Untergruppe vorhanden sein muss!', 'color: red; font-weight: bold');
+					}
+
+					_jsonData14.groups.forEach(function (groupOne) {
+						groupOne.marked = false;
+						groupOne.groups.forEach(function (groupTwo) {
+							groupTwo.marked = false;
+						});
+					});
+
+					_jsonData14.fields.forEach(function (field) {
+						field.marked = false;
+					});
+
+					_accordion16 = (0, _helpers.setAccordionItems)(_jsonData14);
 					_groupsLevelOneToCopy4.length = [];
 					_groupsLevelTwoToCopy4.length = [];
 					_fieldsToCopy5.length = [];
 
-					state = _extends({}, state, { jsonData: _jsonData13, accordion: _accordion16, groupsLevelOneToCopy: _groupsLevelOneToCopy4, groupsLevelTwoToCopy: _groupsLevelTwoToCopy4, fieldsToCopy: _fieldsToCopy5 });
+					state = _extends({}, state, { jsonData: _jsonData14, accordion: _accordion16, groupsLevelOneToCopy: _groupsLevelOneToCopy4, groupsLevelTwoToCopy: _groupsLevelTwoToCopy4, fieldsToCopy: _fieldsToCopy5 });
 					return state;
 					break;
 				}
@@ -62187,24 +62276,24 @@
 					    fieldsLength = action.fieldsLength,
 					    _buttonId2 = "btn_field_" + _element2.key;
 
-					var _jsonData14 = _extends({}, state.jsonData),
+					var _jsonData15 = _extends({}, state.jsonData),
 					    _accordion17 = [].concat(_toConsumableArray(state.accordion)),
 					    _fieldsToCopy6 = [].concat(_toConsumableArray(state.fieldsToCopy));
 
 					if (fieldsLength > 1) {
-						_jsonData14.fields = (0, _helpers.removeArrayElement)(_jsonData14.fields, indexInJson);
+						_jsonData15.fields = (0, _helpers.removeArrayElement)(_jsonData15.fields, indexInJson);
 					} else {
 						console.log('%c Löschen nicht möglich, da mindestens ein Feld vorhanden sein muss!', 'color: red; font-weight: bold');
 					}
 
-					_jsonData14.fields.forEach(function (field) {
+					_jsonData15.fields.forEach(function (field) {
 						field.marked = false;
 					});
 
-					_accordion17 = (0, _helpers.setAccordionItems)(_jsonData14);
+					_accordion17 = (0, _helpers.setAccordionItems)(_jsonData15);
 					_fieldsToCopy6.length = [];
 
-					state = _extends({}, state, { jsonData: _jsonData14, accordion: _accordion17, groupsLevelOneToCopy: groupsLevelOneToCopy, groupsLevelTwoToCopy: groupsLevelTwoToCopy, fieldsToCopy: _fieldsToCopy6 });
+					state = _extends({}, state, { jsonData: _jsonData15, accordion: _accordion17, groupsLevelOneToCopy: groupsLevelOneToCopy, groupsLevelTwoToCopy: groupsLevelTwoToCopy, fieldsToCopy: _fieldsToCopy6 });
 					return state;
 					break;
 				}
@@ -62212,28 +62301,28 @@
 			case "MARK_GROUP_L1":
 				{
 					var _element3 = action.element,
-					    groupIndexInJson = action.groupIndexInJson,
+					    _groupIndexInJson = action.groupIndexInJson,
 					    _buttonId3 = 'btn_group_level_one_mark_' + _element3.key;
 
 					var _groupsLevelOneToCopy5 = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
-					    _jsonData15 = _extends({}, state.jsonData),
+					    _jsonData16 = _extends({}, state.jsonData),
 					    _accordion18 = [].concat(_toConsumableArray(state.accordion)),
 					    _indexForElementToRemove2 = void 0;
 
-					if (_jsonData15.groups[groupIndexInJson].marked) {
+					if (_jsonData16.groups[_groupIndexInJson].marked) {
 						_indexForElementToRemove2 = _groupsLevelOneToCopy5.map(function (key, i) {
 							return key;
 						}).indexOf(_element3.key);
 
 						_groupsLevelOneToCopy5 = (0, _helpers.removeArrayElement)(_groupsLevelOneToCopy5, _indexForElementToRemove2);
-						_jsonData15.groups[groupIndexInJson].marked = false;
+						_jsonData16.groups[_groupIndexInJson].marked = false;
 					} else {
-						_jsonData15.groups[groupIndexInJson].marked = true;
-						_groupsLevelOneToCopy5.push(_jsonData15.groups[groupIndexInJson].key);
+						_jsonData16.groups[_groupIndexInJson].marked = true;
+						_groupsLevelOneToCopy5.push(_jsonData16.groups[_groupIndexInJson].key);
 					}
 
-					_accordion18 = (0, _helpers.setAccordionItems)(_jsonData15);
-					state = _extends({}, state, { jsonData: _jsonData15, accordion: _accordion18, groupsLevelOneToCopy: _groupsLevelOneToCopy5 });
+					_accordion18 = (0, _helpers.setAccordionItems)(_jsonData16);
+					state = _extends({}, state, { jsonData: _jsonData16, accordion: _accordion18, groupsLevelOneToCopy: _groupsLevelOneToCopy5 });
 					return state;
 					break;
 				}
@@ -62244,7 +62333,7 @@
 					    _groupOneIndex6 = action.groupOneIndex,
 					    _indexInGroupOne3 = action.indexInGroupOne;
 
-					var _jsonData16 = _extends({}, state.jsonData),
+					var _jsonData17 = _extends({}, state.jsonData),
 					    _accordion19 = [].concat(_toConsumableArray(state.accordion)),
 					    _groupsLevelTwoToCopy5 = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
 					    _indexForElementToRemove3 = void 0;
@@ -62255,14 +62344,14 @@
 						}).indexOf(_element4.key);
 
 						_groupsLevelTwoToCopy5 = (0, _helpers.removeArrayElement)(_groupsLevelTwoToCopy5, _indexForElementToRemove3);
-						_jsonData16.groups[_groupOneIndex6].groups[_indexInGroupOne3].marked = false;
+						_jsonData17.groups[_groupOneIndex6].groups[_indexInGroupOne3].marked = false;
 					} else {
-						_jsonData16.groups[_groupOneIndex6].groups[_indexInGroupOne3].marked = true;
-						_groupsLevelTwoToCopy5.push(_jsonData16.groups[_groupOneIndex6].groups[_indexInGroupOne3].key);
+						_jsonData17.groups[_groupOneIndex6].groups[_indexInGroupOne3].marked = true;
+						_groupsLevelTwoToCopy5.push(_jsonData17.groups[_groupOneIndex6].groups[_indexInGroupOne3].key);
 					}
 
-					_accordion19 = (0, _helpers.setAccordionItems)(_jsonData16);
-					state = _extends({}, state, { jsonData: _jsonData16, accordion: _accordion19, groupsLevelTwoToCopy: _groupsLevelTwoToCopy5 });
+					_accordion19 = (0, _helpers.setAccordionItems)(_jsonData17);
+					state = _extends({}, state, { jsonData: _jsonData17, accordion: _accordion19, groupsLevelTwoToCopy: _groupsLevelTwoToCopy5 });
 					return state;
 					break;
 				}
@@ -62272,7 +62361,7 @@
 					var _field = action.field,
 					    _indexInJson = action.indexInJson;
 
-					var _jsonData17 = _extends({}, state.jsonData),
+					var _jsonData18 = _extends({}, state.jsonData),
 					    _accordion20 = [].concat(_toConsumableArray(state.accordion)),
 					    _fieldsToCopy7 = [].concat(_toConsumableArray(state.fieldsToCopy)),
 					    _indexForElementToRemove4 = void 0;
@@ -62283,14 +62372,14 @@
 						}).indexOf(_field.key);
 
 						_fieldsToCopy7 = (0, _helpers.removeArrayElement)(_fieldsToCopy7, _indexForElementToRemove4);
-						_jsonData17.fields[_indexInJson].marked = false;
+						_jsonData18.fields[_indexInJson].marked = false;
 					} else {
-						_jsonData17.fields[_indexInJson].marked = true;
-						_fieldsToCopy7.push(_jsonData17.fields[_indexInJson].key);
+						_jsonData18.fields[_indexInJson].marked = true;
+						_fieldsToCopy7.push(_jsonData18.fields[_indexInJson].key);
 					}
 
-					_accordion20 = (0, _helpers.setAccordionItems)(_jsonData17);
-					state = _extends({}, state, { jsonData: _jsonData17, accordion: _accordion20, fieldsToCopy: _fieldsToCopy7 });
+					_accordion20 = (0, _helpers.setAccordionItems)(_jsonData18);
+					state = _extends({}, state, { jsonData: _jsonData18, accordion: _accordion20, fieldsToCopy: _fieldsToCopy7 });
 					return state;
 					break;
 				}
@@ -62299,8 +62388,8 @@
 				{
 					var _groupOneIndex7 = action.groupOneIndex;
 
-					var _jsonData18 = _extends({}, state.jsonData),
-					    _jsonDataCopy = _extends({}, _jsonData18),
+					var _jsonData19 = _extends({}, state.jsonData),
+					    _jsonDataCopy = _extends({}, _jsonData19),
 					    _accordion21 = [].concat(_toConsumableArray(state.accordion)),
 					    _groupsLevelOneToCopy6 = [].concat(_toConsumableArray(state.groupsLevelOneToCopy)),
 					    _groupsLevelTwoToCopy6 = [].concat(_toConsumableArray(state.groupsLevelTwoToCopy)),
@@ -62308,23 +62397,23 @@
 					    _fieldsToCopy8 = [].concat(_toConsumableArray(state.fieldsToCopy)),
 					    counter = 0;
 
-					_jsonData18.groups.forEach(function (groupOne) {
+					_jsonData19.groups.forEach(function (groupOne) {
 						groupOne.marked = false;
 						groupOne.groups.forEach(function (groupTwo) {
 							groupTwo.marked = false;
 						});
 					});
 
-					_jsonData18.fields.forEach(function (field) {
+					_jsonData19.fields.forEach(function (field) {
 						field.marked = false;
 					});
 
-					_accordion21 = (0, _helpers.setAccordionItems)(_jsonData18);
+					_accordion21 = (0, _helpers.setAccordionItems)(_jsonData19);
 					_groupsLevelOneToCopy6.length = [];
 					_groupsLevelTwoToCopy6.length = [];
 					_fieldsToCopy8.length = [];
 
-					state = _extends({}, state, { jsonData: _jsonData18, accordion: _accordion21, groupsLevelOneToCopy: _groupsLevelOneToCopy6, groupsLevelTwoToCopy: _groupsLevelTwoToCopy6, fieldsToCopy: _fieldsToCopy8 });
+					state = _extends({}, state, { jsonData: _jsonData19, accordion: _accordion21, groupsLevelOneToCopy: _groupsLevelOneToCopy6, groupsLevelTwoToCopy: _groupsLevelTwoToCopy6, fieldsToCopy: _fieldsToCopy8 });
 					break;
 				}
 
@@ -62343,10 +62432,7 @@
 	exports.default = changeJSONAndAccordion;
 
 /***/ },
-/* 396 */,
-/* 397 */,
-/* 398 */,
-/* 399 */
+/* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {"use strict";
@@ -63716,6 +63802,50 @@
 	    }, { "./lib/index": 5 }] }, {}, ["jsonpath"])("jsonpath");
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 397 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+	var InitJSON = {
+	   "title": "Titel Fallpauschale",
+	   "valid_from": "2015-01-01",
+	   "valid_to": "2015-12-31",
+	   "groups": [{
+	      "key": "grp_1_Gruppe_Level_1",
+	      "title": "Gruppe Level 1",
+	      "type": "group",
+	      "marked": false,
+	      "groups": [{
+	         "key": "grp_2_Gruppe_Level_2",
+	         "title": "Gruppe Level 2",
+	         "type": "group",
+	         "marked": false
+	      }]
+	   }],
+	   "fields": [{
+	      "key": "fld_feld_titel",
+	      "title": "Feld Titel",
+	      "type": "code",
+	      "group": "grp_1_Gruppe_Level_1|grp_2_Gruppe_Level_2",
+	      "cols": "",
+	      "clearBefore": false,
+	      "clearAfter": false,
+	      "edited": false,
+	      "parameters": {
+	         "css": "",
+	         "html": "",
+	         "js": ""
+	      }
+	   }]
+	};
+
+	exports.default = InitJSON;
 
 /***/ }
 /******/ ]);

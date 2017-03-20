@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import emptyJSON from './../data/EmptyJSON';
+import initJSON from './../data/initJSON';
 
 export default class Textbox extends Component {
 
@@ -11,12 +12,26 @@ export default class Textbox extends Component {
     this.destroyClickedElement = this.destroyClickedElement.bind(this);
     this.loadFileAsText = this.loadFileAsText.bind(this);
     this.clearJSONForExport = this.clearJSONForExport.bind(this);
+    this.initializeJSON = this.initializeJSON.bind(this);
+    this.loadFromStorage = this.loadFromStorage.bind(this);
 
     //getinitialState
     this.state = {
       jsonData: this.props.store.database.jsonData,
       jsonForExport: {}
     };
+  }
+
+  loadFromStorage(event) {
+    let jsonDataString = localStorage.getItem('jsonData'),
+        jsonData = JSON.parse(jsonDataString);
+
+    this.setState({
+      jsonData
+    });
+
+    $('#mainArea').val(jsonDataString);
+    this.props.initializeJSON(jsonData);
   }
 
   saveTextAsFile(event) {
@@ -34,7 +49,6 @@ export default class Textbox extends Component {
     document.body.appendChild(downloadLink);
  
     downloadLink.click();
-    this.props.initializeJSON(emptyJSON);
   }
 
   clearJSONForExport(event) {
@@ -68,6 +82,15 @@ export default class Textbox extends Component {
  
   destroyClickedElement(event) {
     document.body.removeChild(event.target);
+  }
+
+  initializeJSON(event) {
+    this.setState({
+      jsonData: initJSON
+    });
+
+    $('#mainArea').val(JSON.stringify(initJSON, null, 2));
+    this.props.initializeJSON(initJSON);
   }
  
   loadFileAsText(event) {
@@ -142,7 +165,8 @@ export default class Textbox extends Component {
             <input type="button" onClick={(e) => this.loadFileAsText(e)} value="Ausgewählte Datei laden"/>
             <div id="fileError" className="display-hidden error-style">Warnung: Keine Datei ausgewählt!</div>
             <input type="button" onClick={this.props.changeJSON.bind(null, this.state.jsonData)} value="JSON aktualisieren"/>
-            <input type="button" onClick={this.props.initializeJSON.bind(null, this.state.jsonData)} value="NEU"/>     
+            <input type="button" onClick={(e) => this.initializeJSON(e)} value="NEU"/>
+            <input type="button" onClick={(e) => this.loadFromStorage(e)} value="Zuletzt gespeichertes JSON laden"/>      
       </div>
     );
   };

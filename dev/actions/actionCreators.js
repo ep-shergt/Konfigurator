@@ -94,9 +94,10 @@ export function shiftGroupsTwo(groupOneKey, groupTwoKey, groupOneIndex, indexInG
 	}
 }
 
-export function shiftGroupsOne(groupOneKey) {
+export function shiftGroupsOne(groupIndexInJSON, groupOneKey) {
 	return {
 		type: 'SHIFT_GROUP_ONE',
+		groupIndexInJSON,
 		groupOneKey
 	}
 }

@@ -174,6 +174,8 @@ class Configurator extends Component {
     	$('#dateMainTitle').removeAttr('required');
     	$('#endDateMainTitle').removeAttr('required');
     	$('#inputExportKey').removeAttr('required');
+
+    	localStorage.setItem('jsonData', JSON.stringify(newJsonData, null, 2));
     }
 
     componentWillMount() {

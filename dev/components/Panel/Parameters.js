@@ -90,7 +90,8 @@ class Parameters extends Component {
 
 	removeElement(event) {
 		let fieldToEdit = {...this.state.fieldToEdit},
-			indexForRemove = Number(event.target.id.split('_')[1]);
+			indexForRemove = Number(event.target.id.split('_')[1]),
+			self = this;
 
 		fieldToEdit.parameters.options.map((obj, i) => {
 			obj.title = $('#modalTitle_' + i.toString()).val();
@@ -107,7 +108,7 @@ class Parameters extends Component {
 
 		$('#' + fieldToEdit.type + '_' + indexForRemove.toString()).animate({height: "0px"}, 300);
 		setTimeout(() => {
-			this.generateElements(fieldToEdit.parameters.options);
+			self.generateElements(fieldToEdit.parameters.options);
 		}, 301);
 	}
 
@@ -221,8 +222,8 @@ class Parameters extends Component {
 			          <input id="idTextWidth" type="text" className="form-control input-sm"
 			                 name="inputTextWidthParams" placeholder="Breite in Pixel" onChange={this.handleWidthChange.bind(this)}/>            
 			        </div>
-			     </div>
-			     <div id="selectParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
+			    </div>
+			    <div id="selectParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
 			     	<div className="row vertical-align">
 			            <div className="input-group col-xs-4">
 			                <label className="label-check"><input id="idInline" type="checkbox" value="inline" />  inline</label>
@@ -242,6 +243,10 @@ class Parameters extends Component {
 	          		<a onClick={(e) => this.addElements(e)} className="div-margin btn  btn-success btn-sm btn-add" href="#">
 						<i className="fa fa-plus fa-plus-extra" aria-hidden="true"></i>
 					</a>
+					<div id="idSelectContainer" className="param-wrapper div-margin">
+						<span>Container</span>
+						<textarea className="div-margin form-control textarea-container" rows="5" id="textAreaContainer"></textarea>
+					</div>
 			    </div>
 			</div>
 	    )

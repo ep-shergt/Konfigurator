@@ -48,7 +48,9 @@ class StandardPanelInput extends Component {
       case 'select':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#idSelectMultiple').removeClass('display-hidden');
+         $('#idSelectContainer').removeClass('display-hidden');
         fieldToEdit.parameters.options = [];
+        fieldToEdit.parameters.container = "";
         break;
     }
 

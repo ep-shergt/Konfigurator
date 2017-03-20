@@ -69,7 +69,7 @@ class Field extends Component {
     this.props.changeFieldToEdit(field);
 
     $('#inputTitle').val(field.title);
-    $('#colSelectField').val(field.cols);
+    $('#colSelect').val(field.cols);
     $('#fieldType').val(field.type);
     $('#inputExportKey').val(field.exportKey);
     $('#idClearBefore').prop("checked", field.clearBefore);
@@ -115,9 +115,11 @@ class Field extends Component {
       case 'select':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#idSelectMultiple').removeClass('display-hidden');
+        $('#idSelectContainer').removeClass('display-hidden');
         $('#idInline').prop("checked", field.parameters.inline);
         $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
         $('#idMultiple').prop("checked", field.parameters.multiple);
+        $('#textAreaContainer').val(field.parameters.container);
         break;
     }
 

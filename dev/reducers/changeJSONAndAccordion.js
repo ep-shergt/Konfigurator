@@ -40,13 +40,39 @@ let	accordion = setAccordionItems(jsonDataCopy),
 const changeJSONAndAccordion = (state = initialState, action) => {
 	switch(action.type){
 		case "SHIFT_GROUP_ONE": {
-			const { groupOneKey } = action;
+			const { groupIndexInJson, groupOneKey } = action;
 
 			let accordion = [...state.accordion],
 		    	jsonData = {...state.jsonData},
 		    	groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
 		    	groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
-		    	fieldsToCopy = [...state.fieldsToCopy];
+		    	fieldsToCopy = [...state.fieldsToCopy],
+		    	groupObjects = [],
+		    	newTargetIndex = [],
+		    	jsonKeys = [];
+
+		    jsonData.groups.forEach((group) => {
+		    	jsonKeys.push((group.key));
+		    });
+
+		    groupsLevelOneToCopy = jsonKeys.filter(v => groupsLevelOneToCopy.includes(v));
+
+		    groupsLevelOneToCopy.forEach((key) =>{
+		    	jsonData.groups.map((group, index) => {
+		    		if (key === group.key) {
+		    			groupObjects.push(group);
+		    			jsonData.groups = removeArrayElement(jsonData.groups, index);
+		    		}
+		    	});
+		    });
+
+			newTargetIndex = jsonData.groups.map((groupOne, i) => {
+				return groupOne.key;
+			}).indexOf(groupOneKey);
+
+			for (var i = 0; i < groupObjects.length; i++) {
+				jsonData.groups = insertArrayElement(jsonData.groups, groupObjects[i], newTargetIndex + i);
+			} 
 
 			jsonData.groups.forEach((groupOne) => {
 				groupOne.marked = false;
@@ -105,6 +131,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 
     				if (groupTwoIndex >= 0) {
     					let fieldGroups = groupOne.key + '|' + key;
+
 	    				groupTwoInJson = jsonData.groups[i].groups[groupTwoIndex];
 	    				jsonData.groups[i].groups = removeArrayElement(jsonData.groups[i].groups, groupTwoIndex);
 						groupObjects.push(groupTwoInJson);
@@ -552,8 +579,9 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 		}
 
 		case "INITIALIZE_JSON": {
+			const {jsonData} = action;
 			let accordion = [...state.accordion];
-
+			console.log('bla');
 			accordion = setAccordionItems(jsonData);
 
 			state = {...state, jsonData, accordion}

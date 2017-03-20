@@ -19,6 +19,7 @@ class Accordion extends Component {
     this.handleEdit = this.handleEdit.bind(this);
     this.createNewGroupOne = this.createNewGroupOne.bind(this);
     this.handleInsert = this.handleInsert.bind(this);
+    this.shift = this.shift.bind(this);
 
     this.state = {
       jsonData: this.props.store.database.jsonData,
@@ -38,6 +39,10 @@ class Accordion extends Component {
     setTimeout(() => {
       this.updateMarking(newAccordion)
     }, 100);
+  }
+
+  shift(groupIndexInJson, groupOneKey) {
+    this.props.shiftGroupsOne(groupIndexInJson, groupOneKey);
   }
 
   createNewGroupOne(groupOneIndexInJson) {
@@ -212,7 +217,7 @@ class Accordion extends Component {
                       <ul className="dropdown-menu">
                         <li><a href="#" onClick={(e) => this.handleEdit(e, i)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                         <li><a href="#" onClick={() => this.createNewGroupOne(groupIndexInJson)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
-                        <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
+                        <li><a href="#" onClick={() => this.shift(groupIndexInJson, elem.key)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
                         <li><a href="#" onClick={(e) => this.handleInsert(e, groupIndexInJson)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
                         <li><a href="#" onClick={this.props.deleteGroupLevelOne.bind(null, groupIndexInJson, elem)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
                       </ul>
