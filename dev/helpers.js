@@ -37,7 +37,7 @@ export function setAccordionItems(jsonDataCopy) {
     let accordion = [],
         jsonDataNew = {...jsonDataCopy},
         groups = [...jsonDataNew.groups];
-    
+   
     groups.forEach((group) => {
       if (group.groups[0] !== undefined) {
         let groupLevelOneKey = group.key;
@@ -57,6 +57,8 @@ export function setAccordionItems(jsonDataCopy) {
         });
       }
     });
+
+
 
     groups.forEach((i) => {
       accordion.push({

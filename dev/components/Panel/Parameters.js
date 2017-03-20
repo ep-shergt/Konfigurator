@@ -115,54 +115,57 @@ class Parameters extends Component {
 		let elemHtml = "",
 			fieldType = this.state.fieldType,
 			self = this,
+			newOptions = options !== undefined ? options : [],
 			elemArray;
 
-		for (var i = 0; i < options.length; i++) {
-			let addon = '_' + i.toString(),
-				id = fieldType + addon;
+		if (newOptions.length >= 0) {
+			for (var i = 0; i < newOptions.length; i++) {
+				let addon = '_' + i.toString(),
+					id = fieldType + addon;
 
-			elemHtml += '<div class="space-between options-inputs" id=' + id + '>' +
-						    '<div class="delete-markup added">' +
-						    	'<i id="delete' + addon + '" class="fa fa-times fa-2x times-style" aria-hidden="true"></i>' +
-						    '</div>' +
-							'<div class="div-margin dyn-elem">' +
-								'<div class="qu-margin">' +
-									'<div class="input-group param-input-margin">' +
-							            '<span class="input-group-addon">Title</span>' +
-							            '<input required id="modalTitle' + addon + '" type="text" class="form-control input-sm"' +
-							                    'name="modalTitle' + addon + '" placeholder="Titel" />' +            
+				elemHtml += '<div class="space-between options-inputs" id=' + id + '>' +
+							    '<div class="delete-markup added">' +
+							    	'<i id="delete' + addon + '" class="fa fa-times fa-2x times-style" aria-hidden="true"></i>' +
+							    '</div>' +
+								'<div class="div-margin dyn-elem">' +
+									'<div class="qu-margin">' +
+										'<div class="input-group param-input-margin">' +
+								            '<span class="input-group-addon">Title</span>' +
+								            '<input required id="modalTitle' + addon + '" type="text" class="form-control input-sm"' +
+								                    'name="modalTitle' + addon + '" placeholder="Titel" />' +            
+								        '</div>' +
+								        '<div class="input-group param-input-margin">' +
+								            '<span class="input-group-addon">Value</span>' +
+								            '<input required id="modalValue' + addon + '" type="text" class="form-control input-sm"' +
+								                   'name="modalValue' + addon + '" placeholder="Wert" />' +       
+								        '</div>' +
+								        '<div class="input-group param-input-margin">' + 
+								            '<span class="input-group-addon">Score</span>' +
+								            '<input id="modalScore' + addon + '" type="text" class="form-control input-sm"' + 
+								                   'name="modalScore' + addon + '" placeholder="Score" />' +             
+								        '</div>' + 
+								        '<div class="param-input-margin align-center">' +
+								        	'<label><input id="modalDefault' + addon + '" type="checkbox" value="default" />  Default</label>' +		            	
+								        '</div>' +
 							        '</div>' +
-							        '<div class="input-group param-input-margin">' +
-							            '<span class="input-group-addon">Value</span>' +
-							            '<input required id="modalValue' + addon + '" type="text" class="form-control input-sm"' +
-							                   'name="modalValue' + addon + '" placeholder="Wert" />' +       
-							        '</div>' +
-							        '<div class="input-group param-input-margin">' + 
-							            '<span class="input-group-addon">Score</span>' +
-							            '<input id="modalScore' + addon + '" type="text" class="form-control input-sm"' + 
-							                   'name="modalScore' + addon + '" placeholder="Score" />' +             
-							        '</div>' + 
-							        '<div class="param-input-margin align-center">' +
-							        	'<label><input id="modalDefault' + addon + '" type="checkbox" value="default" />  Default</label>' +		            	
-							        '</div>' +
-						        '</div>' +
-					    	'</div>' +
-					    '</div>';
-		}
+						    	'</div>' +
+						    '</div>';
+			}
 
-		$('#elementsAnchor').empty();
-	    $('#elementsAnchor').append(elemHtml);
-	    $('.added').on('click', (event) => {
-	    	self.removeElement(event);
-	    });
+			$('#elementsAnchor').empty();
+		    $('#elementsAnchor').append(elemHtml);
+		    $('.added').on('click', (event) => {
+		    	self.removeElement(event);
+		    });
 
-	    elemArray = $('.options-inputs').toArray();
-	    for (var j = 0; j < elemArray.length; j++) {
-	    	$('#modalTitle_' + j.toString()).val(options[j].title);
-	    	$('#modalValue_' + j.toString()).val(options[j].value);
-	    	$('#modalScore_' + j.toString()).val(options[j].score);
-	    	$('#modalDefault_' + j.toString()).prop("checked", options[j].default);
-	    }
+		    elemArray = $('.options-inputs').toArray();
+		    for (var j = 0; j < elemArray.length; j++) {
+		    	$('#modalTitle_' + j.toString()).val(newOptions[j].title);
+		    	$('#modalValue_' + j.toString()).val(newOptions[j].value);
+		    	$('#modalScore_' + j.toString()).val(newOptions[j].score);
+		    	$('#modalDefault_' + j.toString()).prop("checked", newOptions[j].default);
+		    }
+		}	
 	}
 
 	componentDidMount() {

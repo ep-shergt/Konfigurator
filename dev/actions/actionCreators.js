@@ -83,6 +83,24 @@ export function shiftFields(fieldIndexInJson) {
 		fieldIndexInJson
 	}
 }
+
+export function shiftGroupsTwo(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne) {
+	return {
+		type: 'SHIFT_GROUP_TWO',
+		groupOneKey,
+		groupTwoKey,
+		groupOneIndex,
+		indexInGroupOne
+	}
+}
+
+export function shiftGroupsOne(groupOneKey) {
+	return {
+		type: 'SHIFT_GROUP_ONE',
+		groupOneKey
+	}
+}
+
 //*******************************************************************************
 
 
@@ -150,11 +168,12 @@ export function deleteGroupLevelTwo(groupOneKey, element, indexInGroupOne, subAc
 	}
 }
 
-export function deleteField(element, indexInJson) {
+export function deleteField(element, indexInJson, fieldsLength) {
 	return {
 		type: 'DELETE_FIELD',
 		element,
-		indexInJson
+		indexInJson,
+		fieldsLength
 	}
 }
 

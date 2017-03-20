@@ -15,9 +15,10 @@ class SubAccordion extends Component {
     this.updateMarking = this.updateMarking.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.createNewGroupTwo = this.createNewGroupTwo.bind(this);
-    this.handleDeleteGroupOne = this.handleDeleteGroupOne.bind(this);
+    this.handleDeleteGroupTwo = this.handleDeleteGroupTwo.bind(this);
     this.handleMarking = this.handleMarking.bind(this);
     this.handleInsert = this.handleInsert.bind(this);
+    this.shift = this.shift.bind(this);
 
     this.state = {
       jsonData: this.props.store.database.jsonData,
@@ -58,7 +59,7 @@ class SubAccordion extends Component {
     this.props.setAccordionToOpen(groupLevelOneKey);
   }
 
-  handleDeleteGroupOne(groupLevelOneKey, elem, indexInGroupOne) {
+  handleDeleteGroupTwo(groupLevelOneKey, elem, indexInGroupOne) {
     const subAccLength = this.state.subAccordionItems.length;
 
     this.props.deleteGroupLevelTwo(groupLevelOneKey, elem, indexInGroupOne, subAccLength);
@@ -116,6 +117,11 @@ class SubAccordion extends Component {
         $('#' + buttonId).removeClass('marked');
       }
     });
+  }
+
+  shift(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne) {
+    this.props.shiftGroupsTwo(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne);
+    this.props.setAccordionToOpen(groupOneKey);
   }
 
   componentWillMount() {
@@ -237,9 +243,9 @@ class SubAccordion extends Component {
                             <ul className="dropdown-menu">
                               <li><a href="#" onClick={(e) => this.handleEdit(e, groupLevelOneKey, elem.key)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                               <li><a href="#" onClick={() => this.createNewGroupTwo(groupLevelOneKey, indexInGroupOne)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
-                              <li><a href="#"><i className="fa-margin fa fa-scissors" aria-hidden="true"></i> Ausschneiden</a></li>
+                              <li><a href="#" onClick={() => this.shift(groupLevelOneKey, elem.key, groupOneIndex, indexInGroupOne)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
                               <li><a href="#" onClick={(e) => this.handleInsert(e, groupOneIndex, indexInGroupOne, groupLevelOneKey)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
-                              <li><a href="#" onClick={() => this.handleDeleteGroupOne(groupLevelOneKey, elem, indexInGroupOne)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
+                              <li><a href="#" onClick={() => this.handleDeleteGroupTwo(groupLevelOneKey, elem, indexInGroupOne)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
                             </ul>
                           </div>          
                         </div>

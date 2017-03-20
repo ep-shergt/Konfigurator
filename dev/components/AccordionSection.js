@@ -54,10 +54,10 @@ class AccordionSection extends Component {
     this.props.setSubAccordionToOpen(keysArr);
   }
 
-  handleDeleteField(elem, fieldIndex) {
+  handleDeleteField(elem, fieldIndex, fieldsLength) {
     let keysArr = elem.group.split('|');
 
-    this.props.deleteField(elem, fieldIndex);
+    this.props.deleteField(elem, fieldIndex, fieldsLength);
     this.props.setSubAccordionToOpen(keysArr);
   }
 
@@ -201,6 +201,7 @@ class AccordionSection extends Component {
                   buttonId = "btn_field_" + elem.key,
                   groupKeys = elem.group,
                   jsonData = this.state.jsonData,
+                  fieldsLength = this.state.fields.length,
                   fieldIndexInJsonData;
 
               fieldIndexInJsonData = jsonData.fields.map((field, i) => {
@@ -226,7 +227,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
