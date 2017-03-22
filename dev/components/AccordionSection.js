@@ -15,7 +15,7 @@ class AccordionSection extends Component {
     this.updateMarking = this.updateMarking.bind(this);
     this.updateFieldsToCopy = this.updateFieldsToCopy.bind(this);
     this.updateJsonData = this.updateJsonData.bind(this);
-    this.insertfieldsToCopy = this.insertfieldsToCopy.bind(this);
+    this.insertFieldsToCopy = this.insertFieldsToCopy.bind(this);
     this.createNewField = this.createNewField.bind(this);
     this.handleDeleteField = this.handleDeleteField.bind(this);
     this.shift = this.shift.bind(this);
@@ -42,8 +42,11 @@ class AccordionSection extends Component {
     }, 100);
   }
 
-  insertfieldsToCopy(elem, index) {
+  insertFieldsToCopy(groupKeys, field, fieldIndexInJsonData) {
+    let keysArr = groupKeys.split('|');
 
+    this.props.insertFieldsToCopy(field, fieldIndexInJsonData);
+    this.props.setSubAccordionToOpen(keysArr);
   }
 
   createNewField(groupKeys, fieldIndex) {
@@ -226,7 +229,7 @@ class AccordionSection extends Component {
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
+                                <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
                                 <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
@@ -254,8 +257,8 @@ class AccordionSection extends Component {
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -282,8 +285,8 @@ class AccordionSection extends Component {
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -310,8 +313,8 @@ class AccordionSection extends Component {
                               <ul className="dropdown-menu">
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
-                                <li><a href="#" onClick={() => this.insertfieldsToCopy(elem, i)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>

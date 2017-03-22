@@ -221,11 +221,21 @@ export function insertGroupLevelOne(groupOneIndex) {
 	}
 }
 
-export function insertGroupLevelTwo(groupOneIndex, indexInGroupOne) {
+export function insertGroupLevelTwo(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne) {
 	return {
 		type: 'INSERT_GROUP_TWO',
+		groupOneKey,
+		groupTwoKey,
 		groupOneIndex,
 		indexInGroupOne
+	}
+}
+
+export function insertFieldsToCopy(field, fieldIndexInJson) {
+	return {
+		type: 'INSERT_FIELDS',
+		field,
+		fieldIndexInJson
 	}
 }
 

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import emptyJSON from './../data/EmptyJSON';
-import initJSON from './../data/initJSON';
 
 export default class Textbox extends Component {
 
@@ -85,6 +83,45 @@ export default class Textbox extends Component {
   }
 
   initializeJSON(event) {
+    let initJSON = {
+       "title" :   "Titel Fallpauschale",
+       "valid_from" :   "2015-01-01",
+       "valid_to" :   "2015-12-31",
+       "groups" :   [
+          {
+             "key" :   "grp_1_Gruppe_Level_1",
+             "title" :   "Gruppe Level 1",
+             "type" :   "group",
+             "marked" :  false,
+             "groups" :   [
+                {
+                   "key" :   "grp_2_Gruppe_Level_2",
+                   "title" :   "Gruppe Level 2",
+                   "type" :   "group",
+                   "marked" :  false
+                }
+             ]
+          },
+       ],
+       "fields" :   [
+          {
+             "key" :   "fld_feld_titel",
+             "title" :   "Feld Titel",
+             "type" :   "code",
+             "group" :   "grp_1_Gruppe_Level_1|grp_2_Gruppe_Level_2",
+             "cols" :   "",
+             "clearBefore" :  false,
+             "clearAfter" :   false,
+             "edited" : false,
+             "parameters" :   {
+                "css" :   "",
+                "html" :   "",
+                "js" :   ""
+             }
+          }
+       ]
+    };
+    
     this.setState({
       jsonData: initJSON
     });

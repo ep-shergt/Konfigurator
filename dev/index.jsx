@@ -11,8 +11,7 @@ const router = (
 			<Route path="/" component={App}>
 			</Route>
 		</Router>
-	</Provider>
-	
+	</Provider>	
 )
 
 render(router, document.getElementById('container')); 

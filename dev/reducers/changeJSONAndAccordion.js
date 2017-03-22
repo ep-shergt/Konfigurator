@@ -150,9 +150,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 
 		    groupKeys.forEach((key) => {
 		    	jsonData.fields.forEach((field) => {
-
 		    		if (field.group === key) {
-		    			console.log('field', field);
 		    			let groupTwo = field.group.split('|')[1];
 		    			field.group = jsonData.groups[groupOneIndex].key + '|' + groupTwo;
 		    		}
@@ -581,7 +579,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 		case "INITIALIZE_JSON": {
 			const {jsonData} = action;
 			let accordion = [...state.accordion];
-			console.log('bla');
+
 			accordion = setAccordionItems(jsonData);
 
 			state = {...state, jsonData, accordion}
@@ -706,11 +704,11 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 			let jsonData = {...state.jsonData},
 				accordion = [...state.accordion],
 				fieldsToCopy = [...state.fieldsToCopy];
-	
+		
 			if (fieldsLength > 1) {
 				jsonData.fields = removeArrayElement(jsonData.fields, indexInJson);
 			} else {
-				console.log('%c Löschen nicht möglich, da mindestens ein Feld vorhanden sein muss!', 'color: red; font-weight: bold');
+				console.log('%c Löschen des Feldes nicht möglich, da mindestens ein Feld vorhanden sein muss!', 'color: red; font-weight: bold');
 			}
 
 			jsonData.fields.forEach((field) => {
@@ -806,13 +804,81 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 		case "INSERT_GROUP_ONE": {
 			const {groupOneIndex} = action;
 			let jsonData = {...state.jsonData},
-				jsonDataCopy = {...jsonData},
+				jsonDataCopy = Object.assign({}, jsonData),
+				jsonDataCopy2 = Object.assign({}, jsonData),
 				accordion = [...state.accordion],
 				groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
 				groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
-				groupsToCopy = [],
 				fieldsToCopy = [...state.fieldsToCopy],
-				counter = 0;
+				groupObjects = [],
+				fieldObjects = [],
+				groupKeys = [],
+				jsonKeys = [];
+
+			jsonData.groups.forEach((group) => {
+		    	jsonKeys.push((group.key));
+		    });
+
+		    groupsLevelOneToCopy = jsonKeys.filter(v => groupsLevelOneToCopy.includes(v));
+
+		    groupsLevelOneToCopy.forEach((key) =>{
+		    	jsonDataCopy2.groups.map((group, index) => {
+		    		if (key === group.key) {
+		    			let groupCopy = {
+							    key: "",
+							    title: "",
+							    type: "group",
+							    marked: false,
+							    groups: []
+							},
+		    				newTimestamp = + new Date();
+
+		    			groupCopy.key = 'grp_1_' + (newTimestamp + getRandomInt(1, 1000)).toString();
+		    			groupCopy.title = group.title;
+		    			group.groups.forEach((subGroup) => {
+		    				let newSubGroup = {  
+								   key: "",
+								   title : "",
+								   type : "group",
+								   marked: false    
+								},
+								newTimestamp2 = + new Date(),
+								subArray = [],
+		    					oldFieldGroup,
+		    					newFieldGroup;
+
+		    				oldFieldGroup = key + '|' + subGroup.key;
+		    				newSubGroup.key = 'grp_2_' + (newTimestamp2 + getRandomInt(1, 1000)).toString();
+		    				newSubGroup.title = subGroup.title;
+		    				newFieldGroup = groupCopy.key + '|' + newSubGroup.key;
+		    				subArray.push(oldFieldGroup);
+		    				subArray.push(newFieldGroup);
+		    				groupKeys.push(subArray);
+		    				groupCopy.groups.push(newSubGroup);
+
+		    			});
+
+		    			groupObjects.push(groupCopy);
+		    		}
+		    	});
+		    });
+
+		    groupKeys.forEach((keys) => {
+		    	jsonDataCopy.fields.forEach((field) => {
+		    		if (field.group === keys[0]) {
+		    			let fieldCopy = Object.assign({}, field),
+		    				newTimestamp3 = + new Date();
+
+		    			fieldCopy.group = keys[1];
+		    			fieldCopy.key = 'fld_' + (newTimestamp3 + getRandomInt(1, 1000)).toString();
+		    			jsonData.fields.push(fieldCopy);
+		    		}
+		    	});	
+		    });
+
+			for (var i = 0; i < groupObjects.length; i++) {
+				jsonData.groups = insertArrayElement(jsonData.groups, groupObjects[i], groupOneIndex + i);
+			}
 
 			jsonData.groups.forEach((groupOne) => {
 				groupOne.marked = false;
@@ -835,7 +901,140 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 		}
 
 		case "INSERT_GROUP_TWO": {
-			console.log('affe');
+			const {groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne} = action;
+			let jsonData = {...state.jsonData},
+				jsonDataCopy = {}, 
+				accordion = [...state.accordion],
+				groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
+				groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
+				fieldsToCopy = [...state.fieldsToCopy],
+		    	groupObjects = [],
+		    	fieldObjects = [],
+		    	target,
+		    	jsonKeys = [],
+		    	// must have same length as groupObjects, needed for new groupkey for fields
+		    	groupKeys = [];
+
+		    target = jsonData.groups[groupOneIndex].groups[indexInGroupOne];
+
+		    jsonData.groups.forEach((groupOne) => {
+		    	groupOne.groups.forEach((groupTwo) => {
+					jsonKeys.push(groupTwo.key);
+		    	});
+			});
+
+			groupsLevelTwoToCopy = jsonKeys.filter(v => groupsLevelTwoToCopy.includes(v));
+
+		    groupsLevelTwoToCopy.map((key, index) => {
+		    	jsonData.groups.map((groupOne, i) => {
+		    		let groupTwoIndex,
+		    			groupTwoInJson;
+
+    				groupTwoIndex = groupOne.groups.map((groupTwo, j) => {
+    					return groupTwo.key;
+    				}).indexOf(key);
+
+    				if (groupTwoIndex >= 0) {
+    					let fieldGroups = groupOne.key + '|' + key,
+    						fieldGroupsCopy = "",
+    						subArray = [fieldGroups],
+    						newTimestamp = + new Date();
+
+	    				groupTwoInJson = Object.assign({},jsonData.groups[i].groups[groupTwoIndex]);
+						groupTwoInJson.key = 'grp_2_' + (newTimestamp + getRandomInt(1, 1000)).toString();
+						subArray.push(groupTwoInJson.key);
+						groupObjects.push(groupTwoInJson);
+						groupKeys.push(subArray);
+    				}
+  				});
+		    });
+
+			for (var i = 0; i < groupObjects.length; i++) {
+				jsonData.groups[groupOneIndex].groups = insertArrayElement(jsonData.groups[groupOneIndex].groups, groupObjects[i], indexInGroupOne + i);
+			}
+
+			jsonDataCopy = Object.assign({}, jsonData);
+
+		    groupKeys.forEach((subArray) => {
+		    	jsonDataCopy.fields.map((field, index) => {
+		    		if (field.group === subArray[0]) {
+		    			let fieldCopy = Object.assign({}, field),
+		    				newTimestamp = + new Date();
+
+		    			fieldCopy.key = 'fld_' + (newTimestamp + getRandomInt(1, 1000)).toString();
+		    			fieldCopy.group = jsonData.groups[groupOneIndex].key + '|' + subArray[1];
+		    			jsonData.fields.push(fieldCopy);
+		    		}	
+		    	});
+		    });
+
+			jsonData.groups.forEach((groupOne) => {
+				groupOne.marked = false;
+				groupOne.groups.forEach((groupTwo) => {
+					groupTwo.marked = false;
+				});
+			});
+
+			jsonData.fields.forEach((field) => {
+				field.marked = false;
+			});
+
+			accordion = setAccordionItems(jsonData);
+			groupsLevelOneToCopy.length = [];
+			groupsLevelTwoToCopy.length = [];
+			fieldsToCopy.length = [];
+
+			state = {...state, jsonData, accordion, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy};
+			return state;
+			break;
+		}
+
+		case "INSERT_FIELDS": {
+			const {field, fieldIndexInJson} = action;
+			let jsonData = {...state.jsonData},
+				accordion = [...state.accordion],
+				fieldsToCopy = [...state.fieldsToCopy],
+				fieldObjects = [],
+				jsonKeys = [];
+
+			jsonData.fields.forEach((i) => {
+				jsonKeys.push(i.key);
+			});
+
+			fieldsToCopy = jsonKeys.filter(v => fieldsToCopy.includes(v));
+
+			fieldsToCopy.forEach((key) => {
+				let fieldIndex,
+					fieldInJson;
+
+				fieldIndex = jsonData.fields.map((elem, i) => {
+    				return elem.key;
+  				}).indexOf(key);
+
+				fieldInJson = Object.assign({},jsonData.fields[fieldIndex]);
+				fieldObjects.push(fieldInJson);
+			});
+
+
+			fieldObjects.forEach((elem) => {
+				let newTimestamp = + new Date();
+
+				elem.key = 'fld_' + (newTimestamp + getRandomInt(1, 1000)).toString();
+				elem.group = field.group;
+			});
+
+			for (var i = 0; i < fieldObjects.length; i++) {
+				jsonData.fields = insertArrayElement(jsonData.fields, fieldObjects[i], fieldIndexInJson + i);
+			}
+
+			jsonData.fields.forEach((field) => {
+				field.marked = false;
+			});
+
+			accordion = setAccordionItems(jsonData);
+			fieldsToCopy.length = [];
+
+			state = {...state, jsonData, accordion, groupsLevelOneToCopy, groupsLevelTwoToCopy, fieldsToCopy};
 			break;
 		}
 

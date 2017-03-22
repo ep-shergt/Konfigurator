@@ -35,7 +35,7 @@ export function getRandomInt(min, max) {
 
 export function setAccordionItems(jsonDataCopy) {
     let accordion = [],
-        jsonDataNew = {...jsonDataCopy},
+        jsonDataNew = Object.assign({}, jsonDataCopy),
         groups = [...jsonDataNew.groups];
    
     groups.forEach((group) => {

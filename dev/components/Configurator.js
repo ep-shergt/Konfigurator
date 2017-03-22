@@ -147,6 +147,7 @@ class Configurator extends Component {
     					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
         				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
         				newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
+        				newFieldToEdit.parameters.container = $('#textAreaContainer').val();
         				newFieldToEdit.parameters.options = [];
 
         				for (var i = 0; i < optionsLength; i++) {

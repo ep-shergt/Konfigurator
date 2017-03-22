@@ -180,9 +180,9 @@ class SubAccordion extends Component {
     $('#panelWrapper').attr('grouponekey', groupOneKey);
   }
 
-  handleInsert(event, groupOneIndex, indexInGroupOne, groupLevelOneKey) {
-    this.props.insertGroupLevelTwo(groupOneIndex, indexInGroupOne);
-    this.props.setAccordionToOpen(groupLevelOneKey);
+  handleInsert(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne) {
+    this.props.insertGroupLevelTwo(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne);
+    this.props.setAccordionToOpen(groupOneKey);
   }
 
   render() {
@@ -244,7 +244,7 @@ class SubAccordion extends Component {
                               <li><a href="#" onClick={(e) => this.handleEdit(e, groupLevelOneKey, elem.key)}><i className="fa-margin fa fa-wrench" aria-hidden="true"></i> Bearbeiten</a></li>
                               <li><a href="#" onClick={() => this.createNewGroupTwo(groupLevelOneKey, indexInGroupOne)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element</a></li>
                               <li><a href="#" onClick={() => this.shift(groupLevelOneKey, elem.key, groupOneIndex, indexInGroupOne)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
-                              <li><a href="#" onClick={(e) => this.handleInsert(e, groupOneIndex, indexInGroupOne, groupLevelOneKey)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
+                              <li><a href="#" onClick={() => this.handleInsert(groupLevelOneKey, elem.key, groupOneIndex, indexInGroupOne)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i>Einfügen</a></li>
                               <li><a href="#" onClick={() => this.handleDeleteGroupTwo(groupLevelOneKey, elem, indexInGroupOne)}><i className="fa-margin fa fa-times" aria-hidden="true"></i>Löschen</a></li>
                             </ul>
                           </div>          
