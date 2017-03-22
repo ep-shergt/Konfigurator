@@ -3,7 +3,6 @@ import jsonData from './../data/EmptyJSON';
 import { removeArrayElement } from './../helpers';
 import { insertArrayElement } from './../helpers';
 import { getRandomInt } from './../helpers';
-import jsonpath from './../jp';
 
 const timestamp = + new Date(),
 	  keyOne = 'grp_1_' + (timestamp + getRandomInt(1, 1000)).toString(),
