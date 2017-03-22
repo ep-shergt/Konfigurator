@@ -71,8 +71,8 @@ class OptionalPanelInput extends Component {
             <div className="input-group col-xs-5">
             <label className="label-check"><input id="idCollapse" type="checkbox" value="collapse" /> collapse</label>
           </div>
-          <div className="col-xs-1"></div>
-            <div className="input-group col-xs-6">
+          <div className="col-xs-2"></div>
+            <div className="input-group col-xs-5">
             <label className="label-check"><input id="idAutoCollapse" type="checkbox" value="autocollapse" />  autocollapse</label>
           </div>
           </div>

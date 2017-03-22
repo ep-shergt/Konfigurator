@@ -36,19 +36,25 @@ class StandardPanelInput extends Component {
       case 'check':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#fillerDiv').removeClass('display-hidden');
+        $('#idInlineWrapper').removeClass('display-hidden');
+        $('#idInlineBreakWrapper').removeClass('display-hidden');
         fieldToEdit.parameters.options = [];
         break;
 
       case 'radio':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#fillerDiv').removeClass('display-hidden');
+        $('#idInlineWrapper').removeClass('display-hidden');
+        $('#idInlineBreakWrapper').removeClass('display-hidden');
         fieldToEdit.parameters.options = [];
         break;
 
       case 'select':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#idSelectMultiple').removeClass('display-hidden');
-         $('#idSelectContainer').removeClass('display-hidden');
+        $('#idSelectContainer').removeClass('display-hidden');
+        $('#fillerDivLeft').removeClass('display-hidden');
+        $('#fillerDivRight').removeClass('display-hidden');
         fieldToEdit.parameters.options = [];
         fieldToEdit.parameters.container = "";
         break;

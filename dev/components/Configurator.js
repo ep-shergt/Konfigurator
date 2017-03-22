@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Accordion from './Accordion';
 import { removeArrayElement } from './../helpers';
+import { completeValidation } from './../helpers';
 import StandardPanelInput from './Panel/StandardPanelInput';
 import OptionalPanelInput from './Panel/OptionalPanelInput';
 import Parameters from './Panel/Parameters';
@@ -33,7 +34,9 @@ class Configurator extends Component {
 		let newJsonData = {...this.state.jsonData},
 			newGroupOneToEdit = {...this.state.groupOneToEdit},
 			newGroupTwoToEdit = {...this.state.groupTwoToEdit},
-			newFieldToEdit = {...this.state.fieldToEdit};
+			newFieldToEdit = {...this.state.fieldToEdit},
+            validationValue = "",
+            validationRequired = false;
 
 		switch(configType) {
 			case 'main':
@@ -50,6 +53,9 @@ class Configurator extends Component {
 			    newGroupOneToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
 			    newGroupOneToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
 			    newGroupOneToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
+                validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")")));
+                validationRequired = $('#idValRequired').is(":checked") ? true : false;
+                newGroupOneToEdit.validation = completeValidation(validationRequired, validationValue);
 
     			if (cols !== "") {
     				newGroupOneToEdit.cols = Number($('#colSelect').val());
@@ -64,6 +70,10 @@ class Configurator extends Component {
 			    newGroupTwoToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
 			    newGroupTwoToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
 			    newGroupTwoToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
+                newGroupTwoToEdit.validation = $('#validationTextArea').val();
+                validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")")));
+                validationRequired = $('#idValRequired').is(":checked") ? true : false;
+                newGroupTwoToEdit.validation = completeValidation(validationRequired, validationValue);
 
     			if (cols !== "") {
     				newGroupTwoToEdit.cols = Number($('#colSelect').val());
@@ -144,8 +154,6 @@ class Configurator extends Component {
         				break;
 
         			case 'select':
-    					newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
-        				newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
         				newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
         				newFieldToEdit.parameters.container = $('#textAreaContainer').val();
         				newFieldToEdit.parameters.options = [];
@@ -194,7 +202,7 @@ class Configurator extends Component {
 
 		$('#dateMainTitle').val(this.state.jsonData.valid_from);
 		$('#endDateMainTitle').val(this.state.jsonData.valid_to);
-		
+
 		$(function() {
 	    	$(window).scroll(self.sticky_relocate);
 	    	self.sticky_relocate();
@@ -266,9 +274,26 @@ class Configurator extends Component {
 								<OptionalPanelInput {...this.props} />
 								<br/>
 								<Parameters {...this.props} />
-								<div id="submitButtonWrapper" className="config-wrapper display-hidden">
-									<button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
-								</div> 
+                                <div className="config-wrapper val-access-wrapper">
+    								<div id="idValidationWrapper" className="div-margin display-hidden">
+    									<p className="heading-parameter">Validation (Eingabe des JSON-Objekts)</p>
+    									<textarea className="div-margin form-control textarea-container" rows="5" id="validationTextArea" placeholder='{"property": "", ...}'></textarea>
+    									<div className="row vertical-align">
+    							     		<div id="fillerValLeft" className="input-group col-xs-5"></div>
+    							            <div id="idValRequiredWrapper" className="input-group col-xs-2">
+    							                <label className="label-check"><input id="idValRequired" type="checkbox" value="valRequired" />  required</label>
+    							            </div>
+    							            <div id="fillerValRight" className="input-group col-xs-5"></div>
+    							        </div>
+    								</div>
+    								<div id="idAccessWrapper" className="div-margin display-hidden">
+    									<p className="heading-parameter">Access</p>
+    									<textarea className="div-margin form-control textarea-container" rows="5" id="accessTextArea"></textarea>
+    								</div> 
+                                </div>
+                                <div id="submitButtonWrapper" className="config-wrapper display-hidden">
+                                    <button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
+                                </div>
 							</form>
 						</div>
 					</div>

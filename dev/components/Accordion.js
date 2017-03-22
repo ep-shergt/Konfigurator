@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import SubAccordion from './SubAccordion';
 import { removeArrayElement } from './../helpers';
+import { splitValidation } from './../helpers';
 import { getRandomInt } from './../helpers';
 
 class Accordion extends Component {
@@ -150,17 +151,22 @@ class Accordion extends Component {
 
   handleEdit(event, groupIndex) {
     const groupOneToEdit = this.state.jsonData.groups[groupIndex];
+    let validationValues = [];
 
     $('.config-wrapper').addClass('display-hidden');
+    $('.val-access-wrapper').removeClass('display-hidden');
     $('#standardInputWrapper').removeClass('display-hidden');
     $('#optionalInputWrapper').removeClass('display-hidden');
     $('#colSelectWrapper').removeClass('display-hidden');
     $('#clearWrapper').removeClass('display-hidden');
     $('#collapseWrapper').removeClass('display-hidden');
     $('#submitButtonWrapper').removeClass('display-hidden');
+    $('#idValidationWrapper').removeClass('display-hidden');
     $('#panelWrapper').attr('configtype', 'groupOne');
 
+
     this.props.changeGroupOneToEdit(groupOneToEdit);
+    validationValues = splitValidation(groupOneToEdit.validation);
 
     $('#inputTitle').val(groupOneToEdit.title);
     $('#colSelect').val(groupOneToEdit.cols);
@@ -168,6 +174,8 @@ class Accordion extends Component {
     $('#idClearAfter').prop("checked", groupOneToEdit.clearAfter);
     $('#idCollapse').prop("checked", groupOneToEdit.collapse);
     $('#idAutoCollapse').prop("checked", groupOneToEdit.autocollapse);
+    $('#idValRequired').prop("checked", validationValues[0]);
+    $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
   }
 
   handleInsert(event, groupIndexInJson) {

@@ -33,6 +33,32 @@ export function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+export function splitValidation(validation) {
+  let values = [];
+
+  if (validation.required !== undefined) {
+    values.push(validation.required);
+    delete validation['required'];
+  } else {
+    values.push(false);
+  }
+
+  values.push(validation)
+
+  return values;
+}
+
+export function completeValidation(required, validation) {
+  if (validation.required !== undefined) {
+    validation.required = required;
+  } else {
+    delete validation['required'];
+    validation.required = required;
+  }
+
+  return validation;
+}
+
 export function setAccordionItems(jsonDataCopy) {
     let accordion = [],
         jsonDataNew = Object.assign({}, jsonDataCopy),

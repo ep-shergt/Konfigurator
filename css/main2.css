@@ -14,7 +14,7 @@
 }
 
 .margin-around {
-	margin: 50px 30px 50px 30px;
+	margin: 30px;
 }
 
 .dropdown-menu>li>a {
@@ -441,18 +441,6 @@ ul.button-list>li {
 	font-size: 16px;
 }
 
-/*.cube-element:hover {
-	cursor: pointer;
+.val-access-wrapper {
+	line-height: 40px;
 }
-
-.narcissus_17w311v {
-	width: 350px !important;
-}
-
-.modal-container {
-    position: relative;
- }
- 
-.modal-container .modal, .modal-container .modal-backdrop {
-    position: absolute;
-}*/

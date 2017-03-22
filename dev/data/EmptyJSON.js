@@ -8,12 +8,14 @@ const EmptyJSON = {
          "title" :   "Gruppe Level 1",
          "type" :   "group",
          "marked" :  false,
+         "validation": {},
          "groups" :   [
             {
                "key" :   "grp_2_Gruppe_Level_2",
                "title" :   "Gruppe Level 2",
                "type" :   "group",
-               "marked" :  false
+               "marked" :  false,
+               "validation": {}
             }
          ]
       },

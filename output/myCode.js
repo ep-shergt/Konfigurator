@@ -23928,9 +23928,9 @@
 	        'div',
 	        { className: 'margin-around' },
 	        _react2.default.createElement(
-	          'div',
-	          null,
-	          'Text to Save'
+	          'h3',
+	          { id: 'headerEditJSON' },
+	          'Anzeige f\xFCr JSON'
 	        ),
 	        _react2.default.createElement('textarea', { id: 'mainArea', className: 'jsonbox', onChange: this.handleChange.bind(this) }),
 	        _react2.default.createElement(
@@ -25289,7 +25289,9 @@
 	      var newJsonData = _extends({}, this.state.jsonData),
 	          newGroupOneToEdit = _extends({}, this.state.groupOneToEdit),
 	          newGroupTwoToEdit = _extends({}, this.state.groupTwoToEdit),
-	          newFieldToEdit = _extends({}, this.state.fieldToEdit);
+	          newFieldToEdit = _extends({}, this.state.fieldToEdit),
+	          validationValue = "",
+	          validationRequired = false;
 
 	      switch (configType) {
 	        case 'main':
@@ -25306,6 +25308,9 @@
 	          newGroupOneToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
 	          newGroupOneToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
 	          newGroupOneToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
+	          validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")")));
+	          validationRequired = $('#idValRequired').is(":checked") ? true : false;
+	          newGroupOneToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
 
 	          if (cols !== "") {
 	            newGroupOneToEdit.cols = Number($('#colSelect').val());
@@ -25320,6 +25325,10 @@
 	          newGroupTwoToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
 	          newGroupTwoToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
 	          newGroupTwoToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
+	          newGroupTwoToEdit.validation = $('#validationTextArea').val();
+	          validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")")));
+	          validationRequired = $('#idValRequired').is(":checked") ? true : false;
+	          newGroupTwoToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
 
 	          if (cols !== "") {
 	            newGroupTwoToEdit.cols = Number($('#colSelect').val());
@@ -25400,8 +25409,6 @@
 	              break;
 
 	            case 'select':
-	              newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
-	              newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
 	              newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
 	              newFieldToEdit.parameters.container = $('#textAreaContainer').val();
 	              newFieldToEdit.parameters.options = [];
@@ -25545,6 +25552,46 @@
 	                _react2.default.createElement(_OptionalPanelInput2.default, this.props),
 	                _react2.default.createElement('br', null),
 	                _react2.default.createElement(_Parameters2.default, this.props),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'config-wrapper val-access-wrapper' },
+	                  _react2.default.createElement(
+	                    'div',
+	                    { id: 'idValidationWrapper', className: 'div-margin display-hidden' },
+	                    _react2.default.createElement(
+	                      'p',
+	                      { className: 'heading-parameter' },
+	                      'Validation (Eingabe des JSON-Objekts)'
+	                    ),
+	                    _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'validationTextArea', placeholder: '{"property": "", ...}' }),
+	                    _react2.default.createElement(
+	                      'div',
+	                      { className: 'row vertical-align' },
+	                      _react2.default.createElement('div', { id: 'fillerValLeft', className: 'input-group col-xs-5' }),
+	                      _react2.default.createElement(
+	                        'div',
+	                        { id: 'idValRequiredWrapper', className: 'input-group col-xs-2' },
+	                        _react2.default.createElement(
+	                          'label',
+	                          { className: 'label-check' },
+	                          _react2.default.createElement('input', { id: 'idValRequired', type: 'checkbox', value: 'valRequired' }),
+	                          '  required'
+	                        )
+	                      ),
+	                      _react2.default.createElement('div', { id: 'fillerValRight', className: 'input-group col-xs-5' })
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { id: 'idAccessWrapper', className: 'div-margin display-hidden' },
+	                    _react2.default.createElement(
+	                      'p',
+	                      { className: 'heading-parameter' },
+	                      'Access'
+	                    ),
+	                    _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'accessTextArea' })
+	                  )
+	                ),
 	                _react2.default.createElement(
 	                  'div',
 	                  { id: 'submitButtonWrapper', className: 'config-wrapper display-hidden' },
@@ -25771,17 +25818,21 @@
 	    key: 'handleEdit',
 	    value: function handleEdit(event, groupIndex) {
 	      var groupOneToEdit = this.state.jsonData.groups[groupIndex];
+	      var validationValues = [];
 
 	      $('.config-wrapper').addClass('display-hidden');
+	      $('.val-access-wrapper').removeClass('display-hidden');
 	      $('#standardInputWrapper').removeClass('display-hidden');
 	      $('#optionalInputWrapper').removeClass('display-hidden');
 	      $('#colSelectWrapper').removeClass('display-hidden');
 	      $('#clearWrapper').removeClass('display-hidden');
 	      $('#collapseWrapper').removeClass('display-hidden');
 	      $('#submitButtonWrapper').removeClass('display-hidden');
+	      $('#idValidationWrapper').removeClass('display-hidden');
 	      $('#panelWrapper').attr('configtype', 'groupOne');
 
 	      this.props.changeGroupOneToEdit(groupOneToEdit);
+	      validationValues = (0, _helpers.splitValidation)(groupOneToEdit.validation);
 
 	      $('#inputTitle').val(groupOneToEdit.title);
 	      $('#colSelect').val(groupOneToEdit.cols);
@@ -25789,6 +25840,8 @@
 	      $('#idClearAfter').prop("checked", groupOneToEdit.clearAfter);
 	      $('#idCollapse').prop("checked", groupOneToEdit.collapse);
 	      $('#idAutoCollapse').prop("checked", groupOneToEdit.autocollapse);
+	      $('#idValRequired').prop("checked", validationValues[0]);
+	      $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
 	    }
 	  }, {
 	    key: 'handleInsert',
@@ -26162,6 +26215,7 @@
 	      var jsonData = _extends({}, this.state.jsonData);
 	      var groupOneIndex = void 0,
 	          groupTwoIndex = void 0,
+	          validationValues = {},
 	          newGroupTwoToEdit = _extends({}, this.state.groupTwoToEdit);
 
 	      groupOneIndex = jsonData.groups.map(function (elem, i) {
@@ -26175,15 +26229,18 @@
 	      newGroupTwoToEdit = jsonData.groups[groupOneIndex].groups[groupTwoIndex];
 
 	      $('.config-wrapper').addClass('display-hidden');
+	      $('.val-access-wrapper').removeClass('display-hidden');
 	      $('#standardInputWrapper').removeClass('display-hidden');
 	      $('#optionalInputWrapper').removeClass('display-hidden');
 	      $('#colSelectWrapper').removeClass('display-hidden');
 	      $('#clearWrapper').removeClass('display-hidden');
 	      $('#collapseWrapper').removeClass('display-hidden');
 	      $('#submitButtonWrapper').removeClass('display-hidden');
+	      $('#idValidationWrapper').removeClass('display-hidden');
 	      $('#panelWrapper').attr('configtype', 'groupTwo');
 
 	      this.props.changeGroupTwoToEdit(newGroupTwoToEdit);
+	      validationValues = (0, _helpers.splitValidation)(newGroupTwoToEdit.validation);
 
 	      $('#inputTitle').val(newGroupTwoToEdit.title);
 	      $('#colSelect').val(newGroupTwoToEdit.cols);
@@ -26192,6 +26249,8 @@
 	      $('#idCollapse').prop("checked", newGroupTwoToEdit.collapse);
 	      $('#idAutoCollapse').prop("checked", newGroupTwoToEdit.autocollapse);
 	      $('#panelWrapper').attr('grouponekey', groupOneKey);
+	      $('#idValRequired').prop("checked", validationValues[0]);
+	      $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
 	    }
 	  }, {
 	    key: 'handleInsert',
@@ -27128,6 +27187,9 @@
 
 	      $('.config-wrapper').addClass('display-hidden');
 	      $('.param-wrapper').addClass('display-hidden');
+	      $('.val-access-wrapper').removeClass('display-hidden');
+	      $('#idValidationWrapper').removeClass('display-hidden');
+	      $('#idAccessWrapper').removeClass('display-hidden');
 	      $('#standardInputWrapper').removeClass('display-hidden');
 	      $('#fieldTypeWrapper').removeClass('display-hidden');
 	      $('#exportKeyWrapper').removeClass('display-hidden');
@@ -27176,6 +27238,8 @@
 	          $('#fillerDiv').removeClass('display-hidden');
 	          $('#idInline').prop("checked", field.parameters.inline);
 	          $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
+	          $('#idInlineWrapper').removeClass('display-hidden');
+	          $('#idInlineBreakWrapper').removeClass('display-hidden');
 	          break;
 
 	        case 'radio':
@@ -27183,16 +27247,18 @@
 	          $('#fillerDiv').removeClass('display-hidden');
 	          $('#idInline').prop("checked", field.parameters.inline);
 	          $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
+	          $('#idInlineWrapper').removeClass('display-hidden');
+	          $('#idInlineBreakWrapper').removeClass('display-hidden');
 	          break;
 
 	        case 'select':
 	          $('#selectParamsWrapper').removeClass('display-hidden');
 	          $('#idSelectMultiple').removeClass('display-hidden');
 	          $('#idSelectContainer').removeClass('display-hidden');
-	          $('#idInline').prop("checked", field.parameters.inline);
-	          $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
 	          $('#idMultiple').prop("checked", field.parameters.multiple);
 	          $('#textAreaContainer').val(field.parameters.container);
+	          $('#fillerDivLeft').removeClass('display-hidden');
+	          $('#fillerDivRight').removeClass('display-hidden');
 	          break;
 	      }
 
@@ -27447,6 +27513,8 @@
 	exports.insertArrayElement = insertArrayElement;
 	exports.isInRange = isInRange;
 	exports.getRandomInt = getRandomInt;
+	exports.splitValidation = splitValidation;
+	exports.completeValidation = completeValidation;
 	exports.setAccordionItems = setAccordionItems;
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -27484,6 +27552,32 @@
 
 	function getRandomInt(min, max) {
 	  return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	function splitValidation(validation) {
+	  var values = [];
+
+	  if (validation.required !== undefined) {
+	    values.push(validation.required);
+	    delete validation['required'];
+	  } else {
+	    values.push(false);
+	  }
+
+	  values.push(validation);
+
+	  return values;
+	}
+
+	function completeValidation(required, validation) {
+	  if (validation.required !== undefined) {
+	    validation.required = required;
+	  } else {
+	    delete validation['required'];
+	    validation.required = required;
+	  }
+
+	  return validation;
 	}
 
 	function setAccordionItems(jsonDataCopy) {
@@ -29706,12 +29800,16 @@
 	        case 'check':
 	          $('#selectParamsWrapper').removeClass('display-hidden');
 	          $('#fillerDiv').removeClass('display-hidden');
+	          $('#idInlineWrapper').removeClass('display-hidden');
+	          $('#idInlineBreakWrapper').removeClass('display-hidden');
 	          fieldToEdit.parameters.options = [];
 	          break;
 
 	        case 'radio':
 	          $('#selectParamsWrapper').removeClass('display-hidden');
 	          $('#fillerDiv').removeClass('display-hidden');
+	          $('#idInlineWrapper').removeClass('display-hidden');
+	          $('#idInlineBreakWrapper').removeClass('display-hidden');
 	          fieldToEdit.parameters.options = [];
 	          break;
 
@@ -29719,6 +29817,8 @@
 	          $('#selectParamsWrapper').removeClass('display-hidden');
 	          $('#idSelectMultiple').removeClass('display-hidden');
 	          $('#idSelectContainer').removeClass('display-hidden');
+	          $('#fillerDivLeft').removeClass('display-hidden');
+	          $('#fillerDivRight').removeClass('display-hidden');
 	          fieldToEdit.parameters.options = [];
 	          fieldToEdit.parameters.container = "";
 	          break;
@@ -30077,10 +30177,10 @@
 	                ' collapse'
 	              )
 	            ),
-	            _react2.default.createElement('div', { className: 'col-xs-1' }),
+	            _react2.default.createElement('div', { className: 'col-xs-2' }),
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'input-group col-xs-6' },
+	              { className: 'input-group col-xs-5' },
 	              _react2.default.createElement(
 	                'label',
 	                { className: 'label-check' },
@@ -30417,9 +30517,10 @@
 						_react2.default.createElement(
 							'div',
 							{ className: 'row vertical-align' },
+							_react2.default.createElement('div', { id: 'fillerDivLeft', className: 'input-group col-xs-4 display-hidden param-wrapper' }),
 							_react2.default.createElement(
 								'div',
-								{ className: 'input-group col-xs-4' },
+								{ id: 'idInlineWrapper', className: 'input-group col-xs-4 display-hidden param-wrapper' },
 								_react2.default.createElement(
 									'label',
 									{ className: 'label-check' },
@@ -30438,9 +30539,10 @@
 									'  multiple'
 								)
 							),
+							_react2.default.createElement('div', { id: 'fillerDivRight', className: 'input-group col-xs-4 display-hidden param-wrapper' }),
 							_react2.default.createElement(
 								'div',
-								{ className: 'input-group col-xs-4' },
+								{ id: 'idInlineBreakWrapper', className: 'input-group col-xs-4 display-hidden param-wrapper' },
 								_react2.default.createElement(
 									'label',
 									{ className: 'label-check' },
@@ -61501,6 +61603,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	var timestamp = +new Date(),
@@ -61688,7 +61792,8 @@
 								key: "",
 								title: "Neue Gruppe Level 2",
 								type: "group",
-								marked: false
+								marked: false,
+								validation: {}
 							},
 							    fieldToCreate = {
 								key: "",
@@ -61835,18 +61940,20 @@
 
 					var _jsonData5 = _extends({}, state.jsonData),
 					    _accordion5 = [].concat(_toConsumableArray(state.accordion)),
-					    groupOneToCreate = {
+					    groupOneToCreate = _defineProperty({
 						key: "",
 						title: "Neue Gruppe Level 1",
 						type: "group",
 						marked: false,
+						validation: {},
 						groups: [{
 							key: "",
 							title: "Neue Gruppe Level 2",
 							type: "group",
-							marked: false
+							marked: false,
+							validation: {}
 						}]
-					},
+					}, 'validation', {}),
 					    _fieldToCreate = {
 						key: "",
 						title: 'Neues Feld',
@@ -61895,7 +62002,8 @@
 						key: "",
 						title: "Neue Gruppe Level 2",
 						type: "group",
-						marked: false
+						marked: false,
+						validation: {}
 					},
 					    _fieldToCreate2 = {
 						key: "",
@@ -62405,7 +62513,8 @@
 									title: "",
 									type: "group",
 									marked: false,
-									groups: []
+									groups: [],
+									validation: {}
 								},
 								    _newTimestamp3 = +new Date();
 
@@ -62416,7 +62525,8 @@
 										key: "",
 										title: "",
 										type: "group",
-										marked: false
+										marked: false,
+										validation: {}
 									},
 									    newTimestamp2 = +new Date(),
 									    subArray = [],
@@ -62651,11 +62761,13 @@
 	      "title": "Gruppe Level 1",
 	      "type": "group",
 	      "marked": false,
+	      "validation": {},
 	      "groups": [{
 	         "key": "grp_2_Gruppe_Level_2",
 	         "title": "Gruppe Level 2",
 	         "type": "group",
-	         "marked": false
+	         "marked": false,
+	         "validation": {}
 	      }]
 	   }],
 	   "fields": [{

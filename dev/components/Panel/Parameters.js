@@ -225,17 +225,19 @@ class Parameters extends Component {
 			    </div>
 			    <div id="selectParamsWrapper" className="col-xs-12 display-hidden param-wrapper">
 			     	<div className="row vertical-align">
-			            <div className="input-group col-xs-4">
+			     		<div id="fillerDivLeft" className="input-group col-xs-4 display-hidden param-wrapper"></div>
+			            <div id="idInlineWrapper" className="input-group col-xs-4 display-hidden param-wrapper">
 			                <label className="label-check"><input id="idInline" type="checkbox" value="inline" />  inline</label>
 			            </div>
 			            <div id="fillerDiv" className="input-group col-xs-4 display-hidden param-wrapper"></div>
 			            <div id="idSelectMultiple" className="input-group col-xs-4 display-hidden param-wrapper">
 			                <label className="label-check"><input id="idMultiple" type="checkbox" value="multiple" />  multiple</label>
 			            </div>
-			            <div className="input-group col-xs-4">
+			            <div id="fillerDivRight" className="input-group col-xs-4 display-hidden param-wrapper"></div>
+			            <div id="idInlineBreakWrapper" className="input-group col-xs-4 display-hidden param-wrapper">
 			                <label className="label-check"><input id="idInlineBreak" type="checkbox" value="inlineBreak" />  inlineBreak</label>
 			            </div>
-			         </div>
+			        </div>
 					<div id="elementsAnchor" className="div-margin">
 
 					</div>

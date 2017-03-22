@@ -10,7 +10,8 @@ const GroupOneToCreate = {
          type : "group",
          marked: false
       }
-   ]
+   ],
+   validation: {}
 };
 
 export default GroupOneToCreate;

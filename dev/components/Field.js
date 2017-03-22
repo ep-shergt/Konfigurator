@@ -55,6 +55,9 @@ class Field extends Component {
 
     $('.config-wrapper').addClass('display-hidden');
     $('.param-wrapper').addClass('display-hidden');
+    $('.val-access-wrapper').removeClass('display-hidden');
+    $('#idValidationWrapper').removeClass('display-hidden');
+    $('#idAccessWrapper').removeClass('display-hidden');
     $('#standardInputWrapper').removeClass('display-hidden');
     $('#fieldTypeWrapper').removeClass('display-hidden');
     $('#exportKeyWrapper').removeClass('display-hidden');
@@ -103,6 +106,8 @@ class Field extends Component {
         $('#fillerDiv').removeClass('display-hidden');
         $('#idInline').prop("checked", field.parameters.inline);
         $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
+        $('#idInlineWrapper').removeClass('display-hidden');
+        $('#idInlineBreakWrapper').removeClass('display-hidden');
         break;
 
       case 'radio':
@@ -110,16 +115,18 @@ class Field extends Component {
         $('#fillerDiv').removeClass('display-hidden');
         $('#idInline').prop("checked", field.parameters.inline);
         $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
+        $('#idInlineWrapper').removeClass('display-hidden');
+        $('#idInlineBreakWrapper').removeClass('display-hidden');
         break;
 
       case 'select':
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#idSelectMultiple').removeClass('display-hidden');
         $('#idSelectContainer').removeClass('display-hidden');
-        $('#idInline').prop("checked", field.parameters.inline);
-        $('#idInlineBreak').prop("checked", field.parameters.inlineBreak);
         $('#idMultiple').prop("checked", field.parameters.multiple);
         $('#textAreaContainer').val(field.parameters.container);
+        $('#fillerDivLeft').removeClass('display-hidden');
+        $('#fillerDivRight').removeClass('display-hidden');
         break;
     }
 

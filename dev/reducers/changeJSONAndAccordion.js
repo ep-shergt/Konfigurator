@@ -173,7 +173,8 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 						   key: "",
 						   title : "Neue Gruppe Level 2",
 						   type : "group",
-						   marked: false    
+						   marked: false,
+						   validation: {}    
 						},
 						fieldToCreate = {
 						   key: "",
@@ -314,14 +315,17 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				   title: "Neue Gruppe Level 1",
 				   type: "group",
 				   marked: false,
+				   validation: {},
 				   groups: [
 				      {
 				         key: "",
 				         title : "Neue Gruppe Level 2",
 				         type : "group",
-				         marked: false
+				         marked: false,
+				         validation: {}
 				      }
-				   ]
+				   ],
+				   validation: {}
 				},				
 				fieldToCreate = {
 				   key: "",
@@ -367,7 +371,8 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				   key: "",
 				   title : "Neue Gruppe Level 2",
 				   type : "group",
-				   marked: false    
+				   marked: false, 
+				   validation: {}    
 				},
 				fieldToCreate = {
 				   key: "",
@@ -828,7 +833,8 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 							    title: "",
 							    type: "group",
 							    marked: false,
-							    groups: []
+							    groups: [],
+							    validation: {}
 							},
 		    				newTimestamp = + new Date();
 
@@ -839,7 +845,8 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 								   key: "",
 								   title : "",
 								   type : "group",
-								   marked: false    
+								   marked: false,
+								   validation: {}  
 								},
 								newTimestamp2 = + new Date(),
 								subArray = [],

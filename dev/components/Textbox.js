@@ -121,7 +121,7 @@ export default class Textbox extends Component {
           }
        ]
     };
-    
+
     this.setState({
       jsonData: initJSON
     });
@@ -191,7 +191,7 @@ export default class Textbox extends Component {
   render() {
     return (
       <div className="margin-around">  
-        <div>Text to Save</div>
+        <h3 id="headerEditJSON">Anzeige für JSON</h3>
         <textarea id="mainArea" className="jsonbox" onChange={this.handleChange.bind(this)}></textarea>     
             <div>Dateinamen zum Speichern festlegen:</div>
             <input type="text" id="inputFileNameToSaveAs" />

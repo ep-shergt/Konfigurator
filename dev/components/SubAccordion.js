@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import AccordionSection from './AccordionSection';
 import { removeArrayElement } from './../helpers';
+import { splitValidation } from './../helpers';
 import { getRandomInt } from './../helpers';
 
 class SubAccordion extends Component {
@@ -148,6 +149,7 @@ class SubAccordion extends Component {
   handleEdit(event, groupOneKey, groupTwoKey) {
     const jsonData = {...this.state.jsonData};
     let groupOneIndex, groupTwoIndex,
+        validationValues = {},
         newGroupTwoToEdit = {...this.state.groupTwoToEdit}; 
 
     groupOneIndex = jsonData.groups.map((elem, i) => {
@@ -161,15 +163,18 @@ class SubAccordion extends Component {
     newGroupTwoToEdit = jsonData.groups[groupOneIndex].groups[groupTwoIndex];
          
     $('.config-wrapper').addClass('display-hidden');
+    $('.val-access-wrapper').removeClass('display-hidden');
     $('#standardInputWrapper').removeClass('display-hidden');
     $('#optionalInputWrapper').removeClass('display-hidden');
     $('#colSelectWrapper').removeClass('display-hidden');
     $('#clearWrapper').removeClass('display-hidden');
     $('#collapseWrapper').removeClass('display-hidden');
     $('#submitButtonWrapper').removeClass('display-hidden');
+    $('#idValidationWrapper').removeClass('display-hidden');
     $('#panelWrapper').attr('configtype', 'groupTwo');
 
     this.props.changeGroupTwoToEdit(newGroupTwoToEdit);
+    validationValues = splitValidation(newGroupTwoToEdit.validation);
     
     $('#inputTitle').val(newGroupTwoToEdit.title);
     $('#colSelect').val(newGroupTwoToEdit.cols);
@@ -178,6 +183,8 @@ class SubAccordion extends Component {
     $('#idCollapse').prop("checked", newGroupTwoToEdit.collapse);
     $('#idAutoCollapse').prop("checked", newGroupTwoToEdit.autocollapse);
     $('#panelWrapper').attr('grouponekey', groupOneKey);
+    $('#idValRequired').prop("checked", validationValues[0]);
+    $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
   }
 
   handleInsert(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne) {
