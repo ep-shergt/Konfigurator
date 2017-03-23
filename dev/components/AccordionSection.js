@@ -57,11 +57,17 @@ class AccordionSection extends Component {
     this.props.setSubAccordionToOpen(keysArr);
   }
 
-  handleDeleteField(elem, fieldIndex, fieldsLength) {
-    let keysArr = elem.group.split('|');
+  handleDeleteField(elem, fieldIndex, fieldsLength, ulFieldId) {
+    let keysArr = elem.group.split('|'),
+        self = this;
 
-    this.props.deleteField(elem, fieldIndex, fieldsLength);
-    this.props.setSubAccordionToOpen(keysArr);
+    if (fieldsLength > 1) {
+      $('#' + ulFieldId).fadeOut(400, () => {
+        self.props.deleteField(elem, fieldIndex, fieldsLength);
+        self.props.setSubAccordionToOpen(keysArr);   
+      });
+    }
+
   }
 
   handleMarking(elem, fieldIndex) {
@@ -201,6 +207,7 @@ class AccordionSection extends Component {
           >
             {this.state.fields.map((elem, i) => {
               let fieldId = 'field_' + elem.key,
+                  ulFieldId = 'ul' + elem.key,
                   buttonId = "btn_field_" + elem.key,
                   groupKeys = elem.group,
                   jsonData = this.state.jsonData,
@@ -215,7 +222,7 @@ class AccordionSection extends Component {
                 case elem.clearBefore && elem.clearAfter:
                   return (
                     <div key={i} id={fieldId} className="clear-both">
-                      <ul className="field-ul">
+                      <ul id={ulFieldId} className="field-ul">
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
@@ -230,7 +237,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -243,7 +250,7 @@ class AccordionSection extends Component {
                 case elem.clearBefore && !elem.clearAfter:
                   return (
                     <div key={i} id={fieldId} className="clear-left">
-                      <ul className="field-ul">
+                      <ul id={ulFieldId} className="field-ul">
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
@@ -258,7 +265,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -271,7 +278,7 @@ class AccordionSection extends Component {
                 case !elem.clearBefore && elem.clearAfter:
                   return (
                     <div key={i} id={fieldId} className="clear-right">
-                      <ul className="field-ul">
+                      <ul id={ulFieldId} className="field-ul">
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
@@ -286,7 +293,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>
@@ -299,7 +306,7 @@ class AccordionSection extends Component {
                 case !elem.clearBefore && !elem.clearAfter:
                   return (
                     <div key={i} id={fieldId}>
-                      <ul className="field-ul">
+                      <ul id={ulFieldId} className="field-ul">
                         <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
@@ -314,7 +321,7 @@ class AccordionSection extends Component {
                                 <li><a href="#" onClick={() => this.createNewField(groupKeys, fieldIndexInJsonData)}><i className="fa-margin fa fa-plus" aria-hidden="true"></i> Neues Element anlegen</a></li>
                                 <li><a href="#" onClick={() => this.shift(groupKeys, fieldIndexInJsonData)}><i className="fa fa-arrows" aria-hidden="true"></i> Verschieben</a></li>
                                 <li><a href="#" onClick={() => this.insertFieldsToCopy(groupKeys, elem, fieldIndexInJsonData)}><i className="fa-margin fa fa-arrow-down" aria-hidden="true"></i> Markierte Elemente einfügen</a></li>
-                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
+                                <li><a href="#" onClick={() => this.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId)}><i className="fa-margin fa fa-times" aria-hidden="true"></i> Element löschen</a></li>
                               </ul>
                             </div>
                           </div>

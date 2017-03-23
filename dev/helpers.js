@@ -35,7 +35,7 @@ export function getRandomInt(min, max) {
 
 export function splitValidation(validation) {
   let values = [];
-
+  
   if (validation.required !== undefined) {
     values.push(validation.required);
     delete validation['required'];
@@ -83,8 +83,6 @@ export function setAccordionItems(jsonDataCopy) {
         });
       }
     });
-
-
 
     groups.forEach((i) => {
       accordion.push({

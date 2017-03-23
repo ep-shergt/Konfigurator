@@ -23789,16 +23789,29 @@
 	        delete elem['marked'];
 	        delete elem['open'];
 	        delete elem['marked'];
+	        if ($.isEmptyObject(elem.validation)) {
+	          delete elem['validation'];
+	        }
 	        elem.groups.forEach(function (i) {
 	          delete i['fields'];
 	          delete i['marked'];
 	          delete i['open'];
 	          delete i['marked'];
+	          if ($.isEmptyObject(i.validation)) {
+	            delete i['validation'];
+	          }
 	        });
 	      });
 
 	      jsonCopy.fields.forEach(function (field) {
 	        delete field['marked'];
+	        if ($.isEmptyObject(field.validation)) {
+	          delete field['validation'];
+	        }
+
+	        if ($.isEmptyObject(field.access)) {
+	          delete field['access'];
+	        }
 	      });
 
 	      jsonForExport = jsonCopy;
@@ -23826,10 +23839,12 @@
 	          "title": "Gruppe Level 1",
 	          "type": "group",
 	          "marked": false,
+	          "validation": {},
 	          "groups": [{
 	            "key": "grp_2_Gruppe_Level_2",
 	            "title": "Gruppe Level 2",
 	            "type": "group",
+	            "validation": {},
 	            "marked": false
 	          }]
 	        }],
@@ -23846,7 +23861,9 @@
 	            "css": "",
 	            "html": "",
 	            "js": ""
-	          }
+	          },
+	          "validation": {},
+	          "access": {}
 	        }]
 	      };
 
@@ -23875,6 +23892,18 @@
 
 	          document.getElementById("mainArea").value = textFromFileLoaded;
 	          jsonData = JSON.parse(JSON.stringify(eval("(" + textFromFileLoaded + ")")));
+
+	          jsonData.groups.forEach(function (groupOne) {
+	            groupOne.validation = groupOne.validation !== undefined ? groupOne.validation : {};
+	            groupOne.groups.forEach(function (groupTwo) {
+	              groupTwo.validation = groupTwo.validation !== undefined ? groupTwo.validation : {};
+	            });
+	          });
+
+	          jsonData.fields.forEach(function (field) {
+	            field.validation = field.validation !== undefined ? field.validation : {};
+	            field.access = field.access !== undefined ? field.access : {};
+	          });
 
 	          self.setState({
 	            jsonData: jsonData
@@ -25265,7 +25294,6 @@
 	    var _this = _possibleConstructorReturn(this, (Configurator.__proto__ || Object.getPrototypeOf(Configurator)).call(this, props));
 
 	    _this.handleFieldData = _this.handleFieldData.bind(_this);
-	    _this.sticky_relocate = _this.sticky_relocate.bind(_this);
 
 	    _this.state = {
 	      jsonData: _this.props.store.database.jsonData,
@@ -25290,8 +25318,9 @@
 	          newGroupOneToEdit = _extends({}, this.state.groupOneToEdit),
 	          newGroupTwoToEdit = _extends({}, this.state.groupTwoToEdit),
 	          newFieldToEdit = _extends({}, this.state.fieldToEdit),
-	          validationValue = "",
-	          validationRequired = false;
+	          validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")"))),
+	          validationRequired = $('#idValRequired').is(":checked") ? true : false,
+	          access = JSON.parse(JSON.stringify(eval("(" + $('#accessTextArea').val() + ")")));
 
 	      switch (configType) {
 	        case 'main':
@@ -25308,8 +25337,6 @@
 	          newGroupOneToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
 	          newGroupOneToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
 	          newGroupOneToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
-	          validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")")));
-	          validationRequired = $('#idValRequired').is(":checked") ? true : false;
 	          newGroupOneToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
 
 	          if (cols !== "") {
@@ -25326,8 +25353,6 @@
 	          newGroupTwoToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
 	          newGroupTwoToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
 	          newGroupTwoToEdit.validation = $('#validationTextArea').val();
-	          validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")")));
-	          validationRequired = $('#idValRequired').is(":checked") ? true : false;
 	          newGroupTwoToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
 
 	          if (cols !== "") {
@@ -25354,6 +25379,8 @@
 	          newFieldToEdit.tooltip = $('#inputTooltip').val();
 	          newFieldToEdit.clearBefore = $("#idClearBefore").is(":checked");
 	          newFieldToEdit.clearAfter = $("#idClearAfter").is(":checked");
+	          newFieldToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
+	          newFieldToEdit.access = access;
 	          newFieldToEdit.edited = true;
 
 	          switch (fieldType) {
@@ -25458,11 +25485,6 @@
 
 	      $('#dateMainTitle').val(this.state.jsonData.valid_from);
 	      $('#endDateMainTitle').val(this.state.jsonData.valid_to);
-
-	      $(function () {
-	        $(window).scroll(self.sticky_relocate);
-	        self.sticky_relocate();
-	      });
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -25502,19 +25524,6 @@
 	      $('#endDateMainTitle').val(this.state.jsonData.valid_to);
 	    }
 	  }, {
-	    key: 'sticky_relocate',
-	    value: function sticky_relocate() {
-	      /*var window_top = $(window).scrollTop();
-	      var div_top = $('#sticky-anchor').offset().top;
-	       if (window_top > div_top) {
-	          $('#sticky').addClass('stick');
-	          $('#sticky-anchor').height($('#sticky').outerHeight());
-	      } else {
-	          $('#sticky').removeClass('stick');
-	          $('#sticky-anchor').height(0);
-	      }*/
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -25530,76 +25539,71 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col-md-4 editor-panel' },
-	          _react2.default.createElement('div', { id: 'sticky-anchor' }),
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Konfigurationspanel'
+	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { id: 'sticky' },
+	            { id: 'panelWrapper' },
 	            _react2.default.createElement(
-	              'h2',
-	              null,
-	              'Konfigurationspanel'
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { id: 'panelWrapper' },
+	              'form',
+	              { onSubmit: function onSubmit(e) {
+	                  return _this2.handleFieldData(e);
+	                } },
+	              _react2.default.createElement(_StandardPanelInput2.default, this.props),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(_OptionalPanelInput2.default, this.props),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(_Parameters2.default, this.props),
 	              _react2.default.createElement(
-	                'form',
-	                { onSubmit: function onSubmit(e) {
-	                    return _this2.handleFieldData(e);
-	                  } },
-	                _react2.default.createElement(_StandardPanelInput2.default, this.props),
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(_OptionalPanelInput2.default, this.props),
-	                _react2.default.createElement('br', null),
-	                _react2.default.createElement(_Parameters2.default, this.props),
+	                'div',
+	                { className: 'config-wrapper val-access-wrapper' },
 	                _react2.default.createElement(
 	                  'div',
-	                  { className: 'config-wrapper val-access-wrapper' },
+	                  { id: 'idValidationWrapper', className: 'div-margin display-hidden' },
+	                  _react2.default.createElement(
+	                    'p',
+	                    { className: 'heading-parameter' },
+	                    'Validation (Eingabe des JSON-Objekts)'
+	                  ),
+	                  _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'validationTextArea', placeholder: '{"property": "", ...}' }),
 	                  _react2.default.createElement(
 	                    'div',
-	                    { id: 'idValidationWrapper', className: 'div-margin display-hidden' },
-	                    _react2.default.createElement(
-	                      'p',
-	                      { className: 'heading-parameter' },
-	                      'Validation (Eingabe des JSON-Objekts)'
-	                    ),
-	                    _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'validationTextArea', placeholder: '{"property": "", ...}' }),
+	                    { className: 'row vertical-align' },
+	                    _react2.default.createElement('div', { id: 'fillerValLeft', className: 'input-group col-xs-5' }),
 	                    _react2.default.createElement(
 	                      'div',
-	                      { className: 'row vertical-align' },
-	                      _react2.default.createElement('div', { id: 'fillerValLeft', className: 'input-group col-xs-5' }),
+	                      { id: 'idValRequiredWrapper', className: 'input-group col-xs-2' },
 	                      _react2.default.createElement(
-	                        'div',
-	                        { id: 'idValRequiredWrapper', className: 'input-group col-xs-2' },
-	                        _react2.default.createElement(
-	                          'label',
-	                          { className: 'label-check' },
-	                          _react2.default.createElement('input', { id: 'idValRequired', type: 'checkbox', value: 'valRequired' }),
-	                          '  required'
-	                        )
-	                      ),
-	                      _react2.default.createElement('div', { id: 'fillerValRight', className: 'input-group col-xs-5' })
-	                    )
-	                  ),
-	                  _react2.default.createElement(
-	                    'div',
-	                    { id: 'idAccessWrapper', className: 'div-margin display-hidden' },
-	                    _react2.default.createElement(
-	                      'p',
-	                      { className: 'heading-parameter' },
-	                      'Access'
+	                        'label',
+	                        { className: 'label-check' },
+	                        _react2.default.createElement('input', { id: 'idValRequired', type: 'checkbox', value: 'valRequired' }),
+	                        '  required'
+	                      )
 	                    ),
-	                    _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'accessTextArea' })
+	                    _react2.default.createElement('div', { id: 'fillerValRight', className: 'input-group col-xs-5' })
 	                  )
 	                ),
 	                _react2.default.createElement(
 	                  'div',
-	                  { id: 'submitButtonWrapper', className: 'config-wrapper display-hidden' },
+	                  { id: 'idAccessWrapper', className: 'div-margin display-hidden config-wrapper' },
 	                  _react2.default.createElement(
-	                    'button',
-	                    { type: 'submit', className: 'btn btn-primary btn-field-confirm' },
-	                    'Best\xE4tigen'
-	                  )
+	                    'p',
+	                    { className: 'heading-parameter' },
+	                    'Access (Eingabe des JSON-Objekts)'
+	                  ),
+	                  _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', placeholder: '{"property": "", ...}', id: 'accessTextArea' })
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { id: 'submitButtonWrapper', className: 'config-wrapper display-hidden' },
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'submit', className: 'btn btn-primary btn-field-confirm' },
+	                  'Best\xE4tigen'
 	                )
 	              )
 	            )
@@ -25623,6 +25627,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -25818,7 +25824,6 @@
 	    key: 'handleEdit',
 	    value: function handleEdit(event, groupIndex) {
 	      var groupOneToEdit = this.state.jsonData.groups[groupIndex];
-	      var validationValues = [];
 
 	      $('.config-wrapper').addClass('display-hidden');
 	      $('.val-access-wrapper').removeClass('display-hidden');
@@ -25832,7 +25837,11 @@
 	      $('#panelWrapper').attr('configtype', 'groupOne');
 
 	      this.props.changeGroupOneToEdit(groupOneToEdit);
-	      validationValues = (0, _helpers.splitValidation)(groupOneToEdit.validation);
+
+	      var _splitValidation = (0, _helpers.splitValidation)(groupOneToEdit.validation),
+	          _splitValidation2 = _slicedToArray(_splitValidation, 2),
+	          firstVal = _splitValidation2[0],
+	          secondVal = _splitValidation2[1];
 
 	      $('#inputTitle').val(groupOneToEdit.title);
 	      $('#colSelect').val(groupOneToEdit.cols);
@@ -25840,8 +25849,8 @@
 	      $('#idClearAfter').prop("checked", groupOneToEdit.clearAfter);
 	      $('#idCollapse').prop("checked", groupOneToEdit.collapse);
 	      $('#idAutoCollapse').prop("checked", groupOneToEdit.autocollapse);
-	      $('#idValRequired').prop("checked", validationValues[0]);
-	      $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
+	      $('#idValRequired').prop("checked", firstVal);
+	      $('#validationTextArea').val(JSON.stringify(secondVal, null, 2));
 	    }
 	  }, {
 	    key: 'handleInsert',
@@ -26021,6 +26030,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -26215,7 +26226,6 @@
 	      var jsonData = _extends({}, this.state.jsonData);
 	      var groupOneIndex = void 0,
 	          groupTwoIndex = void 0,
-	          validationValues = {},
 	          newGroupTwoToEdit = _extends({}, this.state.groupTwoToEdit);
 
 	      groupOneIndex = jsonData.groups.map(function (elem, i) {
@@ -26240,7 +26250,11 @@
 	      $('#panelWrapper').attr('configtype', 'groupTwo');
 
 	      this.props.changeGroupTwoToEdit(newGroupTwoToEdit);
-	      validationValues = (0, _helpers.splitValidation)(newGroupTwoToEdit.validation);
+
+	      var _splitValidation = (0, _helpers.splitValidation)(newGroupTwoToEdit.validation),
+	          _splitValidation2 = _slicedToArray(_splitValidation, 2),
+	          firstVal = _splitValidation2[0],
+	          secondVal = _splitValidation2[1];
 
 	      $('#inputTitle').val(newGroupTwoToEdit.title);
 	      $('#colSelect').val(newGroupTwoToEdit.cols);
@@ -26249,8 +26263,8 @@
 	      $('#idCollapse').prop("checked", newGroupTwoToEdit.collapse);
 	      $('#idAutoCollapse').prop("checked", newGroupTwoToEdit.autocollapse);
 	      $('#panelWrapper').attr('grouponekey', groupOneKey);
-	      $('#idValRequired').prop("checked", validationValues[0]);
-	      $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
+	      $('#idValRequired').prop("checked", firstVal);
+	      $('#validationTextArea').val(JSON.stringify(secondVal, null, 2));
 	    }
 	  }, {
 	    key: 'handleInsert',
@@ -26537,11 +26551,16 @@
 	    }
 	  }, {
 	    key: "handleDeleteField",
-	    value: function handleDeleteField(elem, fieldIndex, fieldsLength) {
-	      var keysArr = elem.group.split('|');
+	    value: function handleDeleteField(elem, fieldIndex, fieldsLength, ulFieldId) {
+	      var keysArr = elem.group.split('|'),
+	          self = this;
 
-	      this.props.deleteField(elem, fieldIndex, fieldsLength);
-	      this.props.setSubAccordionToOpen(keysArr);
+	      if (fieldsLength > 1) {
+	        $('#' + ulFieldId).fadeOut(400, function () {
+	          self.props.deleteField(elem, fieldIndex, fieldsLength);
+	          self.props.setSubAccordionToOpen(keysArr);
+	        });
+	      }
 	    }
 	  }, {
 	    key: "handleMarking",
@@ -26705,6 +26724,7 @@
 	              var _React$createElement, _React$createElement2, _React$createElement3, _React$createElement4;
 
 	              var fieldId = 'field_' + elem.key,
+	                  ulFieldId = 'ul' + elem.key,
 	                  buttonId = "btn_field_" + elem.key,
 	                  groupKeys = elem.group,
 	                  jsonData = _this4.state.jsonData,
@@ -26722,7 +26742,7 @@
 	                    { key: i, id: fieldId, className: "clear-both" },
 	                    _react2.default.createElement(
 	                      "ul",
-	                      { className: "field-ul" },
+	                      { id: ulFieldId, className: "field-ul" },
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
@@ -26794,7 +26814,7 @@
 	                                _react2.default.createElement(
 	                                  "a",
 	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength);
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId);
 	                                    } },
 	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
 	                                  " Element l\xF6schen"
@@ -26814,7 +26834,7 @@
 	                    { key: i, id: fieldId, className: "clear-left" },
 	                    _react2.default.createElement(
 	                      "ul",
-	                      { className: "field-ul" },
+	                      { id: ulFieldId, className: "field-ul" },
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
@@ -26886,7 +26906,7 @@
 	                                _react2.default.createElement(
 	                                  "a",
 	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength);
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId);
 	                                    } },
 	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
 	                                  " Element l\xF6schen"
@@ -26906,7 +26926,7 @@
 	                    { key: i, id: fieldId, className: "clear-right" },
 	                    _react2.default.createElement(
 	                      "ul",
-	                      { className: "field-ul" },
+	                      { id: ulFieldId, className: "field-ul" },
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
@@ -26978,7 +26998,7 @@
 	                                _react2.default.createElement(
 	                                  "a",
 	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength);
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId);
 	                                    } },
 	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
 	                                  " Element l\xF6schen"
@@ -26998,7 +27018,7 @@
 	                    { key: i, id: fieldId },
 	                    _react2.default.createElement(
 	                      "ul",
-	                      { className: "field-ul" },
+	                      { id: ulFieldId, className: "field-ul" },
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
@@ -27070,7 +27090,7 @@
 	                                _react2.default.createElement(
 	                                  "a",
 	                                  { href: "#", onClick: function onClick() {
-	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength);
+	                                      return _this4.handleDeleteField(elem, fieldIndexInJsonData, fieldsLength, ulFieldId);
 	                                    } },
 	                                  _react2.default.createElement("i", { className: "fa-margin fa fa-times", "aria-hidden": "true" }),
 	                                  " Element l\xF6schen"
@@ -27106,6 +27126,8 @@
 	  value: true
 	});
 
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -27115,6 +27137,8 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactDom = __webpack_require__(32);
+
+	var _helpers = __webpack_require__(229);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27203,6 +27227,11 @@
 
 	      this.props.changeFieldToEdit(field);
 
+	      var _splitValidation = (0, _helpers.splitValidation)(field.validation),
+	          _splitValidation2 = _slicedToArray(_splitValidation, 2),
+	          firstVal = _splitValidation2[0],
+	          secondVal = _splitValidation2[1];
+
 	      $('#inputTitle').val(field.title);
 	      $('#colSelect').val(field.cols);
 	      $('#fieldType').val(field.type);
@@ -27210,6 +27239,9 @@
 	      $('#idClearBefore').prop("checked", field.clearBefore);
 	      $('#idClearAfter').prop("checked", field.clearAfter);
 	      $('#inputTooltip').val(field.tooltip);
+	      $('#idValRequired').prop("checked", firstVal);
+	      $('#validationTextArea').val(JSON.stringify(secondVal, null, 2));
+	      $('#accessTextArea').val(JSON.stringify(field.access, null, 2));
 
 	      switch (field.type) {
 	        case 'code':
@@ -61809,7 +61841,9 @@
 									css: "",
 									html: "",
 									js: ""
-								}
+								},
+								validation: {},
+								access: {}
 							},
 							    newTimestamp = +new Date(),
 							    groupTwoNewKey = 'grp_2_' + (newTimestamp + (0, _helpers.getRandomInt)(1, 1000)).toString();
@@ -61917,7 +61951,9 @@
 							css: "",
 							html: "",
 							js: ""
-						}
+						},
+						validation: {},
+						access: {}
 					},
 					    newTimestamp = +new Date();
 
@@ -61968,7 +62004,9 @@
 							css: "",
 							html: "",
 							js: ""
-						}
+						},
+						validation: {},
+						access: {}
 					},
 					    _newTimestamp = +new Date(),
 					    _groupOneKey2 = 'grp_1_' + (_newTimestamp + _randomInt).toString(),
@@ -62019,7 +62057,9 @@
 							css: "",
 							html: "",
 							js: ""
-						}
+						},
+						validation: {},
+						access: {}
 					},
 					    _newTimestamp2 = +new Date(),
 					    _groupTwoKey2 = 'grp_2_' + (_newTimestamp2 + _randomInt2).toString(),
@@ -62783,7 +62823,9 @@
 	         "css": "",
 	         "html": "",
 	         "js": ""
-	      }
+	      },
+	      validation: {},
+	      access: {}
 	   }]
 	};
 

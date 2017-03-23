@@ -151,7 +151,6 @@ class Accordion extends Component {
 
   handleEdit(event, groupIndex) {
     const groupOneToEdit = this.state.jsonData.groups[groupIndex];
-    let validationValues = [];
 
     $('.config-wrapper').addClass('display-hidden');
     $('.val-access-wrapper').removeClass('display-hidden');
@@ -166,7 +165,7 @@ class Accordion extends Component {
 
 
     this.props.changeGroupOneToEdit(groupOneToEdit);
-    validationValues = splitValidation(groupOneToEdit.validation);
+    let [firstVal, secondVal] = splitValidation(groupOneToEdit.validation);
 
     $('#inputTitle').val(groupOneToEdit.title);
     $('#colSelect').val(groupOneToEdit.cols);
@@ -174,8 +173,8 @@ class Accordion extends Component {
     $('#idClearAfter').prop("checked", groupOneToEdit.clearAfter);
     $('#idCollapse').prop("checked", groupOneToEdit.collapse);
     $('#idAutoCollapse').prop("checked", groupOneToEdit.autocollapse);
-    $('#idValRequired').prop("checked", validationValues[0]);
-    $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
+    $('#idValRequired').prop("checked", firstVal);
+    $('#validationTextArea').val(JSON.stringify(secondVal, null, 2));
   }
 
   handleInsert(event, groupIndexInJson) {

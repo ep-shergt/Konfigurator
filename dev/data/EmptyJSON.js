@@ -34,7 +34,9 @@ const EmptyJSON = {
             "css" :   "",
             "html" :   "",
             "js" :   ""
-         }
+         },
+         validation: {},
+         access: {}
       }
    ]
 };

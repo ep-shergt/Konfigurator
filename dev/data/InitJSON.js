@@ -34,7 +34,9 @@ const InitJSON = {
             "css" :   "",
             "html" :   "",
             "js" :   ""
-         }
+         },
+         validation: {},
+         access: {}
       }
    ]
 };

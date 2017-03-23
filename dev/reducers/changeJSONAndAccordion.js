@@ -190,7 +190,9 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 						      css: "",
 						      html: "",
 						      js: ""
-						   }
+						   },
+						   validation: {},
+						   access: {}
 						},
 						newTimestamp = + new Date(),
 						groupTwoNewKey = 'grp_2_' + (newTimestamp + getRandomInt(1, 1000)).toString();
@@ -290,7 +292,9 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				      css: "",
 				      html: "",
 				      js: ""
-				   }
+				   },
+				   validation: {},
+				   access: {}
 				},
 				newTimestamp = + new Date();
 			
@@ -341,7 +345,9 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				      css: "",
 				      html: "",
 				      js: ""
-				   }
+				   },
+				   validation: {},
+				   access: {}
 				},
 				newTimestamp = + new Date(),
 				groupOneKey = 'grp_1_' + (newTimestamp + randomInt).toString(),
@@ -388,7 +394,9 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				      css: "",
 				      html: "",
 				      js: ""
-				   }
+				   },
+				   validation: {},
+				   access: {}
 				},
 				newTimestamp = + new Date(),
 				groupTwoKey = 'grp_2_' + (newTimestamp + randomInt).toString(),

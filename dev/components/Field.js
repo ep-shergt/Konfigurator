@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import { splitValidation } from './../helpers';
 
 class Field extends Component {
 
@@ -70,6 +71,7 @@ class Field extends Component {
     $('#panelWrapper').attr('configtype', 'field');
     
     this.props.changeFieldToEdit(field);
+    let [firstVal, secondVal] = splitValidation(field.validation);
 
     $('#inputTitle').val(field.title);
     $('#colSelect').val(field.cols);
@@ -78,6 +80,9 @@ class Field extends Component {
     $('#idClearBefore').prop("checked", field.clearBefore);
     $('#idClearAfter').prop("checked", field.clearAfter);
     $('#inputTooltip').val(field.tooltip);
+    $('#idValRequired').prop("checked", firstVal);
+    $('#validationTextArea').val(JSON.stringify(secondVal, null, 2));
+    $('#accessTextArea').val(JSON.stringify(field.access, null, 2));
 
     switch(field.type) {
       case 'code':

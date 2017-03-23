@@ -149,8 +149,7 @@ class SubAccordion extends Component {
   handleEdit(event, groupOneKey, groupTwoKey) {
     const jsonData = {...this.state.jsonData};
     let groupOneIndex, groupTwoIndex,
-        validationValues = {},
-        newGroupTwoToEdit = {...this.state.groupTwoToEdit}; 
+        newGroupTwoToEdit = {...this.state.groupTwoToEdit};
 
     groupOneIndex = jsonData.groups.map((elem, i) => {
       return elem.key;
@@ -174,7 +173,7 @@ class SubAccordion extends Component {
     $('#panelWrapper').attr('configtype', 'groupTwo');
 
     this.props.changeGroupTwoToEdit(newGroupTwoToEdit);
-    validationValues = splitValidation(newGroupTwoToEdit.validation);
+    let [firstVal, secondVal] = splitValidation(newGroupTwoToEdit.validation);
     
     $('#inputTitle').val(newGroupTwoToEdit.title);
     $('#colSelect').val(newGroupTwoToEdit.cols);
@@ -183,8 +182,8 @@ class SubAccordion extends Component {
     $('#idCollapse').prop("checked", newGroupTwoToEdit.collapse);
     $('#idAutoCollapse').prop("checked", newGroupTwoToEdit.autocollapse);
     $('#panelWrapper').attr('grouponekey', groupOneKey);
-    $('#idValRequired').prop("checked", validationValues[0]);
-    $('#validationTextArea').val(JSON.stringify(validationValues[1], null, 2));
+    $('#idValRequired').prop("checked", firstVal);
+    $('#validationTextArea').val(JSON.stringify(secondVal, null, 2));
   }
 
   handleInsert(groupOneKey, groupTwoKey, groupOneIndex, indexInGroupOne) {

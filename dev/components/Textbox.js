@@ -57,16 +57,29 @@ export default class Textbox extends Component {
         delete elem['marked'];
         delete elem['open'];
         delete elem['marked'];
+        if ($.isEmptyObject(elem.validation)) {
+          delete elem['validation'];
+        }
       elem.groups.forEach((i) => {
         delete i['fields'];
         delete i['marked'];
         delete i['open'];
         delete i['marked'];
+        if ($.isEmptyObject(i.validation)) {
+          delete i['validation'];
+        }
       });
     });
 
     jsonCopy.fields.forEach((field) => {
       delete field['marked'];
+      if ($.isEmptyObject(field.validation)) {
+          delete field['validation'];
+      }
+
+      if ($.isEmptyObject(field.access)) {
+          delete field['access'];
+      }
     });
 
     jsonForExport = jsonCopy;
@@ -93,11 +106,13 @@ export default class Textbox extends Component {
              "title" :   "Gruppe Level 1",
              "type" :   "group",
              "marked" :  false,
+             "validation" : {},
              "groups" :   [
                 {
                    "key" :   "grp_2_Gruppe_Level_2",
                    "title" :   "Gruppe Level 2",
                    "type" :   "group",
+                   "validation" : {},
                    "marked" :  false
                 }
              ]
@@ -117,7 +132,9 @@ export default class Textbox extends Component {
                 "css" :   "",
                 "html" :   "",
                 "js" :   ""
-             }
+             },
+             "validation" : {},
+             "access" : {}
           }
        ]
     };
@@ -146,6 +163,18 @@ export default class Textbox extends Component {
 
           document.getElementById("mainArea").value = textFromFileLoaded;
           jsonData = JSON.parse(JSON.stringify(eval("(" + textFromFileLoaded + ")")));
+
+          jsonData.groups.forEach((groupOne) => {
+            groupOne.validation = groupOne.validation !== undefined ? groupOne.validation : {};
+            groupOne.groups.forEach((groupTwo) => {
+              groupTwo.validation = groupTwo.validation !== undefined ? groupTwo.validation : {};
+            });
+          });
+
+          jsonData.fields.forEach((field) => {
+            field.validation = field.validation !== undefined ? field.validation : {};
+            field.access = field.access !== undefined ? field.access : {};
+          });
 
           self.setState({
             jsonData

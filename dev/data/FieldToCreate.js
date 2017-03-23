@@ -12,7 +12,9 @@ const FieldToCreate = {
       css: "",
       html: "",
       js: ""
-   }
+   },
+   validation: {},
+   access: {}
 };
 
 export default FieldToCreate;
