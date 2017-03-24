@@ -848,6 +848,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 
 		    			groupCopy.key = 'grp_1_' + (newTimestamp + getRandomInt(1, 1000)).toString();
 		    			groupCopy.title = group.title;
+		    			groupCopy.validation = group.validation;
 		    			group.groups.forEach((subGroup) => {
 		    				let newSubGroup = {  
 								   key: "",
@@ -864,6 +865,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 		    				oldFieldGroup = key + '|' + subGroup.key;
 		    				newSubGroup.key = 'grp_2_' + (newTimestamp2 + getRandomInt(1, 1000)).toString();
 		    				newSubGroup.title = subGroup.title;
+		    				newSubGroup.validation = subGroup.validation;
 		    				newFieldGroup = groupCopy.key + '|' + newSubGroup.key;
 		    				subArray.push(oldFieldGroup);
 		    				subArray.push(newFieldGroup);

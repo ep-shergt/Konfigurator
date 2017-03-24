@@ -62560,6 +62560,7 @@
 
 								groupCopy.key = 'grp_1_' + (_newTimestamp3 + (0, _helpers.getRandomInt)(1, 1000)).toString();
 								groupCopy.title = group.title;
+								groupCopy.validation = group.validation;
 								group.groups.forEach(function (subGroup) {
 									var newSubGroup = {
 										key: "",
@@ -62576,6 +62577,7 @@
 									oldFieldGroup = key + '|' + subGroup.key;
 									newSubGroup.key = 'grp_2_' + (newTimestamp2 + (0, _helpers.getRandomInt)(1, 1000)).toString();
 									newSubGroup.title = subGroup.title;
+									newSubGroup.validation = subGroup.validation;
 									newFieldGroup = groupCopy.key + '|' + newSubGroup.key;
 									subArray.push(oldFieldGroup);
 									subArray.push(newFieldGroup);
