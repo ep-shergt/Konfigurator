@@ -35,7 +35,7 @@ export function getRandomInt(min, max) {
 
 export function splitValidation(validation) {
   let values = [];
-  
+
   if (validation.required !== undefined) {
     values.push(validation.required);
     delete validation['required'];
@@ -61,7 +61,7 @@ export function completeValidation(required, validation) {
 
 export function setAccordionItems(jsonDataCopy) {
     let accordion = [],
-        jsonDataNew = Object.assign({}, jsonDataCopy),
+        jsonDataNew = (JSON.parse(JSON.stringify(jsonDataCopy))),
         groups = [...jsonDataNew.groups];
    
     groups.forEach((group) => {

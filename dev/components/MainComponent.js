@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Textbox from './Textbox';
-import DnDField from './DnDField';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'; 
 import Configurator from './Configurator';
 
@@ -24,14 +23,10 @@ class MainComponent extends Component {
 						<Tabs onSelect={this.handleSelect}>
 							<TabList>
 								<Tab>Konfigurator</Tab>
-								<Tab>Vorschauansicht</Tab>
 								<Tab>JSON editieren</Tab>
 							</TabList>
 							<TabPanel>
 								<Configurator {...this.props}/>
-							</TabPanel>
-							<TabPanel>
-								<DnDField {...this.props}/>
 							</TabPanel>
 							<TabPanel>
 								<Textbox {...this.props}/>

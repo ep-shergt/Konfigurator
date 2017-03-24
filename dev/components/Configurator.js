@@ -3,8 +3,8 @@ import { render } from 'react-dom';
 import Accordion from './Accordion';
 import { removeArrayElement } from './../helpers';
 import { completeValidation } from './../helpers';
-import StandardPanelInput from './Panel/StandardPanelInput';
-import OptionalPanelInput from './Panel/OptionalPanelInput';
+import StandardInput from './Panel/StandardInput';
+import OptionalInput from './Panel/OptionalInput';
 import Parameters from './Panel/Parameters';
 
 class Configurator extends Component {
@@ -225,11 +225,6 @@ class Configurator extends Component {
 	        groupOneToEdit,
 	        groupTwoToEdit
 	    });
-
-	    $(function() {
-	    	$(window).scroll(self.sticky_relocate);
-	    	self.sticky_relocate();
-		});
 	}
 
 	componentDidUpdate() {
@@ -247,9 +242,9 @@ class Configurator extends Component {
 					<h2>Konfigurationspanel</h2>
 					<div id="panelWrapper">
 						<form onSubmit={(e) => this.handleFieldData(e)}>
-							<StandardPanelInput {...this.props} />
+							<StandardInput {...this.props} />
 							<br/>
-							<OptionalPanelInput {...this.props} />
+							<OptionalInput {...this.props} />
 							<br/>
 							<Parameters {...this.props} />
                             <div className="config-wrapper val-access-wrapper">

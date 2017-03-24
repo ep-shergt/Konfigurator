@@ -14,7 +14,7 @@ jsonData.groups[0].groups[0].key = keyTwo;
 jsonData.fields[0].group = keyOne + '|' + keyTwo;
 jsonData.fields[0].key = fieldKey;	
 
-const jsonDataCopy = {...jsonData};
+const jsonDataCopy = (JSON.parse(JSON.stringify(jsonData)));
 
 let	accordion = setAccordionItems(jsonDataCopy),
 	groupsLevelOneToCopy = [],
@@ -303,7 +303,6 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 
 			jsonData.fields = insertArrayElement(jsonData.fields, fieldToCreate, fieldIndex);
 			accordion = setAccordionItems(jsonData);
-
 			state = {...state, jsonData, accordion};
 
 			break;
@@ -816,8 +815,8 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 		case "INSERT_GROUP_ONE": {
 			const {groupOneIndex} = action;
 			let jsonData = {...state.jsonData},
-				jsonDataCopy = Object.assign({}, jsonData),
-				jsonDataCopy2 = Object.assign({}, jsonData),
+				jsonDataCopy = (JSON.parse(JSON.stringify(jsonData))),
+				jsonDataCopy2 = (JSON.parse(JSON.stringify(jsonData))),
 				accordion = [...state.accordion],
 				groupsLevelOneToCopy = [...state.groupsLevelOneToCopy],
 				groupsLevelTwoToCopy = [...state.groupsLevelTwoToCopy],
@@ -882,7 +881,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 		    groupKeys.forEach((keys) => {
 		    	jsonDataCopy.fields.forEach((field) => {
 		    		if (field.group === keys[0]) {
-		    			let fieldCopy = Object.assign({}, field),
+		    			let fieldCopy = (JSON.parse(JSON.stringify(field))),
 		    				newTimestamp3 = + new Date();
 
 		    			fieldCopy.group = keys[1];
@@ -969,7 +968,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				jsonData.groups[groupOneIndex].groups = insertArrayElement(jsonData.groups[groupOneIndex].groups, groupObjects[i], indexInGroupOne + i);
 			}
 
-			jsonDataCopy = Object.assign({}, jsonData);
+			jsonDataCopy = (JSON.parse(JSON.stringify(jsonData)));
 
 		    groupKeys.forEach((subArray) => {
 		    	jsonDataCopy.fields.map((field, index) => {
@@ -1027,7 +1026,7 @@ const changeJSONAndAccordion = (state = initialState, action) => {
     				return elem.key;
   				}).indexOf(key);
 
-				fieldInJson = Object.assign({},jsonData.fields[fieldIndex]);
+				fieldInJson = (JSON.parse(JSON.stringify(jsonData.fields[fieldIndex])));
 				fieldObjects.push(fieldInJson);
 			});
 

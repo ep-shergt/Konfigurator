@@ -106,14 +106,14 @@ class Parameters extends Component {
 			fieldToEdit
 		});
 
-		$('#' + fieldToEdit.type + '_' + indexForRemove.toString()).animate({height: "0px"}, 300);
-		setTimeout(() => {
+		$('#' + fieldToEdit.type + '_' + indexForRemove.toString()).fadeOut(400, () => {
 			self.generateElements(fieldToEdit.parameters.options);
-		}, 301);
+		});
 	}
 
 	generateElements(options) {
 		let elemHtml = "",
+			buttonsHtml = "",
 			fieldType = this.state.fieldType,
 			self = this,
 			newOptions = options !== undefined ? options : [],
@@ -122,7 +122,11 @@ class Parameters extends Component {
 		if (newOptions.length >= 0) {
 			for (var i = 0; i < newOptions.length; i++) {
 				let addon = '_' + i.toString(),
-					id = fieldType + addon;
+					id = fieldType + addon,
+					idBtn = 'btn' + '|' + id,
+					value = (i + 1).toString();
+
+				buttonsHtml += '<div id=' + idBtn + ' class="div-margin round-button round-button-color">' + value + '</div>';
 
 				elemHtml += '<div class="space-between options-inputs" id=' + id + '>' +
 							    '<div class="delete-markup added">' +
@@ -150,13 +154,30 @@ class Parameters extends Component {
 								        '</div>' +
 							        '</div>' +
 						    	'</div>' +
+						    	'<div class="number-position">'+ value +'</div>' +
 						    '</div>';
 			}
 
 			$('#elementsAnchor').empty();
+			$('#elementsButtonAnchor').empty();
 		    $('#elementsAnchor').append(elemHtml);
+		    $('#elementsButtonAnchor').append(buttonsHtml);
+
 		    $('.added').on('click', (event) => {
 		    	self.removeElement(event);
+		    });
+
+		    $('.round-button').on('click', (event) => {
+		    	const elemID = event.target.id.split('|')[1],
+		    		  btn = $('#' + 'btn' + '\\|' + elemID);
+
+		    	if ( $( "#" + elemID).is( ":hidden" ) ) {
+				    $( "#" + elemID).slideDown( "slow" );
+				    btn.addClass('round-button-color');
+				} else {
+				    $( "#" + elemID).hide("300");
+				    btn.removeClass('round-button-color');
+				}
 		    });
 
 		    elemArray = $('.options-inputs').toArray();
@@ -237,6 +258,9 @@ class Parameters extends Component {
 			            <div id="idInlineBreakWrapper" className="input-group col-xs-4 display-hidden param-wrapper">
 			                <label className="label-check"><input id="idInlineBreak" type="checkbox" value="inlineBreak" />  inlineBreak</label>
 			            </div>
+			        </div>
+			        <div id="elementsButtonAnchor" className="div-margin">
+
 			        </div>
 					<div id="elementsAnchor" className="div-margin">
 
