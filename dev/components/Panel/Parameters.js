@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { isInRange } from './../../helpers';
-import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 import { removeArrayElement } from './../../helpers';
 import { insertArrayElement } from './../../helpers';
 

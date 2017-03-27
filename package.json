@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server"
   },
   "author": "Steven Hergt",
   "license": "ISC",
@@ -33,7 +34,6 @@
     "react-addons-css-transition-group": "^15.0.2",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.0.2",
-    "react-modal-dialog": "^4.0.7",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.4",
