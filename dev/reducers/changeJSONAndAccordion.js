@@ -452,7 +452,23 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 
 		case "CHANGE_JSON": {
 			const {jsonData} = action;
-			let accordion = [...state.accordion];			
+			let accordion = [...state.accordion];
+
+			jsonData.fields.forEach((field) => {
+				if (field.validation === undefined) {
+					field.validation = {};
+				}
+
+				if (field.access === undefined) {
+					field.access = {};
+				}
+
+				if (field.type === 'select') {
+					if (field.container === undefined) {
+						field.container = {};
+					}
+				}
+			});			
 
 			accordion = setAccordionItems(jsonData);
 

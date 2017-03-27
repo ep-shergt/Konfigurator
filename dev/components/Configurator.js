@@ -153,7 +153,7 @@ class Configurator extends Component {
 
         			case 'select':
         				newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
-        				newFieldToEdit.parameters.container = $('#textAreaContainer').val();
+        				newFieldToEdit.parameters.container = JSON.parse(JSON.stringify(eval("(" + $('#textAreaContainer').val() + ")")));
         				newFieldToEdit.parameters.options = [];
 
         				for (var i = 0; i < optionsLength; i++) {

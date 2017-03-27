@@ -54,6 +54,14 @@ class Field extends Component {
   handleClick(event, field) {
     const groupKeys = field.group.split('|');
 
+    if (field.validation === undefined) {
+      field.validation = {};
+    }
+
+    if(field.access === undefined) {
+      field.access = {};
+    }
+
     $('.config-wrapper').addClass('display-hidden');
     $('.param-wrapper').addClass('display-hidden');
     $('.val-access-wrapper').removeClass('display-hidden');
@@ -129,7 +137,7 @@ class Field extends Component {
         $('#idSelectMultiple').removeClass('display-hidden');
         $('#idSelectContainer').removeClass('display-hidden');
         $('#idMultiple').prop("checked", field.parameters.multiple);
-        $('#textAreaContainer').val(field.parameters.container);
+        $('#textAreaContainer').val(JSON.stringify(field.parameters.container, null, 2));
         $('#fillerDivLeft').removeClass('display-hidden');
         $('#fillerDivRight').removeClass('display-hidden');
         break;

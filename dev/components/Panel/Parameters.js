@@ -41,8 +41,8 @@ class Parameters extends Component {
 
     componentWillReceiveProps(nextProps) {
         let newJsonData = nextProps.store.database.jsonData,
-        	fieldType = nextProps.store.database.fieldType,
         	newFieldToEdit = nextProps.store.database.fieldToEdit,
+        	fieldType = newFieldToEdit.type,
             jsonData = {...this.state.jsonData},
             fieldToEdit = {...this.state.fieldToEdit};
 
@@ -54,7 +54,7 @@ class Parameters extends Component {
 	        fieldType,
 	        fieldToEdit,
 	    });
-
+	
 	    if (fieldType === 'check' || fieldType === 'radio' || fieldType === 'select') {
 			this.generateElements(fieldToEdit.parameters.options);
 		}
@@ -117,6 +117,8 @@ class Parameters extends Component {
 			self = this,
 			newOptions = options !== undefined ? options : [],
 			elemArray;
+
+		console.log('op', options);
 
 		if (newOptions.length >= 0) {
 			for (var i = 0; i < newOptions.length; i++) {
