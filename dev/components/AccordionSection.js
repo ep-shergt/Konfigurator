@@ -223,7 +223,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId} className="clear-both">
                       <ul id={ulFieldId} className="field-ul">
-                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldType={this.props.changeFieldType} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">
@@ -251,7 +251,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId} className="clear-left">
                       <ul id={ulFieldId} className="field-ul">
-                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldType={this.props.changeFieldType} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">
@@ -279,7 +279,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId} className="clear-right">
                       <ul id={ulFieldId} className="field-ul">
-                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldType={this.props.changeFieldType} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">
@@ -307,7 +307,7 @@ class AccordionSection extends Component {
                   return (
                     <div key={i} id={fieldId}>
                       <ul id={ulFieldId} className="field-ul">
-                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
+                        <li className="field-li"><Field setSubAccordionToOpen={this.props.setSubAccordionToOpen} changeFieldType={this.props.changeFieldType} changeFieldToEdit={this.props.changeFieldToEdit} field={elem}></Field></li>
                         <li className="field-li">
                           <div className="btn-group-vertical li-div" role="group" aria-label="edit">
                             <button onClick={() => this.handleMarking(elem, fieldIndexInJsonData)} id={buttonId} type="button" className="btn btn-default btn-xs">

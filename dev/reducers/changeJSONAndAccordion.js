@@ -464,8 +464,8 @@ const changeJSONAndAccordion = (state = initialState, action) => {
 				}
 
 				if (field.type === 'select') {
-					if (field.container === undefined) {
-						field.container = {};
+					if (field.parameters.container === undefined) {
+						field.parameters.container = {};
 					}
 				}
 			});			

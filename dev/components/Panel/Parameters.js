@@ -42,7 +42,7 @@ class Parameters extends Component {
     componentWillReceiveProps(nextProps) {
         let newJsonData = nextProps.store.database.jsonData,
         	newFieldToEdit = nextProps.store.database.fieldToEdit,
-        	fieldType = newFieldToEdit.type,
+        	fieldType = nextProps.store.database.fieldType,
             jsonData = {...this.state.jsonData},
             fieldToEdit = {...this.state.fieldToEdit};
 

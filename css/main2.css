@@ -487,10 +487,12 @@ ul.button-list>li {
 	height: 100px;
 }
 
-#stickyWrap {
-	position: fixed;
-    overflow: auto;
-    height: 100%;
+@media (min-width: 990px) {
+	#stickyWrap {
+		position: fixed;
+	    overflow: auto;
+	    height: 100%;
+	}
 }
 
 .val-access-wrapper {

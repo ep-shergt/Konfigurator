@@ -26408,7 +26408,7 @@
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldType: _this4.props.changeFieldType, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
 	                      ),
 	                      _react2.default.createElement(
 	                        "li",
@@ -26500,7 +26500,7 @@
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldType: _this4.props.changeFieldType, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
 	                      ),
 	                      _react2.default.createElement(
 	                        "li",
@@ -26592,7 +26592,7 @@
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldType: _this4.props.changeFieldType, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
 	                      ),
 	                      _react2.default.createElement(
 	                        "li",
@@ -26684,7 +26684,7 @@
 	                      _react2.default.createElement(
 	                        "li",
 	                        { className: "field-li" },
-	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
+	                        _react2.default.createElement(_Field2.default, { setSubAccordionToOpen: _this4.props.setSubAccordionToOpen, changeFieldType: _this4.props.changeFieldType, changeFieldToEdit: _this4.props.changeFieldToEdit, field: elem })
 	                      ),
 	                      _react2.default.createElement(
 	                        "li",
@@ -26904,6 +26904,7 @@
 	      $('#panelWrapper').attr('configtype', 'field');
 
 	      this.props.changeFieldToEdit(field);
+	      this.props.changeFieldType(field.type);
 
 	      var _splitValidation = (0, _helpers.splitValidation)(field.validation),
 	          _splitValidation2 = _slicedToArray(_splitValidation, 2),
@@ -29990,7 +29991,7 @@
 			value: function componentWillReceiveProps(nextProps) {
 				var newJsonData = nextProps.store.database.jsonData,
 				    newFieldToEdit = nextProps.store.database.fieldToEdit,
-				    fieldType = newFieldToEdit.type,
+				    fieldType = nextProps.store.database.fieldType,
 				    jsonData = _extends({}, this.state.jsonData),
 				    fieldToEdit = _extends({}, this.state.fieldToEdit);
 
@@ -39471,8 +39472,8 @@
 						}
 
 						if (field.type === 'select') {
-							if (field.container === undefined) {
-								field.container = {};
+							if (field.parameters.container === undefined) {
+								field.parameters.container = {};
 							}
 						}
 					});

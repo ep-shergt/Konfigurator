@@ -87,6 +87,8 @@ class Field extends Component {
     $('#panelWrapper').attr('configtype', 'field');
     
     this.props.changeFieldToEdit(field);
+    this.props.changeFieldType(field.type);
+
     let [firstVal, secondVal] = splitValidation(field.validation);
 
     $('#inputTitle').val(field.title);
