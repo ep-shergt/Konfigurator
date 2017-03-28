@@ -239,36 +239,38 @@ class Configurator extends Component {
 					<Accordion {...this.props}/>
 				</div>
 				<div className="col-md-4 editor-panel">
-					<h2>Konfigurationspanel</h2>
-					<div id="panelWrapper">
-						<form onSubmit={(e) => this.handleFieldData(e)}>
-							<StandardInput {...this.props} />
-							<br/>
-							<OptionalInput {...this.props} />
-							<br/>
-							<Parameters {...this.props} />
-                            <div className="config-wrapper val-access-wrapper">
-								<div id="idValidationWrapper" className="div-margin display-hidden">
-									<p className="heading-parameter">Validation (Eingabe des JSON-Objekts)</p>
-									<textarea className="div-margin form-control textarea-container" rows="5" id="validationTextArea" placeholder='{"property": "", ...}'></textarea>
-									<div className="row vertical-align">
-							     		<div id="fillerValLeft" className="input-group col-xs-5"></div>
-							            <div id="idValRequiredWrapper" className="input-group col-xs-2">
-							                <label className="label-check"><input id="idValRequired" type="checkbox" value="valRequired" />  required</label>
-							            </div>
-							            <div id="fillerValRight" className="input-group col-xs-5"></div>
-							        </div>
-								</div>
-								<div id="idAccessWrapper" className="div-margin display-hidden config-wrapper">
-									<p className="heading-parameter">Access (Eingabe des JSON-Objekts)</p>
-									<textarea className="div-margin form-control textarea-container" rows="5" placeholder='{"property": "", ...}' id="accessTextArea"></textarea>
-								</div> 
-                            </div>
-                            <div id="submitButtonWrapper" className="config-wrapper display-hidden">
-                                <button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
-                            </div>
-						</form>
-					</div>
+                    <div id="stickyWrap">
+    					<h2>Konfigurationspanel</h2>
+    					<div id="panelWrapper">
+    						<form onSubmit={(e) => this.handleFieldData(e)}>
+    							<StandardInput {...this.props} />
+    							<br/>
+    							<OptionalInput {...this.props} />
+    							<br/>
+    							<Parameters {...this.props} />
+                                <div className="config-wrapper val-access-wrapper">
+    								<div id="idValidationWrapper" className="div-margin display-hidden">
+    									<p className="heading-parameter">Validation (Eingabe des JSON-Objekts)</p>
+    									<textarea className="div-margin form-control textarea-container" rows="5" id="validationTextArea" placeholder='{"property": "", ...}'></textarea>
+    									<div className="row vertical-align">
+    							     		<div id="fillerValLeft" className="input-group col-xs-5"></div>
+    							            <div id="idValRequiredWrapper" className="input-group col-xs-2">
+    							                <label className="label-check"><input id="idValRequired" type="checkbox" value="valRequired" />  required</label>
+    							            </div>
+    							            <div id="fillerValRight" className="input-group col-xs-5"></div>
+    							        </div>
+    								</div>
+    								<div id="idAccessWrapper" className="div-margin display-hidden config-wrapper">
+    									<p className="heading-parameter">Access (Eingabe des JSON-Objekts)</p>
+    									<textarea className="div-margin form-control textarea-container" rows="5" placeholder='{"property": "", ...}' id="accessTextArea"></textarea>
+    								</div> 
+                                </div>
+                                <div id="submitButtonWrapper" className="config-wrapper display-hidden">
+                                    <button type="submit" className="btn btn-primary btn-field-confirm">Bestätigen</button>
+                                </div>
+    						</form>
+    					</div>
+                    </div>
 				</div>
 			</div>
 		);

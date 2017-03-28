@@ -122,7 +122,6 @@ ul.button-list>li {
 
 .field-node {
 	height: 45px;
-	background-color: #e0eeee;
 	padding: 2px;
 	font-size: 10px;
 	color: rgba(0, 0, 0, 0.5);
@@ -133,6 +132,10 @@ ul.button-list>li {
 
 .field-node:hover {
 	background-color: #afeeee !important;
+}
+
+.unedit-field {
+	background-color: #e0eeee;
 }
 
 .edit-field {
@@ -478,6 +481,16 @@ ul.button-list>li {
     margin-right: 12px;
     font-weight: bold;
     color: darkgray;
+}
+
+#submitButtonWrapper {
+	height: 100px;
+}
+
+#stickyWrap {
+	position: fixed;
+    overflow: auto;
+    height: 100%;
 }
 
 .val-access-wrapper {

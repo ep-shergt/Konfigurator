@@ -30,8 +30,12 @@ class Field extends Component {
     setTimeout(() => {
       if (edited) {
         $('#' + id).removeClass('edit-field');
+        $('#' + id).addClass('unedit-field');
+      } else {
+        $('#' + id).addClass('edit-field')
+        $('#' + id).removeClass('unedit-field')
       }
-    }, 200);
+    }, 352);
   }
 
   updateField(newField) {
@@ -47,8 +51,12 @@ class Field extends Component {
     setTimeout(() => {
       if (edited) {
         $('#' + id).removeClass('edit-field');
+        $('#' + id).addClass('unedit-field');
+      } else {
+        $('#' + id).addClass('edit-field')
+        $('#' + id).removeClass('unedit-field')
       }
-    }, 200);
+    }, 352);
   }
 
   handleClick(event, field) {
@@ -133,6 +141,10 @@ class Field extends Component {
         break;
 
       case 'select':
+        if (field.parameters.container === undefined) {
+          field.parameters.container = {};
+        }
+
         $('#selectParamsWrapper').removeClass('display-hidden');
         $('#idSelectMultiple').removeClass('display-hidden');
         $('#idSelectContainer').removeClass('display-hidden');

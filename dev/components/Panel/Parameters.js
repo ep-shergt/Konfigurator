@@ -118,8 +118,6 @@ class Parameters extends Component {
 			newOptions = options !== undefined ? options : [],
 			elemArray;
 
-		console.log('op', options);
-
 		if (newOptions.length >= 0) {
 			for (var i = 0; i < newOptions.length; i++) {
 				let addon = '_' + i.toString(),

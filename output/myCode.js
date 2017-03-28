@@ -24909,7 +24909,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -24949,329 +24949,333 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Configurator = function (_Component) {
-	  _inherits(Configurator, _Component);
+	    _inherits(Configurator, _Component);
 
-	  function Configurator(props) {
-	    _classCallCheck(this, Configurator);
+	    function Configurator(props) {
+	        _classCallCheck(this, Configurator);
 
-	    var _this = _possibleConstructorReturn(this, (Configurator.__proto__ || Object.getPrototypeOf(Configurator)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (Configurator.__proto__ || Object.getPrototypeOf(Configurator)).call(this, props));
 
-	    _this.handleFieldData = _this.handleFieldData.bind(_this);
+	        _this.handleFieldData = _this.handleFieldData.bind(_this);
 
-	    _this.state = {
-	      jsonData: _this.props.store.database.jsonData,
-	      groupOneToEdit: _this.props.store.database.groupOneToEdit,
-	      groupTwoToEdit: _this.props.store.database.groupTwoToEdit,
-	      fieldToEdit: _this.props.store.database.fieldToEdit
-	    };
-	    return _this;
-	  }
-
-	  _createClass(Configurator, [{
-	    key: 'handleFieldData',
-	    value: function handleFieldData(event) {
-	      event.preventDefault();
-
-	      var configType = document.getElementById("panelWrapper").getAttribute("configtype"),
-	          groupOneKey = document.getElementById("panelWrapper").getAttribute("grouponekey"),
-	          optionsLength = $(".options-inputs").toArray().length,
-	          cols = $('#colSelect').val();
-
-	      var newJsonData = _extends({}, this.state.jsonData),
-	          newGroupOneToEdit = _extends({}, this.state.groupOneToEdit),
-	          newGroupTwoToEdit = _extends({}, this.state.groupTwoToEdit),
-	          newFieldToEdit = _extends({}, this.state.fieldToEdit),
-	          validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")"))),
-	          validationRequired = $('#idValRequired').is(":checked") ? true : false,
-	          access = JSON.parse(JSON.stringify(eval("(" + $('#accessTextArea').val() + ")")));
-
-	      switch (configType) {
-	        case 'main':
-	          newJsonData.title = $('#inputTitle').val();
-	          newJsonData.valid_from = $('#dateMainTitle').val();
-	          newJsonData.valid_to = $('#endDateMainTitle').val();
-
-	          this.props.changeJSON(newJsonData);
-	          break;
-
-	        case 'groupOne':
-	          newGroupOneToEdit.title = $('#inputTitle').val();
-	          newGroupOneToEdit.clearBefore = $("#idClearBefore").is(":checked") ? true : false;
-	          newGroupOneToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
-	          newGroupOneToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
-	          newGroupOneToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
-	          newGroupOneToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
-
-	          if (cols !== "") {
-	            newGroupOneToEdit.cols = Number($('#colSelect').val());
-	          }
-
-	          this.props.changeGroupOne(newGroupOneToEdit);
-	          break;
-
-	        case 'groupTwo':
-	          newGroupTwoToEdit.title = $('#inputTitle').val();
-	          newGroupTwoToEdit.clearBefore = $("#idClearBefore").is(":checked") ? true : false;
-	          newGroupTwoToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
-	          newGroupTwoToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
-	          newGroupTwoToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
-	          newGroupTwoToEdit.validation = $('#validationTextArea').val();
-	          newGroupTwoToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
-
-	          if (cols !== "") {
-	            newGroupTwoToEdit.cols = Number($('#colSelect').val());
-	          }
-
-	          this.props.changeGroupTwo(newGroupTwoToEdit, groupOneKey);
-	          this.props.setAccordionToOpen(groupOneKey);
-	          break;
-
-	        case 'field':
-	          var groupKeys = newFieldToEdit.group.split('|'),
-	              fieldType = $('#fieldType').val();
-
-	          newFieldToEdit['parameters'] = {};
-
-	          if (cols !== "") {
-	            newFieldToEdit.cols = Number($('#colSelect').val());
-	          }
-
-	          newFieldToEdit.title = $('#inputTitle').val();
-	          newFieldToEdit.type = fieldType;
-	          newFieldToEdit.exportKey = $('#inputExportKey').val();
-	          newFieldToEdit.tooltip = $('#inputTooltip').val();
-	          newFieldToEdit.clearBefore = $("#idClearBefore").is(":checked");
-	          newFieldToEdit.clearAfter = $("#idClearAfter").is(":checked");
-	          newFieldToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
-	          newFieldToEdit.access = access;
-	          newFieldToEdit.edited = true;
-
-	          switch (fieldType) {
-	            case 'code':
-	              newFieldToEdit.parameters.css = $('#cssParam').val();
-	              newFieldToEdit.parameters.html = $('#htmlParam').val();
-	              newFieldToEdit.parameters.js = $('#jsParam').val();
-	              break;
-
-	            case 'text':
-	              newFieldToEdit.parameters.class = $('#idTextClass').val();
-	              newFieldToEdit.parameters.placeholder = $('#idTextPlaceholder').val();
-	              newFieldToEdit.parameters.width = $('#idTextWidth').val();
-	              break;
-
-	            case 'textarea':
-	              newFieldToEdit.parameters.class = $('#idTextClass').val();
-	              newFieldToEdit.parameters.placeholder = $('#idTextPlaceholder').val();
-	              newFieldToEdit.parameters.width = $('#idTextWidth').val();
-
-	            case 'check':
-	              newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
-	              newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
-	              newFieldToEdit.parameters.options = [];
-
-	              for (var i = 0; i < optionsLength; i++) {
-	                var obj = {
-	                  title: $('#modalTitle_' + i.toString()).val(),
-	                  value: $('#modalValue_' + i.toString()).val(),
-	                  score: $('#modalScore_' + i.toString()).val(),
-	                  default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
-	                };
-
-	                newFieldToEdit.parameters.options.push(obj);
-	              }
-	              break;
-
-	            case 'radio':
-	              newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
-	              newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
-	              newFieldToEdit.parameters.options = [];
-
-	              for (var i = 0; i < optionsLength; i++) {
-	                var _obj = {
-	                  title: $('#modalTitle_' + i.toString()).val(),
-	                  value: $('#modalValue_' + i.toString()).val(),
-	                  score: $('#modalScore_' + i.toString()).val(),
-	                  default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
-	                };
-
-	                newFieldToEdit.parameters.options.push(_obj);
-	              }
-	              break;
-
-	            case 'select':
-	              newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
-	              newFieldToEdit.parameters.container = JSON.parse(JSON.stringify(eval("(" + $('#textAreaContainer').val() + ")")));
-	              newFieldToEdit.parameters.options = [];
-
-	              for (var i = 0; i < optionsLength; i++) {
-	                var _obj2 = {
-	                  title: $('#modalTitle_' + i.toString()).val(),
-	                  value: $('#modalValue_' + i.toString()).val(),
-	                  score: $('#modalScore_' + i.toString()).val(),
-	                  default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
-	                };
-
-	                newFieldToEdit.parameters.options.push(_obj2);
-	              }
-	              break;
-
-	          }
-
-	          this.props.changeField(newFieldToEdit);
-	          this.props.changeFieldToEdit(newFieldToEdit);
-	          this.props.setSubAccordionToOpen(groupKeys);
-	          break;
-	      }
-
-	      $('.config-wrapper').addClass('display-hidden');
-	      $('#panelWrapper').removeAttr('configtype');
-	      $('#dateMainTitle').removeAttr('required');
-	      $('#endDateMainTitle').removeAttr('required');
-	      $('#inputExportKey').removeAttr('required');
-
-	      localStorage.setItem('jsonData', JSON.stringify(newJsonData, null, 2));
+	        _this.state = {
+	            jsonData: _this.props.store.database.jsonData,
+	            groupOneToEdit: _this.props.store.database.groupOneToEdit,
+	            groupTwoToEdit: _this.props.store.database.groupTwoToEdit,
+	            fieldToEdit: _this.props.store.database.fieldToEdit
+	        };
+	        return _this;
 	    }
-	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.props.changeJSON(this.state.jsonData);
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var self = this;
 
-	      $("input").keypress(function (e) {
-	        var chr = String.fromCharCode(e.which);
-	        if (!("_".indexOf(chr) < 0)) return false;
-	      });
+	    _createClass(Configurator, [{
+	        key: 'handleFieldData',
+	        value: function handleFieldData(event) {
+	            event.preventDefault();
 
-	      $('#dateMainTitle').val(this.state.jsonData.valid_from);
-	      $('#endDateMainTitle').val(this.state.jsonData.valid_to);
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      var newJsonData = nextProps.store.database.jsonData,
-	          newFieldToEdit = nextProps.store.database.fieldToEdit,
-	          newGroupOneToEdit = nextProps.store.database.groupOneToEdit,
-	          newGroupTwoToEdit = nextProps.store.database.groupTwoToEdit,
-	          jsonData = _extends({}, this.state.jsonData),
-	          fieldToEdit = _extends({}, this.state.fieldToEdit),
-	          groupOneToEdit = _extends({}, this.state.groupOneToEdit),
-	          groupTwoToEdit = _extends({}, this.state.groupTwoToEdit);
+	            var configType = document.getElementById("panelWrapper").getAttribute("configtype"),
+	                groupOneKey = document.getElementById("panelWrapper").getAttribute("grouponekey"),
+	                optionsLength = $(".options-inputs").toArray().length,
+	                cols = $('#colSelect').val();
 
-	      var self = this;
+	            var newJsonData = _extends({}, this.state.jsonData),
+	                newGroupOneToEdit = _extends({}, this.state.groupOneToEdit),
+	                newGroupTwoToEdit = _extends({}, this.state.groupTwoToEdit),
+	                newFieldToEdit = _extends({}, this.state.fieldToEdit),
+	                validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")"))),
+	                validationRequired = $('#idValRequired').is(":checked") ? true : false,
+	                access = JSON.parse(JSON.stringify(eval("(" + $('#accessTextArea').val() + ")")));
 
-	      jsonData = newJsonData;
-	      fieldToEdit = newFieldToEdit;
-	      groupOneToEdit = newGroupOneToEdit;
-	      groupTwoToEdit = newGroupTwoToEdit;
+	            switch (configType) {
+	                case 'main':
+	                    newJsonData.title = $('#inputTitle').val();
+	                    newJsonData.valid_from = $('#dateMainTitle').val();
+	                    newJsonData.valid_to = $('#endDateMainTitle').val();
 
-	      this.setState({
-	        jsonData: jsonData,
-	        fieldToEdit: fieldToEdit,
-	        groupOneToEdit: groupOneToEdit,
-	        groupTwoToEdit: groupTwoToEdit
-	      });
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      $('#dateMainTitle').val(this.state.jsonData.valid_from);
-	      $('#endDateMainTitle').val(this.state.jsonData.valid_to);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
+	                    this.props.changeJSON(newJsonData);
+	                    break;
 
-	      return _react2.default.createElement(
-	        'div',
-	        { id: 'configuratorWrapper' },
-	        _react2.default.createElement(
-	          'div',
-	          { id: 'idAccWrapper', className: 'col-md-8' },
-	          _react2.default.createElement(_Accordion2.default, this.props)
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-4 editor-panel' },
-	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Konfigurationspanel'
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { id: 'panelWrapper' },
-	            _react2.default.createElement(
-	              'form',
-	              { onSubmit: function onSubmit(e) {
-	                  return _this2.handleFieldData(e);
-	                } },
-	              _react2.default.createElement(_StandardInput2.default, this.props),
-	              _react2.default.createElement('br', null),
-	              _react2.default.createElement(_OptionalInput2.default, this.props),
-	              _react2.default.createElement('br', null),
-	              _react2.default.createElement(_Parameters2.default, this.props),
-	              _react2.default.createElement(
+	                case 'groupOne':
+	                    newGroupOneToEdit.title = $('#inputTitle').val();
+	                    newGroupOneToEdit.clearBefore = $("#idClearBefore").is(":checked") ? true : false;
+	                    newGroupOneToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
+	                    newGroupOneToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
+	                    newGroupOneToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
+	                    newGroupOneToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
+
+	                    if (cols !== "") {
+	                        newGroupOneToEdit.cols = Number($('#colSelect').val());
+	                    }
+
+	                    this.props.changeGroupOne(newGroupOneToEdit);
+	                    break;
+
+	                case 'groupTwo':
+	                    newGroupTwoToEdit.title = $('#inputTitle').val();
+	                    newGroupTwoToEdit.clearBefore = $("#idClearBefore").is(":checked") ? true : false;
+	                    newGroupTwoToEdit.clearAfter = $("#idClearAfter").is(":checked") ? true : false;
+	                    newGroupTwoToEdit.collapse = $("#idCollapse").is(":checked") ? true : false;
+	                    newGroupTwoToEdit.autocollapse = $("#idAutoCollapse").is(":checked") ? true : false;
+	                    newGroupTwoToEdit.validation = $('#validationTextArea').val();
+	                    newGroupTwoToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
+
+	                    if (cols !== "") {
+	                        newGroupTwoToEdit.cols = Number($('#colSelect').val());
+	                    }
+
+	                    this.props.changeGroupTwo(newGroupTwoToEdit, groupOneKey);
+	                    this.props.setAccordionToOpen(groupOneKey);
+	                    break;
+
+	                case 'field':
+	                    var groupKeys = newFieldToEdit.group.split('|'),
+	                        fieldType = $('#fieldType').val();
+
+	                    newFieldToEdit['parameters'] = {};
+
+	                    if (cols !== "") {
+	                        newFieldToEdit.cols = Number($('#colSelect').val());
+	                    }
+
+	                    newFieldToEdit.title = $('#inputTitle').val();
+	                    newFieldToEdit.type = fieldType;
+	                    newFieldToEdit.exportKey = $('#inputExportKey').val();
+	                    newFieldToEdit.tooltip = $('#inputTooltip').val();
+	                    newFieldToEdit.clearBefore = $("#idClearBefore").is(":checked");
+	                    newFieldToEdit.clearAfter = $("#idClearAfter").is(":checked");
+	                    newFieldToEdit.validation = (0, _helpers.completeValidation)(validationRequired, validationValue);
+	                    newFieldToEdit.access = access;
+	                    newFieldToEdit.edited = true;
+
+	                    switch (fieldType) {
+	                        case 'code':
+	                            newFieldToEdit.parameters.css = $('#cssParam').val();
+	                            newFieldToEdit.parameters.html = $('#htmlParam').val();
+	                            newFieldToEdit.parameters.js = $('#jsParam').val();
+	                            break;
+
+	                        case 'text':
+	                            newFieldToEdit.parameters.class = $('#idTextClass').val();
+	                            newFieldToEdit.parameters.placeholder = $('#idTextPlaceholder').val();
+	                            newFieldToEdit.parameters.width = $('#idTextWidth').val();
+	                            break;
+
+	                        case 'textarea':
+	                            newFieldToEdit.parameters.class = $('#idTextClass').val();
+	                            newFieldToEdit.parameters.placeholder = $('#idTextPlaceholder').val();
+	                            newFieldToEdit.parameters.width = $('#idTextWidth').val();
+
+	                        case 'check':
+	                            newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
+	                            newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
+	                            newFieldToEdit.parameters.options = [];
+
+	                            for (var i = 0; i < optionsLength; i++) {
+	                                var obj = {
+	                                    title: $('#modalTitle_' + i.toString()).val(),
+	                                    value: $('#modalValue_' + i.toString()).val(),
+	                                    score: $('#modalScore_' + i.toString()).val(),
+	                                    default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
+	                                };
+
+	                                newFieldToEdit.parameters.options.push(obj);
+	                            }
+	                            break;
+
+	                        case 'radio':
+	                            newFieldToEdit.parameters.inline = $("#idInline").is(":checked") ? true : false;
+	                            newFieldToEdit.parameters.inlineBreak = $("#idInlineBreak").is(":checked") ? true : false;
+	                            newFieldToEdit.parameters.options = [];
+
+	                            for (var i = 0; i < optionsLength; i++) {
+	                                var _obj = {
+	                                    title: $('#modalTitle_' + i.toString()).val(),
+	                                    value: $('#modalValue_' + i.toString()).val(),
+	                                    score: $('#modalScore_' + i.toString()).val(),
+	                                    default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
+	                                };
+
+	                                newFieldToEdit.parameters.options.push(_obj);
+	                            }
+	                            break;
+
+	                        case 'select':
+	                            newFieldToEdit.parameters.multiple = $("#idMultiple").is(":checked") ? true : false;
+	                            newFieldToEdit.parameters.container = JSON.parse(JSON.stringify(eval("(" + $('#textAreaContainer').val() + ")")));
+	                            newFieldToEdit.parameters.options = [];
+
+	                            for (var i = 0; i < optionsLength; i++) {
+	                                var _obj2 = {
+	                                    title: $('#modalTitle_' + i.toString()).val(),
+	                                    value: $('#modalValue_' + i.toString()).val(),
+	                                    score: $('#modalScore_' + i.toString()).val(),
+	                                    default: $('#modalDefault_' + i.toString()).is(":checked") ? true : false
+	                                };
+
+	                                newFieldToEdit.parameters.options.push(_obj2);
+	                            }
+	                            break;
+
+	                    }
+
+	                    this.props.changeField(newFieldToEdit);
+	                    this.props.changeFieldToEdit(newFieldToEdit);
+	                    this.props.setSubAccordionToOpen(groupKeys);
+	                    break;
+	            }
+
+	            $('.config-wrapper').addClass('display-hidden');
+	            $('#panelWrapper').removeAttr('configtype');
+	            $('#dateMainTitle').removeAttr('required');
+	            $('#endDateMainTitle').removeAttr('required');
+	            $('#inputExportKey').removeAttr('required');
+
+	            localStorage.setItem('jsonData', JSON.stringify(newJsonData, null, 2));
+	        }
+	    }, {
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            this.props.changeJSON(this.state.jsonData);
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var self = this;
+
+	            $("input").keypress(function (e) {
+	                var chr = String.fromCharCode(e.which);
+	                if (!("_".indexOf(chr) < 0)) return false;
+	            });
+
+	            $('#dateMainTitle').val(this.state.jsonData.valid_from);
+	            $('#endDateMainTitle').val(this.state.jsonData.valid_to);
+	        }
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            var newJsonData = nextProps.store.database.jsonData,
+	                newFieldToEdit = nextProps.store.database.fieldToEdit,
+	                newGroupOneToEdit = nextProps.store.database.groupOneToEdit,
+	                newGroupTwoToEdit = nextProps.store.database.groupTwoToEdit,
+	                jsonData = _extends({}, this.state.jsonData),
+	                fieldToEdit = _extends({}, this.state.fieldToEdit),
+	                groupOneToEdit = _extends({}, this.state.groupOneToEdit),
+	                groupTwoToEdit = _extends({}, this.state.groupTwoToEdit);
+
+	            var self = this;
+
+	            jsonData = newJsonData;
+	            fieldToEdit = newFieldToEdit;
+	            groupOneToEdit = newGroupOneToEdit;
+	            groupTwoToEdit = newGroupTwoToEdit;
+
+	            this.setState({
+	                jsonData: jsonData,
+	                fieldToEdit: fieldToEdit,
+	                groupOneToEdit: groupOneToEdit,
+	                groupTwoToEdit: groupTwoToEdit
+	            });
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            $('#dateMainTitle').val(this.state.jsonData.valid_from);
+	            $('#endDateMainTitle').val(this.state.jsonData.valid_to);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
 	                'div',
-	                { className: 'config-wrapper val-access-wrapper' },
+	                { id: 'configuratorWrapper' },
 	                _react2.default.createElement(
-	                  'div',
-	                  { id: 'idValidationWrapper', className: 'div-margin display-hidden' },
-	                  _react2.default.createElement(
-	                    'p',
-	                    { className: 'heading-parameter' },
-	                    'Validation (Eingabe des JSON-Objekts)'
-	                  ),
-	                  _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'validationTextArea', placeholder: '{"property": "", ...}' }),
-	                  _react2.default.createElement(
 	                    'div',
-	                    { className: 'row vertical-align' },
-	                    _react2.default.createElement('div', { id: 'fillerValLeft', className: 'input-group col-xs-5' }),
-	                    _react2.default.createElement(
-	                      'div',
-	                      { id: 'idValRequiredWrapper', className: 'input-group col-xs-2' },
-	                      _react2.default.createElement(
-	                        'label',
-	                        { className: 'label-check' },
-	                        _react2.default.createElement('input', { id: 'idValRequired', type: 'checkbox', value: 'valRequired' }),
-	                        '  required'
-	                      )
-	                    ),
-	                    _react2.default.createElement('div', { id: 'fillerValRight', className: 'input-group col-xs-5' })
-	                  )
+	                    { id: 'idAccWrapper', className: 'col-md-8' },
+	                    _react2.default.createElement(_Accordion2.default, this.props)
 	                ),
 	                _react2.default.createElement(
-	                  'div',
-	                  { id: 'idAccessWrapper', className: 'div-margin display-hidden config-wrapper' },
-	                  _react2.default.createElement(
-	                    'p',
-	                    { className: 'heading-parameter' },
-	                    'Access (Eingabe des JSON-Objekts)'
-	                  ),
-	                  _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', placeholder: '{"property": "", ...}', id: 'accessTextArea' })
+	                    'div',
+	                    { className: 'col-md-4 editor-panel' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'stickyWrap' },
+	                        _react2.default.createElement(
+	                            'h2',
+	                            null,
+	                            'Konfigurationspanel'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'panelWrapper' },
+	                            _react2.default.createElement(
+	                                'form',
+	                                { onSubmit: function onSubmit(e) {
+	                                        return _this2.handleFieldData(e);
+	                                    } },
+	                                _react2.default.createElement(_StandardInput2.default, this.props),
+	                                _react2.default.createElement('br', null),
+	                                _react2.default.createElement(_OptionalInput2.default, this.props),
+	                                _react2.default.createElement('br', null),
+	                                _react2.default.createElement(_Parameters2.default, this.props),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'config-wrapper val-access-wrapper' },
+	                                    _react2.default.createElement(
+	                                        'div',
+	                                        { id: 'idValidationWrapper', className: 'div-margin display-hidden' },
+	                                        _react2.default.createElement(
+	                                            'p',
+	                                            { className: 'heading-parameter' },
+	                                            'Validation (Eingabe des JSON-Objekts)'
+	                                        ),
+	                                        _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'validationTextArea', placeholder: '{"property": "", ...}' }),
+	                                        _react2.default.createElement(
+	                                            'div',
+	                                            { className: 'row vertical-align' },
+	                                            _react2.default.createElement('div', { id: 'fillerValLeft', className: 'input-group col-xs-5' }),
+	                                            _react2.default.createElement(
+	                                                'div',
+	                                                { id: 'idValRequiredWrapper', className: 'input-group col-xs-2' },
+	                                                _react2.default.createElement(
+	                                                    'label',
+	                                                    { className: 'label-check' },
+	                                                    _react2.default.createElement('input', { id: 'idValRequired', type: 'checkbox', value: 'valRequired' }),
+	                                                    '  required'
+	                                                )
+	                                            ),
+	                                            _react2.default.createElement('div', { id: 'fillerValRight', className: 'input-group col-xs-5' })
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'div',
+	                                        { id: 'idAccessWrapper', className: 'div-margin display-hidden config-wrapper' },
+	                                        _react2.default.createElement(
+	                                            'p',
+	                                            { className: 'heading-parameter' },
+	                                            'Access (Eingabe des JSON-Objekts)'
+	                                        ),
+	                                        _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', placeholder: '{"property": "", ...}', id: 'accessTextArea' })
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { id: 'submitButtonWrapper', className: 'config-wrapper display-hidden' },
+	                                    _react2.default.createElement(
+	                                        'button',
+	                                        { type: 'submit', className: 'btn btn-primary btn-field-confirm' },
+	                                        'Best\xE4tigen'
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
 	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { id: 'submitButtonWrapper', className: 'config-wrapper display-hidden' },
-	                _react2.default.createElement(
-	                  'button',
-	                  { type: 'submit', className: 'btn btn-primary btn-field-confirm' },
-	                  'Best\xE4tigen'
-	                )
-	              )
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
+	            );
+	        }
+	    }]);
 
-	  return Configurator;
+	    return Configurator;
 	}(_react.Component);
 
 	exports.default = Configurator;
@@ -26840,8 +26844,12 @@
 	      setTimeout(function () {
 	        if (edited) {
 	          $('#' + id).removeClass('edit-field');
+	          $('#' + id).addClass('unedit-field');
+	        } else {
+	          $('#' + id).addClass('edit-field');
+	          $('#' + id).removeClass('unedit-field');
 	        }
-	      }, 200);
+	      }, 352);
 	    }
 	  }, {
 	    key: 'updateField',
@@ -26859,8 +26867,12 @@
 	      setTimeout(function () {
 	        if (edited) {
 	          $('#' + id).removeClass('edit-field');
+	          $('#' + id).addClass('unedit-field');
+	        } else {
+	          $('#' + id).addClass('edit-field');
+	          $('#' + id).removeClass('unedit-field');
 	        }
-	      }, 200);
+	      }, 352);
 	    }
 	  }, {
 	    key: 'handleClick',
@@ -26950,6 +26962,10 @@
 	          break;
 
 	        case 'select':
+	          if (field.parameters.container === undefined) {
+	            field.parameters.container = {};
+	          }
+
 	          $('#selectParamsWrapper').removeClass('display-hidden');
 	          $('#idSelectMultiple').removeClass('display-hidden');
 	          $('#idSelectContainer').removeClass('display-hidden');
@@ -29518,7 +29534,8 @@
 	          $('#fillerDivLeft').removeClass('display-hidden');
 	          $('#fillerDivRight').removeClass('display-hidden');
 	          fieldToEdit.parameters.options = [];
-	          fieldToEdit.parameters.container = "";
+	          fieldToEdit.parameters.container = {};
+	          $('#textAreaContainer').val(JSON.stringify(fieldToEdit.parameters.container, null, 2));
 	          break;
 	      }
 
@@ -30051,8 +30068,6 @@
 				    self = this,
 				    newOptions = options !== undefined ? options : [],
 				    elemArray = void 0;
-
-				console.log('op', options);
 
 				if (newOptions.length >= 0) {
 					for (var i = 0; i < newOptions.length; i++) {

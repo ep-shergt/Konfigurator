@@ -56,7 +56,8 @@ class StandardPanelInput extends Component {
         $('#fillerDivLeft').removeClass('display-hidden');
         $('#fillerDivRight').removeClass('display-hidden');
         fieldToEdit.parameters.options = [];
-        fieldToEdit.parameters.container = "";
+        fieldToEdit.parameters.container = {};
+        $('#textAreaContainer').val(JSON.stringify(fieldToEdit.parameters.container, null, 2));
         break;
     }
 
