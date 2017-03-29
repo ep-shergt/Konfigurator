@@ -24981,12 +24981,13 @@
 	                newGroupOneToEdit = _extends({}, this.state.groupOneToEdit),
 	                newGroupTwoToEdit = _extends({}, this.state.groupTwoToEdit),
 	                newFieldToEdit = _extends({}, this.state.fieldToEdit),
-	                validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")"))),
+	                validationValue = $('#validationTextArea').val() !== "" ? JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")"))) : {},
 	                validationRequired = $('#idValRequired').is(":checked") ? true : false,
-	                access = JSON.parse(JSON.stringify(eval("(" + $('#accessTextArea').val() + ")")));
+	                access = $('#accessTextArea').val() !== "" ? JSON.parse(JSON.stringify(eval("(" + $('#accessTextArea').val() + ")"))) : {};
 
 	            switch (configType) {
 	                case 'main':
+	                    debugger;
 	                    newJsonData.title = $('#inputTitle').val();
 	                    newJsonData.valid_from = $('#dateMainTitle').val();
 	                    newJsonData.valid_to = $('#endDateMainTitle').val();
@@ -25229,7 +25230,7 @@
 	                                            { className: 'heading-parameter' },
 	                                            'Validation (Eingabe des JSON-Objekts)'
 	                                        ),
-	                                        _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', id: 'validationTextArea', placeholder: '{"property": "", ...}' }),
+	                                        _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container adjust-width', rows: '5', id: 'validationTextArea', placeholder: '{"property": "", ...}' }),
 	                                        _react2.default.createElement(
 	                                            'div',
 	                                            { className: 'row vertical-align' },
@@ -25255,7 +25256,7 @@
 	                                            { className: 'heading-parameter' },
 	                                            'Access (Eingabe des JSON-Objekts)'
 	                                        ),
-	                                        _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container', rows: '5', placeholder: '{"property": "", ...}', id: 'accessTextArea' })
+	                                        _react2.default.createElement('textarea', { className: 'div-margin form-control textarea-container adjust-width', rows: '5', placeholder: '{"property": "", ...}', id: 'accessTextArea' })
 	                                    )
 	                                ),
 	                                _react2.default.createElement(
@@ -29596,7 +29597,7 @@
 	            { className: 'input-group-addon' },
 	            'title'
 	          ),
-	          _react2.default.createElement('input', { required: true, id: 'inputTitle', type: 'text', className: 'form-control', name: 'inputTitle', placeholder: '' })
+	          _react2.default.createElement('input', { required: true, id: 'inputTitle', type: 'text', className: 'form-control adjust-width', name: 'inputTitle', placeholder: '' })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -29677,7 +29678,7 @@
 	            { className: 'input-group-addon' },
 	            'exportKey'
 	          ),
-	          _react2.default.createElement('input', { id: 'inputExportKey', type: 'text', className: 'form-control input-sm', name: 'inputExportKey', placeholder: '' }),
+	          _react2.default.createElement('input', { id: 'inputExportKey', type: 'text', className: 'form-control input-sm adjust-width', name: 'inputExportKey', placeholder: '' }),
 	          _react2.default.createElement('br', null)
 	        )
 	      );
@@ -29846,7 +29847,7 @@
 	            { className: 'input-group-addon' },
 	            'tooltip'
 	          ),
-	          _react2.default.createElement('input', { id: 'inputTooltip', type: 'text', className: 'form-control input-sm', name: 'inputTooltip', placeholder: 'Tooltip - Text' })
+	          _react2.default.createElement('input', { id: 'inputTooltip', type: 'text', className: 'form-control input-sm adjust-width', name: 'inputTooltip', placeholder: 'Tooltip - Text' })
 	        ),
 	        _react2.default.createElement(
 	          'div',

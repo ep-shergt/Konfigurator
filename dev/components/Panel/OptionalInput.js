@@ -53,7 +53,7 @@ class OptionalPanelInput extends Component {
         </div>
         <div id="tooltipWrapper" className="input-group config-wrapper display-hidden">
             <span className="input-group-addon">tooltip</span>
-            <input id="inputTooltip" type="text" className="form-control input-sm" name="inputTooltip" placeholder="Tooltip - Text" />            
+            <input id="inputTooltip" type="text" className="form-control input-sm adjust-width" name="inputTooltip" placeholder="Tooltip - Text" />            
         </div>
         <div id="clearWrapper" className="container-fluid config-wrapper display-hidden">
           <div className="row vertical-align">

@@ -34,12 +34,13 @@ class Configurator extends Component {
 			newGroupOneToEdit = {...this.state.groupOneToEdit},
 			newGroupTwoToEdit = {...this.state.groupTwoToEdit},
 			newFieldToEdit = {...this.state.fieldToEdit},
-            validationValue = JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")"))),
+            validationValue = ($('#validationTextArea').val() !== "") ? JSON.parse(JSON.stringify(eval("(" + $('#validationTextArea').val() + ")"))) : {},
             validationRequired = $('#idValRequired').is(":checked") ? true : false,
-            access = JSON.parse(JSON.stringify(eval("(" + $('#accessTextArea').val() + ")")));
+            access = ($('#accessTextArea').val() !== "") ? JSON.parse(JSON.stringify(eval("(" + $('#accessTextArea').val() + ")"))) : {};
 
 		switch(configType) {
 			case 'main':
+                debugger;
 				newJsonData.title = $('#inputTitle').val();
     			newJsonData.valid_from = $('#dateMainTitle').val();
     			newJsonData.valid_to = $('#endDateMainTitle').val();
@@ -251,7 +252,7 @@ class Configurator extends Component {
                                 <div className="config-wrapper val-access-wrapper">
     								<div id="idValidationWrapper" className="div-margin display-hidden">
     									<p className="heading-parameter">Validation (Eingabe des JSON-Objekts)</p>
-    									<textarea className="div-margin form-control textarea-container" rows="5" id="validationTextArea" placeholder='{"property": "", ...}'></textarea>
+    									<textarea className="div-margin form-control textarea-container adjust-width" rows="5" id="validationTextArea" placeholder='{"property": "", ...}'></textarea>
     									<div className="row vertical-align">
     							     		<div id="fillerValLeft" className="input-group col-xs-5"></div>
     							            <div id="idValRequiredWrapper" className="input-group col-xs-2">
@@ -262,7 +263,7 @@ class Configurator extends Component {
     								</div>
     								<div id="idAccessWrapper" className="div-margin display-hidden config-wrapper">
     									<p className="heading-parameter">Access (Eingabe des JSON-Objekts)</p>
-    									<textarea className="div-margin form-control textarea-container" rows="5" placeholder='{"property": "", ...}' id="accessTextArea"></textarea>
+    									<textarea className="div-margin form-control textarea-container adjust-width" rows="5" placeholder='{"property": "", ...}' id="accessTextArea"></textarea>
     								</div> 
                                 </div>
                                 <div id="submitButtonWrapper" className="config-wrapper display-hidden">

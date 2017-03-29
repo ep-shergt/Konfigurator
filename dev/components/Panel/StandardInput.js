@@ -104,7 +104,7 @@ class StandardPanelInput extends Component {
         <p className="heading-parameter">Pflichteinstellungen</p>
         <div className="input-group">
           <span className="input-group-addon">title</span>
-          <input required id="inputTitle" type="text" className="form-control" name="inputTitle" placeholder="" />           
+          <input required id="inputTitle" type="text" className="form-control adjust-width" name="inputTitle" placeholder="" />           
         </div>
         <div id="datepickerWrapper" className="config-wrapper display-hidden">
           <div className="bootstrap-iso">
@@ -131,7 +131,7 @@ class StandardPanelInput extends Component {
         </div>
         <div id="exportKeyWrapper" className="input-group config-wrapper display-hidden">
           <span className="input-group-addon">exportKey</span>
-          <input id="inputExportKey" type="text" className="form-control input-sm" name="inputExportKey" placeholder="" />           
+          <input id="inputExportKey" type="text" className="form-control input-sm adjust-width" name="inputExportKey" placeholder="" />           
           <br/>
         </div>
       </div>
