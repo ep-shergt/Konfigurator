@@ -54,9 +54,9 @@ class Parameters extends Component {
 	        fieldType,
 	        fieldToEdit,
 	    });
-	
+	    
 	    if (fieldType === 'check' || fieldType === 'radio' || fieldType === 'select') {
-			this.generateElements(fieldToEdit.parameters.options);
+			this.generateElements(fieldToEdit.parameters.options, fieldType);
 		}
     }
 
@@ -84,7 +84,7 @@ class Parameters extends Component {
 			fieldToEdit
 		});
 
-		this.generateElements(fieldToEdit.parameters.options);
+		this.generateElements(fieldToEdit.parameters.options, fieldToEdit.type);
 	}
 
 	removeElement(event) {
@@ -106,14 +106,13 @@ class Parameters extends Component {
 		});
 
 		$('#' + fieldToEdit.type + '_' + indexForRemove.toString()).fadeOut(400, () => {
-			self.generateElements(fieldToEdit.parameters.options);
+			self.generateElements(fieldToEdit.parameters.options, fieldToEdit.type);
 		});
 	}
 
-	generateElements(options) {
+	generateElements(options, fieldType) {
 		let elemHtml = "",
 			buttonsHtml = "",
-			fieldType = this.state.fieldType,
 			self = this,
 			newOptions = options !== undefined ? options : [],
 			elemArray;
@@ -194,7 +193,7 @@ class Parameters extends Component {
 			fieldToEdit = {...this.state.fieldToEdit};
 
 		if (type === 'check' || type === 'radio' || type === 'select') {
-			this.generateElements(fieldToEdit.parameters.options);
+			this.generateElements(fieldToEdit.parameters.options, this.state.fieldType);
 		}
 	}
 

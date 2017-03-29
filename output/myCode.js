@@ -30005,7 +30005,7 @@
 				});
 
 				if (fieldType === 'check' || fieldType === 'radio' || fieldType === 'select') {
-					this.generateElements(fieldToEdit.parameters.options);
+					this.generateElements(fieldToEdit.parameters.options, fieldType);
 				}
 			}
 		}, {
@@ -30034,7 +30034,7 @@
 					fieldToEdit: fieldToEdit
 				});
 
-				this.generateElements(fieldToEdit.parameters.options);
+				this.generateElements(fieldToEdit.parameters.options, fieldToEdit.type);
 			}
 		}, {
 			key: 'removeElement',
@@ -30057,15 +30057,14 @@
 				});
 
 				$('#' + fieldToEdit.type + '_' + indexForRemove.toString()).fadeOut(400, function () {
-					self.generateElements(fieldToEdit.parameters.options);
+					self.generateElements(fieldToEdit.parameters.options, fieldToEdit.type);
 				});
 			}
 		}, {
 			key: 'generateElements',
-			value: function generateElements(options) {
+			value: function generateElements(options, fieldType) {
 				var elemHtml = "",
 				    buttonsHtml = "",
-				    fieldType = this.state.fieldType,
 				    self = this,
 				    newOptions = options !== undefined ? options : [],
 				    elemArray = void 0;
@@ -30120,7 +30119,7 @@
 				    fieldToEdit = _extends({}, this.state.fieldToEdit);
 
 				if (type === 'check' || type === 'radio' || type === 'select') {
-					this.generateElements(fieldToEdit.parameters.options);
+					this.generateElements(fieldToEdit.parameters.options, this.state.fieldType);
 				}
 			}
 		}, {
