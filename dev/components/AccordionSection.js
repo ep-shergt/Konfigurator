@@ -62,12 +62,9 @@ class AccordionSection extends Component {
         self = this;
 
     if (fieldsLength > 1) {
-      $('#' + ulFieldId).fadeOut(400, () => {
         self.props.deleteField(elem, fieldIndex, fieldsLength);
-        self.props.setSubAccordionToOpen(keysArr);   
-      });
+        self.props.setSubAccordionToOpen(keysArr);        
     }
-
   }
 
   handleMarking(elem, fieldIndex) {

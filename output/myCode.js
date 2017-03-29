@@ -26219,10 +26219,8 @@
 	          self = this;
 
 	      if (fieldsLength > 1) {
-	        $('#' + ulFieldId).fadeOut(400, function () {
-	          self.props.deleteField(elem, fieldIndex, fieldsLength);
-	          self.props.setSubAccordionToOpen(keysArr);
-	        });
+	        self.props.deleteField(elem, fieldIndex, fieldsLength);
+	        self.props.setSubAccordionToOpen(keysArr);
 	      }
 	    }
 	  }, {
